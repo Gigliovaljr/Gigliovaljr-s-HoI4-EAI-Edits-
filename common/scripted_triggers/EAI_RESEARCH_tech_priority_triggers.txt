@@ -1,0 +1,340 @@
+############################################################################
+#	Expert AI mod - tech prio triggers
+############################################################################
+
+### Spirits
+
+EAI_land_spirit_limit = {
+	OR = {
+		AND = {
+			has_war = no
+			set_temp_variable = { _check_xp = 150 }
+			NOT = { EAI_XP_has_army_check_xp = yes }
+		}
+
+		AND = {
+			has_war = yes
+			NOT = { surrender_progress > 0.1 }
+			set_temp_variable = { _check_xp = 100 }
+			NOT = { EAI_XP_has_army_check_xp = yes }
+		}
+
+		AND = {
+			has_war = yes
+			surrender_progress > 0.1
+			set_temp_variable = { _check_xp = 50 }
+			NOT = { EAI_XP_has_army_check_xp = yes }
+		}
+
+		### Strategies
+	}
+}
+
+### Land Doctrines
+
+EAI_land_doctrine_progress_limit = {
+	OR = {
+		AND = {
+			has_war = no
+			set_temp_variable = { _check_xp = 150 }
+			NOT = { EAI_XP_has_army_check_xp = yes }
+		}
+
+		AND = {
+			has_war = yes
+			NOT = { surrender_progress > 0.1 }
+			set_temp_variable = { _check_xp = 100 }
+			NOT = { EAI_XP_has_army_check_xp = yes }
+		}
+
+		AND = {
+			has_war = yes
+			surrender_progress > 0.1
+			set_temp_variable = { _check_xp = 50 }
+			NOT = { EAI_XP_has_army_check_xp = yes }
+		}
+
+		### Strategies
+	}
+}
+
+EAI_land_doctrine_priority = {
+
+	set_temp_variable = { _check_xp = 150 } NOT = { EAI_XP_has_army_check_xp = yes }
+}
+
+EAI_land_doctrine_mass_assault_priority = {
+
+	NOT = {
+		any_enemy_country = { OR = { is_major = yes strength_ratio = { tag = ROOT ratio > 1 } } }
+	}
+
+	AND = {
+		check_variable = { EAI_FOCUS/LAND/land_doctrine = global.EAI_MA_DOCTRINE }
+		
+		NOT = { 
+			has_tech = vast_offensives 
+			has_tech = human_wave_offensive 
+		}
+	}
+}
+
+EAI_land_doctrine_completed = {
+	OR = {
+		has_tech = modern_blitzkrieg
+		has_tech = werwolf_guerillas
+		has_tech = air_land_battle
+		has_tech = shock_and_awe
+		has_tech = c3i_theory
+		has_tech = infiltration_in_depth
+		has_tech = continuous_offensive
+		has_tech = guerilla_warfare
+	}
+}
+
+### Naval Doctrines
+
+EAI_naval_doctrine_progress_limit = {
+
+	OR = {
+		# Reserve 200 xp for designs unless facing an enemy with a big navy
+		AND = {
+			set_temp_variable = { _check_xp = 200 }
+			NOT = { EAI_XP_has_navy_check_xp = yes }
+			if = { limit = { has_war = yes } alliance_naval_strength_ratio > 2 }
+		}
+
+		### Strategies
+	}
+}
+
+### Air Doctrines
+
+EAI_air_doctrine_progress_limit = {
+
+	OR = {
+		# Reserve 200 xp for designs during peace
+		AND = {
+			has_war = no
+			set_temp_variable = { _check_xp = 200 }
+			NOT = { EAI_XP_has_air_check_xp = yes }
+		}
+
+		# Reserve 200 xp for designs during war
+		AND = {
+			has_war = yes
+			set_temp_variable = { _check_xp = 100 }
+			NOT = { EAI_XP_has_air_check_xp = yes }
+		}
+
+		### Strategies
+	}
+}
+
+EAI_air_doctrine_SD_priority = {
+
+	OR = {
+		NOT = { has_tech = logistical_bombing }
+		has_air_experience > 200
+	}
+}
+
+EAI_air_doctrine_BFS_priority = {
+
+	OR = {
+		NOT = { has_tech = ground_support_integration }
+		NOT = { has_tech = battlefield_support }
+		has_air_experience > 200
+	}
+}
+
+EAI_air_doctrine_OI_priority = {
+	OR = {
+		NOT = { has_tech = fighter_veteran_initiative }
+		NOT = { has_tech = cas_veteran_initiative }
+		has_air_experience > 200
+	}
+}
+
+EAI_specops_MNT_doctrine_progress_limit = {
+	OR = {
+		AND = {
+			check_variable = { EAI_FOCUS/LAND/spec_ops = global.EAI_MNT_SPEC_OPS }
+			set_temp_variable = { _check_xp = 400 }
+			NOT = { EAI_XP_has_army_check_xp = yes }
+
+			NOT = {
+				has_tech = modern_blitzkrieg
+				has_tech = werwolf_guerillas
+				has_tech = air_land_battle
+				has_tech = shock_and_awe
+				has_tech = c3i_theory
+				has_tech = infiltration_in_depth
+				has_tech = continuous_offensive
+				has_tech = guerilla_warfare
+			}
+		}
+		AND = {
+			check_variable = { EAI_FOCUS/LAND/spec_ops = global.EAI_MNT_SPEC_OPS }
+			set_temp_variable = { _check_xp = 200 }
+			NOT = { EAI_XP_has_navy_check_xp = yes }
+		}
+	}
+}
+
+EAI_specops_MAR_doctrine_progress_limit = {
+	OR = {
+		AND = {
+			check_variable = { EAI_FOCUS/LAND/spec_ops = global.EAI_MAR_SPEC_OPS }
+			set_temp_variable = { _check_xp = 150 }
+			NOT = { EAI_XP_has_navy_check_xp = yes }
+			NOT = {
+				has_tech = grand_battlefleet
+				has_tech = carrier_battlegroups
+				has_tech = floating_airfield_ti
+			}
+		}
+		AND = {
+			check_variable = { EAI_FOCUS/LAND/spec_ops = global.EAI_MAR_SPEC_OPS }
+			set_temp_variable = { _check_xp = 250 }
+			NOT = { EAI_XP_has_navy_check_xp = yes }
+		}
+	}
+}
+
+EAI_specops_PAR_doctrine_progress_limit = {
+	OR = {
+		AND = {
+			OR = {
+				check_variable = { EAI_FOCUS/LAND/spec_ops = global.EAI_MNT_SPEC_OPS }
+				check_variable = { EAI_FOCUS/LAND/spec_ops = global.EAI_MAR_SPEC_OPS }
+			}
+			set_temp_variable = { _check_xp = 150 }
+			NOT = { EAI_XP_has_air_check_xp = yes }
+			NOT = {
+				has_tech = offensive_formations
+				has_tech = mass_destruction
+				has_tech = forward_interception
+				has_tech = high_level_bombing
+			}
+			NOT = {
+				has_tech = special_forces_mountaineers
+				has_tech = special_forces_marines
+			}
+		}
+		AND = {
+			OR = {
+				check_variable = { EAI_FOCUS/LAND/spec_ops = global.EAI_MNT_SPEC_OPS }
+				check_variable = { EAI_FOCUS/LAND/spec_ops = global.EAI_MAR_SPEC_OPS }
+			}
+			set_temp_variable = { _check_xp = 250 }
+			NOT = { EAI_XP_has_air_check_xp = yes }
+			NOT = {
+				has_tech = special_forces_mountaineers
+				has_tech = special_forces_marines
+			}
+		}
+	}
+}
+
+
+
+
+###
+
+### special tech bonus checks
+
+EAI_armor_tech_bonus = {
+	OR = {
+		AND = {
+			original_tag = GER
+			OR = { has_opinion_modifier = sov_ger_treaty_trade }
+		}
+		AND = {
+			original_tag = SOV
+			OR = { has_opinion_modifier = sov_ger_treaty_trade has_completed_focus = SOV_lessons_of_war }
+		}
+		AND = {
+			original_tag = FRA
+			OR = {
+				AND = { check_variable = { EAI_FOCUS/LAND/antitank_design = global.EAI_HTD_AT_DESIGN } has_completed_focus = FRA_heavy_armor_focus }
+				AND = { check_variable = { EAI_FOCUS/LAND/antitank_design = global.EAI_MTD_AT_DESIGN } has_completed_focus = FRA_light_medium_armor }
+			}
+		}
+		AND = {
+			original_tag = ENG
+			has_completed_focus = ENG_tank_focus
+		}
+		# AND = {
+		# 	original_tag = ITA
+		# 	OR = {
+		# 		has_completed_focus = ITA_armored_effort
+		# 		has_completed_focus = ITA_german_rd_treaty
+		# 	}
+		# }
+	}
+}
+
+EAI_armor_tech_bonus_2 = {
+	OR = {
+		AND = {
+			original_tag = GER
+			has_opinion_modifier = sov_ger_treaty_trade
+		}
+	}
+}
+
+EAI_GER_SOV_armor_tech_bonus = {
+	OR = {
+		AND = {
+			original_tag = GER
+			OR = { has_opinion_modifier = sov_ger_treaty_trade }
+		}
+		AND = {
+			original_tag = SOV
+			OR = { has_opinion_modifier = sov_ger_treaty_trade has_completed_focus = SOV_lessons_of_war }
+		}
+	}
+}
+
+EAI_fighter_tech_bonus = {
+	NOT = { EAI_MODE_historical = yes }
+	OR = {
+		AND = { original_tag = ENG has_completed_focus = fighter_command_focus }
+		#AND = { original_tag = ITA has_completed_focus = ITA_air_innovation_2 }
+		#AND = { original_tag = JAP has_completed_focus = JAP_fighter_modernization }
+	}
+}
+
+EAI_carrier_tech_bonus = {
+	OR = {
+		AND = { original_tag = ENG has_completed_focus = uk_carrier_focus }
+		AND = { original_tag = USA has_completed_focus = USA_carrier_primacy }
+	}
+}
+
+###
+
+EAI_PR_year_FACTOR = { # var:_year var:_prio_val
+	set_temp_variable = { _val_ = global.EAI_days_elapsed }
+	set_temp_variable = { _min = _year }
+	subtract_from_temp_variable = { _min = 1936 }
+	multiply_temp_variable = { _min = 365 }
+	set_temp_variable = { _max = _min }
+	add_to_temp_variable = { _max = 365 }
+	EAI_MATH_TRIGGER_normalize = yes
+	add_to_temp_variable = { _val_ = 1 }
+	multiply_temp_variable = { _prio_val = _val_ }
+}
+
+EAI_PR_equipment_usage_FACTOR = { # var:_eq_1 var:_eq_2 var:_ratio var:_prio_val
+	if = { limit = { check_variable = { _eq_2 > 0 } }
+		set_temp_variable = { _val_ = _eq_1 }
+		divide_temp_variable = { _val_ = _eq_2 }
+		set_temp_variable = { _min = 0 }
+		set_temp_variable = { _max = _ratio }
+		EAI_MATH_TRIGGER_normalize = yes
+		add_to_temp_variable = { _val_ = 1 }
+		multiply_temp_variable = { _prio_val = _val_ }
+	}
+}

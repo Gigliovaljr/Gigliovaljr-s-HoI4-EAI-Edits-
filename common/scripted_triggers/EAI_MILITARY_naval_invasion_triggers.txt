@@ -1,0 +1,412 @@
+############################################################################################################
+#	Expert AI mod - scripted invasion AI triggers
+############################################################################################################
+
+### ROOT = INVADER
+### THIS = TARGET
+
+EAI_INVASION_enable = {
+
+	NOT = { surrender_progress > 0.2 }
+	OR = { has_tech = transport has_tech = mtg_transport }
+	has_manpower > 50000
+
+	OR = { 
+		NOT = { # safe at home
+			any_of_scopes = { array = owned_states
+			
+				is_controlled_by = ROOT
+				is_in_home_area = yes
+				
+				OR = {
+					NOT = { is_fully_controlled_by = ROOT }
+					
+					any_neighbor_state = {
+
+						CONTROLLER = { has_war_with = ROOT }
+					}
+				}
+			}
+		}
+
+		AND = {
+			alliance_naval_strength_ratio > 2
+			alliance_strength_ratio > 2
+		}
+		
+		# exception for historical invasions
+		any_of_scopes = { array = updated_naval_invasion_targets EAI_INVASION_invasion_strategies = yes }
+	}
+}
+
+EAI_INVASION_THIS_is_valid_target_of_ROOT = { 
+
+	NOT = {
+		EAI_PREV_on_same_side_with_THIS = yes
+		has_country_flag = EAI_stop_invasions_@ROOT
+	}
+
+	any_of_scopes = { array = controlled_states
+		is_coastal = yes
+	}
+
+	ROOT = {
+		OR = {
+			has_navy_size = { size > 50 }
+			
+			alliance_naval_strength_ratio > 1
+			
+			PREV = { EAI_INVASION_invasion_strategies = yes }
+		}
+	}
+
+	if = { limit = { has_war_with = ROOT }
+		
+		OR = {
+			alliance_strength_ratio < 0.8
+			
+			strength_ratio = { tag = ROOT ratio < 1.0 }
+		
+			EAI_INVASION_invasion_strategies = yes
+
+			naval_strength_comparison = {
+				other = ROOT
+				ratio < 2.0
+				sub_unit_def_weights = {
+					carrier = 1
+					battleship = 1
+					battle_cruiser = 1
+					destroyer = 1
+					light_cruiser = 1
+					heavy_cruiser = 1
+				}
+			}
+		}
+	}
+
+	OR = {
+		has_war_with = ROOT
+
+		EAI_INVASION_invasion_strategies = yes
+	}
+	
+	if = { limit = { NOT = { EAI_INVASION_invasion_strategies = yes } }
+
+		NOT = { EAI_INVASION_block_invasion_strategies = yes }
+	}
+}
+
+EAI_INVASION_ROOT_cancel_invasion_target_on_THIS = {
+
+	OR = {
+		AND = {
+			NOT = { EAI_INVASION_invasion_strategies = yes }
+			EAI_INVASION_block_invasion_strategies = yes
+		}
+
+		NOT = { EAI_INVASION_THIS_is_valid_target_of_ROOT = yes }
+
+		EAI_INVASION_ROOT_made_no_invasion_progress_against_THIS = yes
+
+		ROOT = { NOT = { has_country_flag = EAI_naval_invasion_max_duration } }
+	}
+
+	NOT = { EAI_INVASION_THIS_is_invaded_by_leader_of_ROOT = yes }
+}
+
+EAI_INVASION_exclude_target = { # Stop any invasion against this target
+
+	### Targets that should be considered for blocking
+
+	NOT = { check_variable = { PREV.EAI_naval_invasion_target = THIS.id } }
+
+	# has_war_with = PREV
+
+	any_of_scopes = { array = controlled_states
+		is_coastal = yes
+	}
+
+	NOT = { EAI_INVASION_THIS_is_invaded_by_leader_of_ROOT = yes }
+
+	### Reasons for blocking
+
+	OR = {
+		AND = {
+			NOT = { EAI_INVASION_invasion_strategies = yes }
+			EAI_INVASION_block_invasion_strategies = yes
+		}
+	}
+}
+
+EAI_INVASION_ROOT_made_no_invasion_progress_against_THIS = {
+
+	if = { limit = { ROOT = { NOT = { has_country_flag = EAI_naval_invasion_min_duration } } }
+
+		NOT = { 
+			any_of_scopes = { array = ROOT.EAI_naval_invasion_target_states
+
+				CONTROLLER = { NOT = { has_war_with = ROOT } }
+			}
+		}
+	}
+	else = { always = no }
+}
+
+EAI_INVASION_THIS_is_invaded_by_leader_of_ROOT = {
+
+	any_other_country = {
+		is_ai = yes
+		NOT = { tag = ROOT }
+		has_capitulated = no
+		OR = {
+			AND = { is_in_faction_with = ROOT is_faction_leader = yes }
+			ROOT = { is_subject_of = PREV }
+		}
+		PREV = { has_country_flag = EAI_naval_invasion_from_@PREV }
+	}
+}
+
+EAI_INVASION_THIS_is_coordinated_invasion_target_of_ROOT = {
+
+	var:EAI_coordinated_naval_invasion_iniatiator = { 
+		
+		var:EAI_coordinated_naval_invasion_target = { 
+			
+			check_variable = { THIS.id = PREV.PREV.EAI_naval_invasion_target } 
+		} 
+	}
+}
+
+#####################################################
+#	Strategies
+#####################################################
+
+# Strategies for blocking invasions
+EAI_INVASION_block_invasion_strategies = { 
+
+	OR = {
+
+		# SOV - focus on land defense during initial Barbarossa
+		AND = {
+			ROOT = { original_tag = SOV }
+
+			OR = {
+				AND = {
+					has_war_with = GER
+					has_country_flag = EAI_barbarossa_defensive
+				}
+				AND = {
+					NOT = { has_war_with = GER }
+					GER = { 
+						focus_progress = { focus = GER_war_with_the_ussr progress > 0 } 
+						NOT = { has_completed_focus = GER_war_with_the_ussr }
+					}
+				}
+			}
+		}
+
+		AND = {
+			ROOT = { 
+				original_tag = SOV 
+				has_war_with = GER
+			}
+
+			THIS = {
+				NOT = { is_neighbor_of = ROOT }
+			}
+		}
+
+		# stop norway invasion setting
+		AND = {
+			has_global_flag = EAI_GER_dont_invade_NOR
+			ROOT = { GER = { EAI_PREV_on_same_side_with_THIS = yes } }
+			THIS = { original_tag = NOR }
+		}
+
+		# Early allied invasions vs axis
+		AND = { 
+			ROOT = { ENG = { EAI_PREV_on_same_side_with_THIS = yes } } 
+			
+			THIS = { 
+				OR = {
+					GER = { EAI_PREV_on_same_side_with_THIS = yes }
+					GER = { EAI_THIS_is_aligned_with_PREV = yes }
+				}
+			} 
+
+			date < 1943.1.1
+
+			GER = { surrender_progress < 0.2 }
+			SOV = { surrender_progress < 0.25 }
+
+			is_historical_focus_on = yes
+		}
+
+		# Early allied invasions vs JAP
+		AND = { 
+			ROOT = { 
+				is_historical_focus_on = yes
+				has_global_flag = { flag = EAI_JAP_blitz_pacific_1000d value = 1 days < 180 }
+				ENG = { EAI_PREV_on_same_side_with_THIS = yes } 
+			} 
+			
+			THIS = { 
+				JAP = { is_ai = yes }
+				JAP = { EAI_PREV_on_same_side_with_THIS = yes } 
+			} 
+		}
+
+		# Axis invasions vs SOV
+		AND = {
+			ROOT = { GER = { EAI_PREV_on_same_side_with_THIS = yes } } 
+			
+			THIS = { SOV = { EAI_PREV_on_same_side_with_THIS = yes } } 
+		}
+
+		# Army size check for allies
+		AND = { 
+			ROOT = { 
+				OR = { original_tag = ENG original_tag = USA }
+				has_army_manpower = { size < 1000000 }
+			} 
+			
+			THIS = { 
+				GER = { EAI_PREV_on_same_side_with_THIS = yes } 
+				has_army_manpower = { size > 1000000 }
+			}
+		}
+		
+		# Uninvadeable countries
+		AND = { 
+			ROOT = { ENG = { EAI_PREV_on_same_side_with_THIS = yes } } 
+			
+			THIS = { OR = { original_tag = BUL original_tag = ROM original_tag = HUN original_tag = FIN } is_in_faction_with = GER } 
+		}
+
+		# Allied invasions vs GER - handled by military strategy
+		AND = { 
+			ROOT = { 
+				is_historical_focus_on = yes
+				ENG = { EAI_PREV_on_same_side_with_THIS = yes }
+			}
+			
+			THIS = { 
+				is_in_faction_with = GER
+			}
+		}
+
+		# Allied invasions vs ITA - handled by military strategy
+		AND = { 
+			ROOT = { 
+				is_historical_focus_on = yes
+				ENG = { EAI_PREV_on_same_side_with_THIS = yes }
+			}
+			
+			THIS = { 
+				is_in_faction_with = ITA
+			}
+		}
+
+		# Allied invasions vs VIC - handled by military strategy
+		AND = { 
+			ROOT = { 
+				is_historical_focus_on = yes
+				ENG = { EAI_PREV_on_same_side_with_THIS = yes }
+			}
+			
+			THIS = { 
+				is_in_faction_with = VIC
+			}
+		}
+
+		# Axis invasions vs ENG - handled by military strategy
+		AND = { 
+			ROOT = { 
+				is_historical_focus_on = yes
+				GER = { EAI_PREV_on_same_side_with_THIS = yes }
+			}
+			
+			THIS = { 
+				is_in_faction_with = ENG
+			}
+		}
+
+		# Axis invasions vs USA - handled by military strategy
+		AND = { 
+			ROOT = { 
+				is_historical_focus_on = yes
+				GER = { EAI_PREV_on_same_side_with_THIS = yes }
+			}
+			
+			THIS = { 
+				is_in_faction_with = USA
+			}
+		}
+
+		# USA invasions vs JAP - handled by military strategy
+		AND = { 
+			ROOT = { 
+				is_historical_focus_on = yes
+				USA = { EAI_PREV_on_same_side_with_THIS = yes }
+			}
+			
+			THIS = { 
+				is_in_faction_with = JAP
+			}
+		}
+
+		# JAP invasions vs USA - handled by military strategy
+		AND = { 
+			ROOT = { 
+				is_historical_focus_on = yes
+				JAP = { EAI_PREV_on_same_side_with_THIS = yes }
+			}
+			
+			THIS = { 
+				is_in_faction_with = USA
+			}
+		}
+	}
+}
+
+# Strategies for forcing invasions
+EAI_INVASION_invasion_strategies = { 
+
+	NOT = {
+		EAI_PREV_on_same_side_with_THIS = yes
+		has_country_flag = EAI_stop_invasions_@ROOT
+	}
+	
+	OR = {
+		
+		# AXIS invasion in norway
+		AND = { 
+			ROOT = { 
+				tag = GER
+				OR = {
+					has_global_flag = { flag = EAI_GER_blitz_denmark_365d days < 90 }
+					AND = { focus_progress = { focus = GER_operation_weserubung progress > 0 } NOT = { has_completed_focus = GER_operation_weserubung } }
+				}
+				NOR = { EAI_PREV_deploy_against_THIS = yes }
+			}
+
+			THIS = { 
+				original_tag = NOR
+				has_capitulated = no
+			} 
+		}
+		
+		# ITA invasion in greece
+		AND = { 
+			ROOT = { 
+				original_tag = ITA 
+
+				has_war_with = GRE
+			} 
+
+			THIS = { 
+				original_tag = GRE 
+			} 
+		}
+	}
+}
