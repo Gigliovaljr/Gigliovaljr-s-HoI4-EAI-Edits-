@@ -1,0 +1,78 @@
+############################################################################################################
+#	Expert AI mod templates
+############################################################################################################
+
+EAI_cavalry_role = { # To stop AI from upgrading fielded cavalry to suppression templates
+	role = cavalry
+	upgrade_prio = { 
+		base = 0
+	}
+	CAVALRY_TEMPLATE = {
+		enable = { always = yes } upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				cavalry = 4
+			}
+		}
+	}
+	CAVALRY_TEMPLATE_2 = {
+		enable = { always = yes } upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				cavalry = 6
+			}
+		}
+	}
+}
+
+EAI_suppression_role = {
+	role = suppression
+	upgrade_prio = { 
+		base = 0
+		modifier = {
+			add = 1000
+			OR = {
+				has_army_experience > 300
+				check_variable = { num_occupied_states > 15 }
+			}
+		}
+	}
+
+	SUPPRESSION_TEMPLATE = {
+		enable = { has_country_flag = { flag = EAI_SUPPRESSION_TEMPLATE value = 1 } } upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				cavalry = 4
+			}
+		}
+	}
+
+	SUPPRESSION_TEMPLATE_2 = {
+		enable = { has_country_flag = { flag = EAI_SUPPRESSION_TEMPLATE value = 2 } } upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				cavalry = 20
+			}
+			support = {
+				military_police = 1
+			}
+		}
+	}
+
+	SUPPRESSION_TEMPLATE_3 = {
+		enable = { has_country_flag = { flag = EAI_SUPPRESSION_TEMPLATE value = 3 } } upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				cavalry = 25
+			}
+			support = {
+				military_police = 1
+			}
+		}
+	}
+}

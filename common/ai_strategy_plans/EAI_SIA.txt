@@ -1,0 +1,44 @@
+SIA_fascist = {
+	name = "SIA turn fascist"
+
+	enable = {
+		is_historical_focus_on = yes
+	
+		OR = { tag = SIA }
+
+		OR = { has_government = neutrality has_government = fascism }
+		
+		date > 1938.1.1
+	}
+	abort_when_not_enabled = yes
+
+	focus_factors = {
+		liberty_ethos = 0
+
+		infrastructure_effort = 1000
+		construction_effort_3 = 1000
+		infrastructure_effort_2 = 1000
+		extra_tech_slot = 1000
+		political_effort = 1000
+		collectivist_ethos = 1000
+		nationalism_focus = 1000
+		militarism = 1000
+		military_youth = 1000
+		paramilitarism = 1000
+		ideological_fanaticism = 1000
+	}
+
+	ai_national_focuses = {
+		infrastructure_effort
+		construction_effort_3
+		infrastructure_effort_2
+		extra_tech_slot
+		political_effort
+		collectivist_ethos
+		nationalism_focus
+		militarism
+		military_youth 
+		paramilitarism
+		ideological_fanaticism
+	}
+}

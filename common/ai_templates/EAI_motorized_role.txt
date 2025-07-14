@@ -1,0 +1,782 @@
+############################################################################################################
+#	Expert AI mod templates
+############################################################################################################
+
+EAI_motorized_role = {
+	role = motorized
+	upgrade_prio = { 
+		base = 0
+		modifier = {
+			add = 1000
+			has_army_experience > 200
+		}
+	}
+
+	#####################################################
+	#	18W
+	#####################################################
+
+	### MOTART
+
+	GENERIC_MOTORIZED_TEMPLATE_18_A1 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 11 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 6
+				mot_artillery_brigade = 2
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+	}
+	GENERIC_MOTORIZED_TEMPLATE_18_A2 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 11 } 
+			EAI_DESIGN_MOTORIZED_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		can_upgrade_in_field = { check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				motorized = 6
+				mot_artillery_brigade = 2
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_18_A3
+	}
+	GENERIC_MOTORIZED_TEMPLATE_18_A3 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 11 } 
+			EAI_DESIGN_MOTORIZED_rocket_artillery_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				mechanized = 6
+				mot_rocket_artillery_brigade = 2
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_18_A4
+	}
+	GENERIC_MOTORIZED_TEMPLATE_18_A4 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 11 } 
+			EAI_DESIGN_MOTORIZED_mechanized_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				mechanized = 6
+				mot_rocket_artillery_brigade = 2
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+	}
+
+	### MSPART
+
+	GENERIC_MOTORIZED_TEMPLATE_18_B1 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 12 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 6
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_18_B2
+	}
+	GENERIC_MOTORIZED_TEMPLATE_18_B2 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 12 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 6
+				medium_sp_artillery_brigade = 2
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+	}
+	GENERIC_MOTORIZED_TEMPLATE_18_B3 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 12 } 
+			EAI_DESIGN_MOTORIZED_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		can_upgrade_in_field = { check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				motorized = 6
+				medium_sp_artillery_brigade = 2
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_18_B4
+	}
+	GENERIC_MOTORIZED_TEMPLATE_18_B4 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 12 } 
+			EAI_DESIGN_MOTORIZED_mechanized_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				mechanized = 6
+				medium_sp_artillery_brigade = 2
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+	}
+
+	### LSPART
+
+	GENERIC_MOTORIZED_TEMPLATE_18_C1 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 13 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 6
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_18_C2
+	}
+	GENERIC_MOTORIZED_TEMPLATE_18_C2 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 13 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 6
+				light_sp_artillery_brigade = 2
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+	}
+	GENERIC_MOTORIZED_TEMPLATE_18_C3 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 13 } 
+			EAI_DESIGN_MOTORIZED_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		can_upgrade_in_field = { check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				motorized = 6
+				light_sp_artillery_brigade = 2
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_18_C4
+	}
+	GENERIC_MOTORIZED_TEMPLATE_18_C4 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 13 } 
+			EAI_DESIGN_MOTORIZED_mechanized_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				mechanized = 6
+				light_sp_artillery_brigade = 2
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+	}
+
+	#####################################################
+	#	25W
+	#####################################################
+
+	### MOTART
+
+	GENERIC_MOTORIZED_TEMPLATE_25_A1 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 21 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 8
+				mot_artillery_brigade = 3
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+	}
+	GENERIC_MOTORIZED_TEMPLATE_25_A2 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 21 } 
+			EAI_DESIGN_MOTORIZED_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		can_upgrade_in_field = { check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				motorized = 8
+				mot_artillery_brigade = 3
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_25_A3
+	}
+	GENERIC_MOTORIZED_TEMPLATE_25_A3 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 21 } 
+			EAI_DESIGN_MOTORIZED_rocket_artillery_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				mechanized = 8
+				mot_rocket_artillery_brigade = 3
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_25_A4
+	}
+	GENERIC_MOTORIZED_TEMPLATE_25_A4 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 21 } 
+			EAI_DESIGN_MOTORIZED_mechanized_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				mechanized = 8
+				mot_rocket_artillery_brigade = 3
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+	}
+
+	### MSPART
+
+	GENERIC_MOTORIZED_TEMPLATE_25_B1 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 22 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 8
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_25_B2
+	}
+	GENERIC_MOTORIZED_TEMPLATE_25_B2 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 22 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 8
+				medium_sp_artillery_brigade = 3
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+	}
+	GENERIC_MOTORIZED_TEMPLATE_25_B3 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 22 } 
+			EAI_DESIGN_MOTORIZED_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		can_upgrade_in_field = { check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				motorized = 8
+				medium_sp_artillery_brigade = 3
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_25_B4
+	}
+	GENERIC_MOTORIZED_TEMPLATE_25_B4 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 22 } 
+			EAI_DESIGN_MOTORIZED_mechanized_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				mechanized = 8
+				medium_sp_artillery_brigade = 3
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+	}
+
+	### LSPART
+
+	GENERIC_MOTORIZED_TEMPLATE_25_C1 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 23 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 8
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_25_C2
+	}
+	GENERIC_MOTORIZED_TEMPLATE_25_C2 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 23 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 8
+				light_sp_artillery_brigade = 3
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+	}
+	GENERIC_MOTORIZED_TEMPLATE_25_C3 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 23 } 
+			EAI_DESIGN_MOTORIZED_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		can_upgrade_in_field = { check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				motorized = 8
+				light_sp_artillery_brigade = 3
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_25_C4
+	}
+	GENERIC_MOTORIZED_TEMPLATE_25_C4 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 23 } 
+			EAI_DESIGN_MOTORIZED_mechanized_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				mechanized = 8
+				light_sp_artillery_brigade = 3
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+	}
+
+	#####################################################
+	#	35W
+	#####################################################
+
+	### MOTART
+
+	GENERIC_MOTORIZED_TEMPLATE_35_A1 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 31 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 10
+				mot_artillery_brigade = 5
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+	}
+	GENERIC_MOTORIZED_TEMPLATE_35_A2 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 31 } 
+			EAI_DESIGN_MOTORIZED_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		can_upgrade_in_field = { check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				motorized = 10
+				mot_artillery_brigade = 5
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_35_A3
+	}
+	GENERIC_MOTORIZED_TEMPLATE_35_A3 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 31 } 
+			EAI_DESIGN_MOTORIZED_rocket_artillery_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				mechanized = 10
+				mot_rocket_artillery_brigade = 5
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_35_A4
+	}
+	GENERIC_MOTORIZED_TEMPLATE_35_A4 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 31 } 
+			EAI_DESIGN_MOTORIZED_mechanized_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				mechanized = 10
+				mot_rocket_artillery_brigade = 5
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+	}
+
+	### MSPART
+
+	GENERIC_MOTORIZED_TEMPLATE_35_B1 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 32 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 10
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_35_B2
+	}
+	GENERIC_MOTORIZED_TEMPLATE_35_B2 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 32 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 10
+				medium_sp_artillery_brigade = 5
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+	}
+	GENERIC_MOTORIZED_TEMPLATE_35_B3 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 32 } 
+			EAI_DESIGN_MOTORIZED_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		can_upgrade_in_field = { check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				motorized = 10
+				medium_sp_artillery_brigade = 5
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_35_B4
+	}
+	GENERIC_MOTORIZED_TEMPLATE_35_B4 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 32 } 
+			EAI_DESIGN_MOTORIZED_mechanized_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				mechanized = 10
+				medium_sp_artillery_brigade = 5
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+	}
+
+	### LSPART
+
+	GENERIC_MOTORIZED_TEMPLATE_35_C1 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 33 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 10
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_35_C2
+	}
+	GENERIC_MOTORIZED_TEMPLATE_35_C2 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 33 } 
+			NOT = { EAI_DESIGN_MOTORIZED_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				motorized = 10
+				light_sp_artillery_brigade = 5
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+			}
+		}
+	}
+	GENERIC_MOTORIZED_TEMPLATE_35_C3 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 33 } 
+			EAI_DESIGN_MOTORIZED_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		can_upgrade_in_field = { check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				motorized = 10
+				light_sp_artillery_brigade = 5
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MOTORIZED_TEMPLATE_35_C3
+	}
+	GENERIC_MOTORIZED_TEMPLATE_35_C4 = {
+		enable = { 
+			has_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 33 } 
+			EAI_DESIGN_MOTORIZED_mechanized_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 10 }
+		reinforce_prio = 1
+		target_template = {
+			regiments = {
+				mechanized = 10
+				light_sp_artillery_brigade = 5
+			}
+			support = {
+				artillery = 1
+				anti_air = 1
+				anti_tank = 1
+				logistics_company = 1
+			}
+		}
+	}
+}

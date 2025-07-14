@@ -1,0 +1,775 @@
+############################################################################################################
+#	Expert AI mod templates
+############################################################################################################
+
+EAI_armor_role = {
+	role = armor
+	upgrade_prio = {	
+		base = 1000
+	}
+
+	#********************************************************************************************************#
+	#********************************************************************************************************#
+	#	Light
+	#********************************************************************************************************#
+	#********************************************************************************************************#
+
+	#####################################################
+	#	18W
+	#####################################################
+
+	GENERIC_LIGHT_ARMOR_TEMPLATE_18_A1 = {
+		enable = {
+			has_country_flag = { flag = EAI_LIGHT_ARMOR_TEMPLATE value = 11 }
+			NOT = { EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				light_armor = 5
+				motorized = 4
+			}
+			support = {
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+			}
+		}
+		# replace_at_match = 0.9
+		# replace_with = GENERIC_LIGHT_ARMOR_TEMPLATE_18_A2
+	}
+	GENERIC_LIGHT_ARMOR_TEMPLATE_18_A2 = {
+		enable = {
+			has_country_flag = { flag = EAI_LIGHT_ARMOR_TEMPLATE value = 11 }
+			EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				light_armor = 5
+				motorized = 4
+			}
+			support = {
+				light_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+	}
+
+	#####################################################
+	#	25W
+	#####################################################
+
+	GENERIC_LIGHT_ARMOR_TEMPLATE_25_A1 = {
+		enable = {
+			has_country_flag = { flag = EAI_LIGHT_ARMOR_TEMPLATE value = 21 }
+			NOT = { EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				light_armor = 7
+				motorized = 5
+			}
+			support = {
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+			}
+		}
+		# replace_at_match = 0.9
+		# replace_with = GENERIC_LIGHT_ARMOR_TEMPLATE_25_A2
+	}
+	GENERIC_LIGHT_ARMOR_TEMPLATE_25_A2 = {
+		enable = {
+			has_country_flag = { flag = EAI_LIGHT_ARMOR_TEMPLATE value = 21 }
+			EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				light_armor = 7
+				motorized = 5
+			}
+			support = {
+				light_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+	}
+
+	#####################################################
+	#	35W
+	#####################################################
+
+	GENERIC_LIGHT_ARMOR_TEMPLATE_35_A1 = {
+		enable = {
+			has_country_flag = { flag = EAI_LIGHT_ARMOR_TEMPLATE value = 31 }
+			NOT = { EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				light_armor = 10
+				motorized = 8
+			}
+			support = {
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+			}
+		}
+		# replace_at_match = 0.9
+		# replace_with = GENERIC_LIGHT_ARMOR_TEMPLATE_35_A2
+	}
+	GENERIC_LIGHT_ARMOR_TEMPLATE_35_A2 = {
+		enable = {
+			has_country_flag = { flag = EAI_LIGHT_ARMOR_TEMPLATE value = 31 }
+			EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				light_armor = 10
+				motorized = 8
+			}
+			support = {
+				light_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+	}
+
+	#********************************************************************************************************#
+	#********************************************************************************************************#
+	#	Medium
+	#********************************************************************************************************#
+	#********************************************************************************************************#
+
+	#####################################################
+	#	18W
+	#####################################################
+
+	GENERIC_MEDIUM_ARMOR_TEMPLATE_18_A1 = {
+		enable = {
+			has_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 11 }
+			NOT = { EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes }
+			EAI_has_correct_equipment_to_unlock_MARM_template = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				medium_armor = 5
+				motorized = 4
+			}
+			support = {
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+				medium_flame_tank = 1
+			}
+		}
+		# replace_at_match = 0.9
+		# replace_with = GENERIC_MEDIUM_ARMOR_TEMPLATE_18_A2
+	}
+	GENERIC_MEDIUM_ARMOR_TEMPLATE_18_A2 = {
+		enable = {
+			has_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 11 }
+			EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes
+			EAI_has_correct_equipment_to_unlock_MARM_template = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { has_country_flag = EAI_DESIGN_ARMOR_mechanized_upgrade_production_started check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				medium_armor = 5
+				motorized = 4
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MEDIUM_ARMOR_TEMPLATE_18_A3
+	}
+	GENERIC_MEDIUM_ARMOR_TEMPLATE_18_A3 = {
+		enable = {
+			has_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 11 }
+			EAI_DESIGN_ARMOR_mechanized_upgrade_focus = yes
+			EAI_has_correct_equipment_to_unlock_MARM_template = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { has_country_flag = EAI_DESIGN_ARMOR_modern_upgrade_production_started check_variable = { EAI_fielded_eq_ratio_modern > 0.9 } }
+		target_template = {
+			regiments = {
+				medium_armor = 5
+				mechanized = 4
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MEDIUM_ARMOR_TEMPLATE_18_A4
+	}
+	GENERIC_MEDIUM_ARMOR_TEMPLATE_18_A4 = {
+		enable = {
+			has_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 11 }
+			EAI_DESIGN_ARMOR_modern_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				modern_armor = 5
+				mechanized = 4
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+	}
+
+	#####################################################
+	#	25W
+	#####################################################
+
+	GENERIC_MEDIUM_ARMOR_TEMPLATE_25_A1 = {
+		enable = {
+			has_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 21 }
+			NOT = { EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes }
+			EAI_has_correct_equipment_to_unlock_MARM_template = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				medium_armor = 7
+				motorized = 5
+			}
+			support = {
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+				medium_flame_tank = 1
+			}
+		}
+		# replace_at_match = 0.9
+		# replace_with = GENERIC_MEDIUM_ARMOR_TEMPLATE_25_A2
+	}
+	GENERIC_MEDIUM_ARMOR_TEMPLATE_25_A2 = {
+		enable = {
+			has_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 21 }
+			EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes
+			EAI_has_correct_equipment_to_unlock_MARM_template = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { has_country_flag = EAI_DESIGN_ARMOR_mechanized_upgrade_production_started check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				medium_armor = 7
+				motorized = 5
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MEDIUM_ARMOR_TEMPLATE_25_A3
+	}
+	GENERIC_MEDIUM_ARMOR_TEMPLATE_25_A3 = {
+		enable = {
+			has_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 21 }
+			EAI_DESIGN_ARMOR_mechanized_upgrade_focus = yes
+			EAI_has_correct_equipment_to_unlock_MARM_template = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { has_country_flag = EAI_DESIGN_ARMOR_modern_upgrade_production_started check_variable = { EAI_fielded_eq_ratio_modern > 0.9 } }
+		target_template = {
+			regiments = {
+				medium_armor = 7
+				mechanized = 5
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MEDIUM_ARMOR_TEMPLATE_25_A4
+	}
+	GENERIC_MEDIUM_ARMOR_TEMPLATE_25_A4 = {
+		enable = {
+			has_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 21 }
+			EAI_DESIGN_ARMOR_modern_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				modern_armor = 7
+				mechanized = 5
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+	}
+
+	#####################################################
+	#	35W
+	#####################################################
+
+	GENERIC_MEDIUM_ARMOR_TEMPLATE_35_A1 = {
+		enable = {
+			has_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 31 }
+			NOT = { EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes }
+			EAI_has_correct_equipment_to_unlock_MARM_template = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				medium_armor = 10
+				motorized = 8
+			}
+			support = {
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+				medium_flame_tank = 1
+			}
+		}
+		# replace_at_match = 0.9
+		# replace_with = GENERIC_MEDIUM_ARMOR_TEMPLATE_35_A2
+	}
+	GENERIC_MEDIUM_ARMOR_TEMPLATE_35_A2 = {
+		enable = {
+			has_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 31 }
+			EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes
+			EAI_has_correct_equipment_to_unlock_MARM_template = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { has_country_flag = EAI_DESIGN_ARMOR_mechanized_upgrade_production_started check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				medium_armor = 10
+				motorized = 8
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MEDIUM_ARMOR_TEMPLATE_35_A3
+	}
+	GENERIC_MEDIUM_ARMOR_TEMPLATE_35_A3 = {
+		enable = {
+			has_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 31 }
+			EAI_DESIGN_ARMOR_mechanized_upgrade_focus = yes
+			EAI_has_correct_equipment_to_unlock_MARM_template = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { has_country_flag = EAI_DESIGN_ARMOR_modern_upgrade_production_started check_variable = { EAI_fielded_eq_ratio_modern > 0.9 } }
+		target_template = {
+			regiments = {
+				medium_armor = 10
+				mechanized = 8
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_MEDIUM_ARMOR_TEMPLATE_35_A4
+	}
+	GENERIC_MEDIUM_ARMOR_TEMPLATE_35_A4 = {
+		enable = {
+			has_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 31 }
+			EAI_DESIGN_ARMOR_modern_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				modern_armor = 10
+				mechanized = 8
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+	}
+
+	#********************************************************************************************************#
+	#********************************************************************************************************#
+	#	Heavy
+	#********************************************************************************************************#
+	#********************************************************************************************************#
+
+	#####################################################
+	#	18W
+	#####################################################
+
+	GENERIC_HEAVY_ARMOR_TEMPLATE_18_A1 = {
+		enable = {
+			has_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 11 }
+			NOT = { EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				heavy_armor = 5
+				motorized = 4
+			}
+			support = {
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+			}
+		}
+		# replace_at_match = 0.9
+		# replace_with = GENERIC_HEAVY_ARMOR_TEMPLATE_18_A2
+	}
+	GENERIC_HEAVY_ARMOR_TEMPLATE_18_A2 = {
+		enable = {
+			has_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 11 }
+			EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { has_country_flag = EAI_DESIGN_ARMOR_mechanized_upgrade_production_started check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				heavy_armor = 5
+				motorized = 4
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_HEAVY_ARMOR_TEMPLATE_18_A3
+	}
+	GENERIC_HEAVY_ARMOR_TEMPLATE_18_A3 = {
+		enable = {
+			has_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 11 }
+			EAI_DESIGN_ARMOR_mechanized_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { has_country_flag = EAI_DESIGN_ARMOR_modern_upgrade_production_started check_variable = { EAI_fielded_eq_ratio_modern > 0.9 } }
+		target_template = {
+			regiments = {
+				heavy_armor = 5
+				mechanized = 4
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_HEAVY_ARMOR_TEMPLATE_18_A4
+	}
+	GENERIC_HEAVY_ARMOR_TEMPLATE_18_A4 = {
+		enable = {
+			always = no
+			has_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 11 }
+			EAI_DESIGN_ARMOR_modern_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				modern_armor = 5
+				mechanized = 4
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+	}
+
+	#####################################################
+	#	25W
+	#####################################################
+
+	GENERIC_HEAVY_ARMOR_TEMPLATE_25_A1 = {
+		enable = {
+			has_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 21 }
+			NOT = { EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				heavy_armor = 7
+				motorized = 5
+			}
+			support = {
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+			}
+		}
+		# replace_at_match = 0.9
+		# replace_with = GENERIC_HEAVY_ARMOR_TEMPLATE_25_A2
+	}
+	GENERIC_HEAVY_ARMOR_TEMPLATE_25_A2 = {
+		enable = {
+			has_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 21 }
+			EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { has_country_flag = EAI_DESIGN_ARMOR_mechanized_upgrade_production_started check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				heavy_armor = 7
+				motorized = 5
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_HEAVY_ARMOR_TEMPLATE_25_A3
+	}
+	GENERIC_HEAVY_ARMOR_TEMPLATE_25_A3 = {
+		enable = {
+			has_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 21 }
+			EAI_DESIGN_ARMOR_mechanized_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { has_country_flag = EAI_DESIGN_ARMOR_modern_upgrade_production_started check_variable = { EAI_fielded_eq_ratio_modern > 0.9 } }
+		target_template = {
+			regiments = {
+				heavy_armor = 7
+				mechanized = 5
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_HEAVY_ARMOR_TEMPLATE_25_A4
+	}
+	GENERIC_HEAVY_ARMOR_TEMPLATE_25_A4 = {
+		enable = {
+			has_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 21 }
+			EAI_DESIGN_ARMOR_modern_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				modern_armor = 7
+				mechanized = 5
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+	}
+
+	#####################################################
+	#	35W
+	#####################################################
+
+	GENERIC_HEAVY_ARMOR_TEMPLATE_35_A1 = {
+		enable = {
+			has_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 31 }
+			NOT = { EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes }
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				heavy_armor = 8
+				motorized = 6
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+		# replace_at_match = 0.9
+		# replace_with = GENERIC_HEAVY_ARMOR_TEMPLATE_35_A2
+	}
+	GENERIC_HEAVY_ARMOR_TEMPLATE_35_A2 = {
+		enable = {
+			has_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 31 }
+			EAI_DESIGN_ARMOR_armored_engineer_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { has_country_flag = EAI_DESIGN_ARMOR_mechanized_upgrade_production_started check_variable = { EAI_fielded_eq_ratio_mechanized > 0.9 } }
+		target_template = {
+			regiments = {
+				heavy_armor = 10
+				motorized = 8
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_HEAVY_ARMOR_TEMPLATE_35_A3
+	}
+	GENERIC_HEAVY_ARMOR_TEMPLATE_35_A3 = {
+		enable = {
+			has_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 31 }
+			EAI_DESIGN_ARMOR_mechanized_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { has_country_flag = EAI_DESIGN_ARMOR_modern_upgrade_production_started check_variable = { EAI_fielded_eq_ratio_modern > 0.9 } }
+		target_template = {
+			regiments = {
+				heavy_armor = 10
+				mechanized = 8
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+		replace_at_match = 1.0
+		replace_with = GENERIC_HEAVY_ARMOR_TEMPLATE_35_A4
+	}
+	GENERIC_HEAVY_ARMOR_TEMPLATE_35_A4 = {
+		enable = {
+			has_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 31 }
+			EAI_DESIGN_ARMOR_modern_upgrade_focus = yes
+		}
+		upgrade_prio = { base = 1 }
+		reinforce_prio = 2
+		can_upgrade_in_field = { always = yes }
+		target_template = {
+			regiments = {
+				modern_armor = 10
+				mechanized = 8
+			}
+			support = {
+				medium_flame_tank = 1
+				logistics_company = 1
+				anti_air = 1
+				field_hospital = 1
+				armored_engineer = 1
+			}
+		}
+	}
+}

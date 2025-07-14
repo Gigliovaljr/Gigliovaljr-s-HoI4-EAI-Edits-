@@ -1,0 +1,17 @@
+buildings = {
+
+	EAI_reserved_slot = {
+		show_on_map = 100
+		base_cost = 10800
+		base_cost_conversion = 9000
+		military_production = 0
+		icon_frame = 20
+		value = 5
+		infrastructure_construction_effect = yes
+		hide_if_missing_tech = yes
+		level_cap = {
+			shares_slots = yes
+			state_max = 20
+		}
+	}
+}
