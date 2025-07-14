@@ -1,0 +1,346 @@
+############################################################################################################
+#	Expert AI mod - naval designs
+############################################################################################################
+
+EAI_battleship_early = {
+	category = naval
+	roles = { naval_capital_bb }
+	priority = {
+		base = 0.01
+	}
+
+	EARLY_BATTLESHIP_1 = { # to make task force reinforcement work
+		role_icon_index = 1
+		priority = {
+			base = 0
+		}
+
+		target_variant = {
+			type = ship_hull_heavy_1
+			match_value = 1000
+		}
+	}
+	EARLY_BATTLESHIP_2 = { # to make task force reinforcement work
+		role_icon_index = 1
+		priority = {
+			base = 0
+		}
+
+		target_variant = {
+			type = ship_hull_pre_dreadnought
+			match_value = 1000
+		}
+	}
+	GER_BB = {
+		role_icon_index = 1
+		priority = {
+			base = 1
+		}
+		enable = { original_tag = GER }
+
+		target_variant = {
+			type = ship_hull_heavy_2
+			match_value = 1000
+
+			modules = {
+				fixed_ship_battery_slot = ship_heavy_battery_2
+				fixed_ship_anti_air_slot = ship_anti_air_1
+				fixed_ship_fire_control_system_slot = ship_fire_control_system_0
+				fixed_ship_radar_slot = empty
+				fixed_ship_engine_slot = heavy_ship_engine_2
+				fixed_ship_secondaries_slot = ship_secondaries_1
+				fixed_ship_armor_slot = ship_armor_bb_1
+				front_1_custom_slot = ship_anti_air_1
+				mid_1_custom_slot = empty
+				mid_2_custom_slot = ship_secondaries_1
+				rear_1_custom_slot = ship_heavy_battery_2
+			}
+		}
+	}
+	ITA_BB = {
+		role_icon_index = 1
+		priority = {
+			base = 1
+		}
+		enable = { original_tag = ITA }
+
+		target_variant = {
+			type = ship_hull_heavy_1
+			match_value = 1000
+
+			modules = {
+				fixed_ship_battery_slot = ship_heavy_battery_1
+				fixed_ship_anti_air_slot = ship_anti_air_1
+				fixed_ship_fire_control_system_slot = ship_fire_control_system_0
+				fixed_ship_radar_slot = empty
+				fixed_ship_engine_slot = heavy_ship_engine_2
+				fixed_ship_secondaries_slot = ship_secondaries_1
+				fixed_ship_armor_slot = ship_armor_bb_1
+				front_1_custom_slot = empty
+				mid_1_custom_slot = ship_secondaries_1
+				mid_2_custom_slot = ship_airplane_launcher_1
+				rear_1_custom_slot = ship_heavy_battery_1
+			}
+		}
+	}
+	JAP_SHBB = {
+		role_icon_index = 1
+		priority = {
+			base = 1
+		}
+		enable = { original_tag = JAP }
+
+		target_variant = {
+			type = ship_hull_super_heavy_1
+			match_value = 1000
+
+			modules = {
+				fixed_ship_battery_slot = ship_super_heavy_battery_1
+				fixed_ship_anti_air_slot = ship_anti_air_2
+				fixed_ship_fire_control_system_slot = ship_fire_control_system_1
+				fixed_ship_radar_slot = empty
+				fixed_ship_engine_slot = heavy_ship_engine_2
+				fixed_ship_secondaries_slot = ship_secondaries_2
+				fixed_ship_armor_slot = ship_armor_shbb
+				front_1_custom_slot = ship_anti_air_1
+				front_2_custom_slot = empty
+				mid_1_custom_slot = empty
+				mid_2_custom_slot = ship_secondaries_2
+				mid_3_custom_slot = ship_secondaries_2
+				rear_1_custom_slot = ship_super_heavy_battery_1
+				rear_2_custom_slot = ship_airplane_launcher_1
+			}
+		}
+	}
+}
+
+EAI_battleship = {
+	category = naval
+	roles = { naval_capital_bb }
+	priority = { # Priority of design among all roles (1-10)
+		base = 0
+		modifier = { add = 5000 check_variable = { EAI_FOCUS/NAVY/battleship = global.EAI_A_BB_DESIGN } }
+	}
+
+	##############################################################################
+	### 	BASIC
+	##############################################################################
+
+	BASIC_BATTLESHIP = {
+		role_icon_index = 1
+		priority = {
+			base = 0
+			modifier = { 
+				add = 10000
+
+				### Requirements
+				has_tech = basic_ship_hull_heavy
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_heavy_2
+			match_value = 1
+
+			modules = {
+				
+				# ELECTRONICS
+				fixed_ship_fire_control_system_slot = { any_of = { ship_fire_control_system } upgrade > current }
+				fixed_ship_radar_slot = { any_of = { ship_radar } upgrade > current }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = heavy_ship_engine_2 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { any_of = { ship_anti_air } upgrade > current }
+
+				# ARMOR
+				fixed_ship_armor_slot = { module = ship_armor_bb_2 upgrade = current }
+
+				# MAIN
+				fixed_ship_secondaries_slot = { any_of = { ship_secondaries } upgrade > current }
+				fixed_ship_battery_slot = { any_of = { ship_heavy_battery } upgrade > current }
+
+				# CUSTOM
+				front_1_custom_slot = { any_of = { ship_heavy_battery } upgrade > current }
+				mid_1_custom_slot = { any_of = { ship_heavy_battery } upgrade > current }
+				mid_2_custom_slot = { any_of = { ship_anti_air } upgrade > current }
+				rear_1_custom_slot = { any_of = { ship_anti_air } upgrade > current }
+			}
+		}
+
+		requirements = {
+			module = ship_armor_bb_2
+		}
+	}
+
+	##############################################################################
+	### 	IMPROVED
+	##############################################################################
+
+	IMPROVED_BATTLESHIP = {
+		role_icon_index = 1
+		priority = {
+			base = 0
+			modifier = { 
+				add = 20000
+
+				### Requirements
+				has_tech = improved_ship_hull_heavy
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_heavy_3
+			match_value = 1.1
+
+			modules = {
+				
+				# ELECTRONICS
+				fixed_ship_fire_control_system_slot = { any_of = { ship_fire_control_system } upgrade > current }
+				fixed_ship_radar_slot = { any_of = { ship_radar } upgrade > current }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = heavy_ship_engine_3 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { any_of = { ship_anti_air } upgrade > current }
+
+				# ARMOR
+				fixed_ship_armor_slot = { module = ship_armor_bb_2 upgrade = current }
+
+				# MAIN
+				fixed_ship_secondaries_slot = { any_of = { ship_secondaries } upgrade > current }
+				fixed_ship_battery_slot = { any_of = { ship_heavy_battery } upgrade > current }
+
+				# CUSTOM
+				front_1_custom_slot = { any_of = { ship_heavy_battery } upgrade > current }
+				mid_1_custom_slot = { any_of = { ship_heavy_battery } upgrade > current }
+				mid_2_custom_slot = { any_of = { ship_anti_air } upgrade > current }
+				mid_3_custom_slot = { any_of = { ship_secondaries } upgrade > current }
+				rear_1_custom_slot = { any_of = { ship_anti_air } upgrade > current }
+			}
+		}
+
+		requirements = {
+			module = ship_armor_bb_2
+		}
+	}
+
+	##############################################################################
+	### 	ADVANCED
+	##############################################################################
+
+	ADVANCED_BATTLESHIP = {
+		role_icon_index = 1
+		priority = {
+			base = 0
+			modifier = { 
+				add = 40000
+
+				### Requirements
+				has_tech = advanced_ship_hull_heavy
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_heavy_4
+			match_value = 1.1
+
+			modules = {
+				
+				# ELECTRONICS
+				fixed_ship_fire_control_system_slot = { any_of = { ship_fire_control_system } upgrade > current }
+				fixed_ship_radar_slot = { any_of = { ship_radar } upgrade > current }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = heavy_ship_engine_4 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { any_of = { ship_anti_air } upgrade > current }
+
+				# ARMOR
+				fixed_ship_armor_slot = { module = ship_armor_bb_3 upgrade = current }
+
+				# MAIN
+				fixed_ship_secondaries_slot = { any_of = { ship_dp_secondaries } upgrade > current }
+				fixed_ship_battery_slot = { any_of = { ship_heavy_battery } upgrade > current }
+
+				# CUSTOM
+				front_1_custom_slot = { any_of = { ship_heavy_battery } upgrade > current }
+				mid_1_custom_slot = { any_of = { ship_heavy_battery } upgrade > current }
+				mid_2_custom_slot = { any_of = { ship_anti_air } upgrade > current }
+				mid_3_custom_slot = { any_of = { ship_dp_secondaries } upgrade > current }
+				rear_1_custom_slot = { any_of = { ship_anti_air } upgrade > current }
+			}
+		}
+
+		requirements = {
+			module = ship_armor_bb_3
+		}
+	}
+}
+
+EAI_super_heavy_battleship = {
+	category = naval
+	roles = { naval_capital_bb }
+	priority = { # Priority of design among all roles (1-10)
+		base = 0
+		modifier = { add = 5000 check_variable = { EAI_FOCUS/NAVY/battleship = global.EAI_B_BB_DESIGN } }
+	}
+
+	##############################################################################
+	### 	SUPER_HEAVY_BATTLESHIP
+	##############################################################################
+
+	SUPER_HEAVY_BATTLESHIP = {
+		role_icon_index = 1
+		priority = {
+			base = 0
+			modifier = { 
+				add = 10000
+
+				### Requirements
+				is_special_project_completed = sp:sp_naval_super_heavy_battleship
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_super_heavy_1
+			match_value = 1.4
+
+			modules = {
+
+				# ELECTRONICS
+				fixed_ship_fire_control_system_slot = { any_of = { ship_fire_control_system } upgrade > current }
+				fixed_ship_radar_slot = { any_of = { ship_radar } upgrade > current }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = heavy_ship_engine_2 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { any_of = { ship_anti_air } upgrade > current }
+
+				# ARMOR
+				fixed_ship_armor_slot = { module = ship_armor_shbb upgrade = current }
+
+				# MAIN
+				fixed_ship_secondaries_slot = { any_of = { ship_dp_secondaries } upgrade > current }
+				fixed_ship_battery_slot = { any_of = { ship_super_heavy_battery } upgrade > current }
+
+				# CUSTOM
+				front_1_custom_slot = { any_of = { ship_super_heavy_battery } upgrade > current }
+				front_2_custom_slot = { any_of = { ship_anti_air } upgrade > current }
+				mid_1_custom_slot = { any_of = { ship_dp_secondaries } upgrade > current }
+				mid_2_custom_slot = { any_of = { ship_dp_secondaries } upgrade > current }
+				mid_3_custom_slot = { any_of = { ship_dp_secondaries } upgrade > current }
+				rear_1_custom_slot = { any_of = { ship_super_heavy_battery } upgrade > current }
+				rear_1_custom_slot = { any_of = { ship_anti_air } upgrade > current }
+			}
+		}
+
+		requirements = {
+			module = ship_armor_shbb
+		}
+	}
+}

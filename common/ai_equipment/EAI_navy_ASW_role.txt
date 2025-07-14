@@ -1,0 +1,386 @@
+############################################################################################################
+#	Expert AI mod - naval designs
+############################################################################################################
+
+EAI_ASW_destroyer_A = {
+	category = naval
+	roles = { naval_escort }
+	priority = { # Priority of design among all roles (1-10)
+		base = 0
+		modifier = { add = 8000 check_variable = { EAI_FOCUS/NAVY/ASW_destroyer = global.EAI_A_ASW_DD_DESIGN } }
+	}
+
+	##############################################################################
+	### 	BASIC DESTROYER
+	##############################################################################
+
+	BASIC_ASW_DESTROYER_A = {
+		role_icon_index = 3
+		priority = {
+			base = 0
+			modifier = { 
+				add = 10000
+
+				### Requirements
+				has_tech = basic_ship_hull_light
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_light_2
+			match_value = 1
+
+			modules = {
+
+				# ELECTRONICS
+				fixed_ship_fire_control_system_slot = { any_of = { ship_sonar } upgrade > current }
+				fixed_ship_radar_slot = { module = empty }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = light_ship_engine_2 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { any_of = { ship_anti_air } upgrade > current }
+
+				# MAIN
+				fixed_ship_battery_slot = { any_of = { ship_light_battery } upgrade > current }
+				fixed_ship_torpedo_slot = empty 
+
+				# CUSTOM
+				mid_1_custom_slot = { any_of = { ship_depth_charge } upgrade > current }
+				rear_1_custom_slot = { any_of = { ship_depth_charge } upgrade > current }
+			}
+		}
+
+		requirements = {
+			module = ship_depth_charge
+			module = ship_sonar
+		}
+	}
+
+	##############################################################################
+	### 	IMPROVED DESTROYER
+	##############################################################################
+
+	IMPROVED_DESTROYER_A = {
+		role_icon_index = 3
+		priority = {
+			base = 0
+			modifier = { 
+				add = 20000
+
+				### Requirements
+				has_tech = improved_ship_hull_light
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_light_3
+			match_value = 1
+
+			modules = {
+
+				# ELECTRONICS
+				fixed_ship_fire_control_system_slot = { any_of = { ship_sonar } upgrade > current }
+				fixed_ship_radar_slot = { any_of = { ship_radar } upgrade > current }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = light_ship_engine_3 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { any_of = { ship_anti_air } upgrade > current }
+
+				# MAIN
+				fixed_ship_battery_slot = { any_of = { ship_light_battery } upgrade > current }
+				fixed_ship_torpedo_slot = empty 
+
+				# CUSTOM
+				front_1_custom_slot = { any_of = { ship_depth_charge } upgrade > current }
+				mid_1_custom_slot = { any_of = { ship_depth_charge } upgrade > current }
+				rear_1_custom_slot = { any_of = { ship_depth_charge } upgrade > current }
+			}
+		}
+
+		requirements = {
+			module = ship_depth_charge
+			module = ship_sonar
+		}
+	}
+
+	##############################################################################
+	### 	ADVANCED DESTROYER
+	##############################################################################
+
+	ADVANCED_ASW_DESTROYER_A = {
+		role_icon_index = 3
+		priority = {
+			base = 0
+			modifier = { 
+				add = 40000
+
+				### Requirements
+				has_tech = advanced_ship_hull_light
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_light_4
+			match_value = 1
+
+			modules = {
+
+				# ELECTRONICS
+				fixed_ship_fire_control_system_slot = { any_of = { ship_sonar } upgrade > current }
+				fixed_ship_radar_slot = { any_of = { ship_radar } upgrade > current }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = light_ship_engine_4 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { any_of = { ship_anti_air } upgrade > current }
+
+				# MAIN
+				fixed_ship_battery_slot = { any_of = { ship_light_battery } upgrade > current }
+				fixed_ship_torpedo_slot = empty 
+
+				# CUSTOM
+				front_1_custom_slot = { any_of = { ship_depth_charge } upgrade > current }
+				mid_1_custom_slot = { any_of = { ship_depth_charge } upgrade > current }
+				mid_2_custom_slot = { any_of = { ship_depth_charge } upgrade > current }
+				rear_1_custom_slot = { module = empty upgrade = current }
+			}
+		}
+
+		requirements = {
+			module = ship_depth_charge
+			module = ship_sonar
+		}
+	}
+}
+
+EAI_ASW_destroyer_B = {
+	category = naval
+	roles = { naval_escort }
+	priority = { # Priority of design among all roles (1-10)
+		base = 0
+		modifier = { add = 8000 check_variable = { EAI_FOCUS/NAVY/ASW_destroyer = global.EAI_B_ASW_DD_DESIGN } }
+	}
+
+	##############################################################################
+	### 	BASIC DESTROYER
+	##############################################################################
+
+	BASIC_ASW_DESTROYER_B = {
+		role_icon_index = 3
+		priority = {
+			base = 0
+			modifier = { 
+				add = 10000
+
+				### Requirements
+				has_tech = basic_ship_hull_light
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_light_2
+			match_value = 1
+
+			modules = {
+
+				# ELECTRONICS
+				fixed_ship_fire_control_system_slot = { any_of = { ship_sonar } upgrade > current }
+				fixed_ship_radar_slot = { module = empty }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = light_ship_engine_2 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = empty
+
+				# MAIN
+				fixed_ship_battery_slot = { any_of = { ship_light_battery } upgrade > current }
+				fixed_ship_torpedo_slot = empty 
+
+				# CUSTOM
+				mid_1_custom_slot = { any_of = { ship_depth_charge } upgrade > current }
+				rear_1_custom_slot = { any_of = { ship_depth_charge } upgrade > current }
+			}
+		}
+
+		requirements = {
+			module = ship_depth_charge
+			module = ship_sonar
+		}
+	}
+}
+
+EAI_ASW_light_cruiser = {
+	category = naval
+	roles = { naval_escort_cl }
+	priority = { # Priority of design among all roles (1-10)
+		base = 0
+		modifier = { add = 8000 check_variable = { EAI_FOCUS/NAVY/ASW_light_cruiser = global.EAI_ON } }
+	}
+
+	##############################################################################
+	### 	BASIC
+	##############################################################################
+
+	BASIC_ASW_LIGHT_CRUISER = {
+		role_icon_index = 3
+		priority = {
+			base = 0
+			modifier = { 
+				add = 10000
+
+				### Requirements
+				has_tech = basic_ship_hull_cruiser
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_cruiser_2
+			match_value = 1
+
+			modules = {
+				
+				# ELECTRONICS
+				fixed_ship_fire_control_system_slot = { any_of = { ship_sonar } upgrade > current }
+				fixed_ship_radar_slot = { module = empty }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = cruiser_ship_engine_2 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { any_of = { ship_anti_air } upgrade > current }
+
+				# ARMOR
+				fixed_ship_armor_slot = empty
+
+				# MAIN
+				fixed_ship_secondaries_slot = empty
+				fixed_ship_battery_slot = { any_of = { ship_light_battery } upgrade > current }
+
+				# CUSTOM
+				front_1_custom_slot = empty
+				mid_1_custom_slot = { any_of = { ship_airplane_launcher } upgrade > current }
+				mid_2_custom_slot = { any_of = { ship_airplane_launcher } upgrade > current }
+				rear_1_custom_slot = { any_of = { ship_airplane_launcher } upgrade > current }
+			}
+		}
+
+		requirements = {
+			module = ship_sonar
+			module = ship_airplane_launcher
+		}
+	}
+
+	##############################################################################
+	### 	IMPROVED
+	##############################################################################
+
+	IMPROVED_ASW_LIGHT_CRUISER = {
+		role_icon_index = 3
+		priority = {
+			base = 0
+			modifier = { 
+				add = 20000
+
+				### Requirements
+				has_tech = improved_ship_hull_cruiser
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_cruiser_3
+			match_value = 1.1
+
+			modules = {
+
+				# ELECTRONICS
+				fixed_ship_fire_control_system_slot = { any_of = { ship_sonar } upgrade > current }
+				fixed_ship_radar_slot = { any_of = { ship_radar } upgrade > current }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = cruiser_ship_engine_3 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { any_of = { ship_anti_air } upgrade > current }
+
+				# ARMOR
+				fixed_ship_armor_slot = empty
+
+				# MAIN
+				fixed_ship_secondaries_slot = empty
+				fixed_ship_battery_slot = { any_of = { ship_light_battery } upgrade > current }
+
+				# CUSTOM
+				front_1_custom_slot = empty
+				mid_1_custom_slot = { any_of = { ship_airplane_launcher } upgrade > current }
+				mid_2_custom_slot = { any_of = { ship_airplane_launcher } upgrade > current }
+				rear_1_custom_slot = { any_of = { ship_airplane_launcher } upgrade > current }
+				rear_2_custom_slot = { any_of = { ship_airplane_launcher } upgrade > current }
+			}
+		}
+
+		requirements = {
+			module = ship_sonar
+			module = ship_airplane_launcher
+		}
+	}
+
+	##############################################################################
+	### 	ADVANCED
+	##############################################################################
+
+	ADVANCED_ASW_LIGHT_CRUISER = {
+		role_icon_index = 3
+		priority = {
+			base = 0
+			modifier = { 
+				add = 40000
+
+				### Requirements
+				has_tech = advanced_ship_hull_cruiser
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_cruiser_4
+			match_value = 1.1
+
+			modules = {
+
+				# ELECTRONICS
+				fixed_ship_fire_control_system_slot = { any_of = { ship_sonar } upgrade > current }
+				fixed_ship_radar_slot = { any_of = { ship_radar } upgrade > current }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = cruiser_ship_engine_4 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { any_of = { ship_anti_air } upgrade > current }
+
+				# ARMOR
+				fixed_ship_armor_slot = empty
+
+				# MAIN
+				fixed_ship_secondaries_slot = empty
+				fixed_ship_battery_slot = { any_of = { ship_light_battery } upgrade > current }
+
+				# CUSTOM
+				front_1_custom_slot = empty
+				mid_1_custom_slot = { any_of = { ship_airplane_launcher } upgrade > current }
+				mid_2_custom_slot = { any_of = { ship_airplane_launcher } upgrade > current }
+				rear_1_custom_slot = { any_of = { ship_airplane_launcher } upgrade > current }
+				rear_2_custom_slot = { any_of = { ship_airplane_launcher } upgrade > current }
+			}
+		}
+
+		requirements = {
+			module = ship_sonar
+			module = ship_airplane_launcher
+		}
+	}
+}

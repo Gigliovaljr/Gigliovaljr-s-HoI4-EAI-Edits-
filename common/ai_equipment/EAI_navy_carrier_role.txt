@@ -1,0 +1,340 @@
+############################################################################################################
+#	Expert AI mod - naval designs
+############################################################################################################
+
+EAI_carrier_early = {
+	category = naval
+	roles = { naval_carrier }
+	priority = {
+		base = 0
+	}
+
+	EARLY_CARRIER_1 = { # to make task force reinforcement work
+		role_icon_index = 7
+		priority = {
+			base = 0
+		}
+
+		target_variant = {
+			type = ship_hull_carrier_conversion_bb
+			match_value = 1000
+		}
+	}
+	EARLY_CARRIER_2 = { # to make task force reinforcement work
+		role_icon_index = 7
+		priority = {
+			base = 0
+		}
+
+		target_variant = {
+			type = ship_hull_carrier_conversion_ca
+			match_value = 1000
+		}
+	}
+	JAP_CV = {
+		role_icon_index = 7
+		priority = {
+			base = 1
+		}
+		enable = { original_tag = JAP }
+
+		target_variant = {
+			type = ship_hull_carrier_1
+			match_value = 1000
+
+			modules = {
+				fixed_ship_deck_slot_1 = ship_deck_space
+				fixed_ship_deck_slot_2 = ship_deck_space
+				fixed_ship_anti_air_slot = ship_anti_air_1
+				fixed_ship_radar_slot = empty
+				fixed_ship_engine_slot = carrier_ship_engine_1
+				fixed_ship_secondaries_slot = ship_secondaries_1
+				front_1_custom_slot = ship_deck_space
+			}
+		}
+	}
+}
+
+EAI_carrier_A = {
+	category = naval
+	roles = { naval_carrier }
+	priority = { # Priority of design among all roles (1-10)
+		base = 0
+		modifier = { add = 5000 check_variable = { EAI_FOCUS/NAVY/carrier = global.EAI_A_CV_DESIGN } }
+	}
+
+	##############################################################################
+	### 	BASIC
+	##############################################################################
+
+	BASIC_CARRIER_A = {
+		role_icon_index = 7
+		priority = {
+			base = 0
+			modifier = { 
+				add = 10000
+
+				### Requirements
+				has_tech = basic_ship_hull_carrier
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_carrier_1
+			match_value = 1
+
+			modules = {
+				
+				# ELECTRONICS
+				fixed_ship_radar_slot = { any_of = { ship_radar } upgrade > current }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = carrier_ship_engine_2 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { module = empty }
+
+				# MAIN
+				fixed_ship_secondaries_slot = { module = empty }
+				fixed_ship_deck_slot_1 = { any_of = { ship_deck_space } upgrade > current }
+				fixed_ship_deck_slot_2 = { any_of = { ship_deck_space } upgrade > current }
+
+				# CUSTOM
+				front_1_custom_slot = { any_of = { ship_deck_space } upgrade > current }
+				mid_1_custom_slot = { any_of = { ship_deck_space } upgrade > current }
+			}
+		}
+	}
+
+	##############################################################################
+	### 	IMPROVED
+	##############################################################################
+
+	IMPROVED_CARRIER_A = {
+		role_icon_index = 7
+		priority = {
+			base = 0
+			modifier = { 
+				add = 20000
+
+				### Requirements
+				has_tech = improved_ship_hull_carrier
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_carrier_2
+			match_value = 1.1
+
+			modules = {
+
+				# ELECTRONICS
+				fixed_ship_radar_slot = { any_of = { ship_radar } upgrade > current }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = carrier_ship_engine_3 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { any_of = { ship_anti_air } upgrade > current }
+
+				# MAIN
+				fixed_ship_secondaries_slot = { any_of = { ship_secondaries } upgrade > current }
+				fixed_ship_deck_slot_1 = { any_of = { ship_deck_space } upgrade > current }
+				fixed_ship_deck_slot_2 = { any_of = { ship_deck_space } upgrade > current }
+
+				# CUSTOM
+				front_1_custom_slot = { any_of = { ship_deck_space } upgrade > current }
+				mid_1_custom_slot = { any_of = { ship_deck_space } upgrade > current }
+				mid_2_custom_slot = { any_of = { ship_deck_space } upgrade > current }
+			}
+		}
+	}
+
+	##############################################################################
+	### 	ADVANCED
+	##############################################################################
+
+	ADVANCED_CARRIER_A = {
+		role_icon_index = 7
+		priority = {
+			base = 0
+			modifier = { 
+				add = 40000
+
+				### Requirements
+				has_tech = advanced_ship_hull_carrier
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_carrier_3
+			match_value = 1.1
+
+			modules = {
+
+				# ELECTRONICS
+				fixed_ship_radar_slot = { any_of = { ship_radar } upgrade > current }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = carrier_ship_engine_4 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { any_of = { ship_anti_air } upgrade > current }
+
+				# MAIN
+				fixed_ship_secondaries_slot = { any_of = { ship_dp_secondaries } upgrade > current }
+				fixed_ship_deck_slot_1 = { any_of = { ship_deck_space } upgrade > current }
+				fixed_ship_deck_slot_2 = { any_of = { ship_deck_space } upgrade > current }
+
+				# CUSTOM
+				front_1_custom_slot = { any_of = { ship_deck_space } upgrade > current }
+				mid_1_custom_slot = { any_of = { ship_deck_space } upgrade > current }
+				mid_2_custom_slot = { any_of = { ship_deck_space } upgrade > current }
+				rear_1_custom_slot = { any_of = { ship_deck_space } upgrade > current }
+			}
+		}
+	}
+}
+
+EAI_carrier_B = {
+	category = naval
+	roles = { naval_carrier }
+	priority = { # Priority of design among all roles (1-10)
+		base = 0
+		modifier = { add = 5000 check_variable = { EAI_FOCUS/NAVY/carrier = global.EAI_B_CV_DESIGN } }
+	}
+
+	##############################################################################
+	### 	BASIC
+	##############################################################################
+
+	BASIC_CARRIER_B = {
+		role_icon_index = 7
+		priority = {
+			base = 0
+			modifier = { 
+				add = 10000
+
+				### Requirements
+				has_tech = basic_ship_hull_carrier
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_carrier_1
+			match_value = 1
+
+			modules = {
+				
+				# ELECTRONICS
+				fixed_ship_radar_slot = { any_of = { ship_radar } upgrade > current }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = carrier_ship_engine_2 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { module = empty }
+
+				# MAIN
+				fixed_ship_secondaries_slot = { module = empty }
+				fixed_ship_deck_slot_1 = { any_of = { ship_deck_space } upgrade > current }
+				fixed_ship_deck_slot_2 = { any_of = { ship_deck_space } upgrade > current }
+
+				# CUSTOM
+				front_1_custom_slot = { module = empty upgrade = current }
+				mid_1_custom_slot = { module = empty upgrade = current }
+			}
+		}
+	}
+
+	##############################################################################
+	### 	IMPROVED
+	##############################################################################
+
+	IMPROVED_CARRIER_B = {
+		role_icon_index = 7
+		priority = {
+			base = 0
+			modifier = { 
+				add = 20000
+
+				### Requirements
+				has_tech = improved_ship_hull_carrier
+				
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_carrier_2
+			match_value = 1.1
+
+			modules = {
+
+				# ELECTRONICS
+				fixed_ship_radar_slot = { any_of = { ship_radar } upgrade > current }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = carrier_ship_engine_3 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { any_of = { ship_anti_air } upgrade > current }
+
+				# MAIN
+				fixed_ship_secondaries_slot = { any_of = { ship_secondaries } upgrade > current }
+				fixed_ship_deck_slot_1 = { any_of = { ship_deck_space } upgrade > current }
+				fixed_ship_deck_slot_2 = { any_of = { ship_deck_space } upgrade > current }
+
+				# CUSTOM
+				front_1_custom_slot = { module = empty upgrade = current }
+				mid_1_custom_slot = { module = empty upgrade = current }
+				mid_2_custom_slot = { module = empty upgrade = current }
+			}
+		}
+	}
+
+	##############################################################################
+	### 	ADVANCED
+	##############################################################################
+
+	ADVANCED_CARRIER_B = {
+		role_icon_index = 7
+		priority = {
+			base = 0
+			modifier = { 
+				add = 40000
+
+				### Requirements
+				has_tech = advanced_ship_hull_carrier
+				
+			}
+		}
+
+		target_variant = {
+			type = ship_hull_carrier_3
+			match_value = 1.1
+
+			modules = {
+
+				# ELECTRONICS
+				fixed_ship_radar_slot = { any_of = { ship_radar } upgrade > current }
+
+				# ENGINE
+				fixed_ship_engine_slot = { module = carrier_ship_engine_4 upgrade = current }
+
+				# ANTI-AIR
+				fixed_ship_anti_air_slot = { any_of = { ship_anti_air } upgrade > current }
+
+				# MAIN
+				fixed_ship_secondaries_slot = { any_of = { ship_dp_secondaries } upgrade > current }
+				fixed_ship_deck_slot_1 = { any_of = { ship_deck_space } upgrade > current }
+				fixed_ship_deck_slot_2 = { any_of = { ship_deck_space } upgrade > current }
+
+				# CUSTOM
+				front_1_custom_slot = { module = empty upgrade = current }
+				mid_1_custom_slot = { module = empty upgrade = current }
+				mid_2_custom_slot = { module = empty upgrade = current }
+				rear_1_custom_slot = { module = empty upgrade = current }
+			}
+		}
+	}
+}
