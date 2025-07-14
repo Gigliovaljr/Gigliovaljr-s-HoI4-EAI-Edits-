@@ -1,0 +1,1659 @@
+############################################################################################################
+# 	Expert AI mod - priority construction AI
+############################################################################################################
+
+### Refineries
+
+@EAI_PC_build_refineries_TYPE_ID = 1
+@EAI_PC_build_refineries_PRIO = 1500
+EAI_PC_build_refineries = {
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_REF }
+	set_temp_variable = { _project_type_id = @EAI_PC_build_refineries_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_build_refineries_PRIO }
+	set_temp_variable = { _project_cancel_unbuildable = 1 }
+
+	EAI_PC_build_refineries_STRATEGIES = yes
+
+	if = {
+		limit = {
+			check_variable = { EAI_PC_build_refineries_STRATEGIES = 1 }
+			set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+			EAI_PC_get_total_queued_num = yes
+			check_variable = { queued_type_num_ < 2 }
+		}
+
+		if = { limit = { check_variable = { EAI_has_shared_slot_scores = 0 } }
+
+			set_temp_variable = { _num_available_shared_slots > 1 }
+			EAI_get_shared_slot_scores = yes
+		}
+
+		for_each_scope_loop = { array = EAI_shared_slot_scores
+
+			if = { limit = { EAI_PC_can_build_project = yes NOT = { EAI_PC_has_same_type_project_here = yes } }
+
+				EAI_PC_start_project = yes
+				set_temp_variable = { break = 1 }
+			}
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_build_refineries_STRATEGIES = {
+
+	set_temp_variable = { EAI_PC_build_refineries_STRATEGIES = 0 }
+
+	if = {
+		limit = {
+			OR = {
+
+				### Strategies
+
+				AND = {
+					tag = SOV
+					has_war = yes
+					check_variable = { EAI_rubber_resource_shortage = 3 }
+				}
+			}
+		}
+	
+		set_temp_variable = { EAI_PC_build_refineries_STRATEGIES = 1 }
+	}
+}
+
+### Silos
+
+@EAI_PC_build_fuel_silos_TYPE_ID = 2
+@EAI_PC_build_fuel_silos_PRIO = 1000
+EAI_PC_build_fuel_silos = {
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_SILO }
+	set_temp_variable = { _project_type_id = @EAI_PC_build_fuel_silos_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_build_fuel_silos_PRIO }
+	set_temp_variable = { _project_cancel_unbuildable = 1 }
+
+	EAI_PC_build_fuel_silos_STRATEGIES = yes
+
+	if = {
+		limit = {
+			check_variable = { EAI_PC_build_fuel_silos_STRATEGIES = 1 }
+			set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+			EAI_PC_get_total_queued_num = yes
+			check_variable = { queued_type_num_ < 2 }
+		}
+
+		if = { limit = { check_variable = { EAI_has_shared_slot_scores = 0 } }
+
+			EAI_get_shared_slot_scores = yes
+		}
+
+		for_each_scope_loop = { array = EAI_shared_slot_scores
+
+			if = { limit = { EAI_PC_can_build_project = yes NOT = { EAI_PC_has_same_type_project_here = yes } }
+
+				EAI_PC_start_project = yes
+				set_temp_variable = { break = 1 }
+			}
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_build_fuel_silos_STRATEGIES = {
+
+	set_temp_variable = { EAI_PC_build_fuel_silos_STRATEGIES = 0 }
+
+	if = {
+		limit = {
+			OR = {
+
+				### Strategies
+
+				AND = {
+					tag = JAP
+		
+					check_variable = { max_fuel_k < 2000 }
+
+					check_variable = { EAI_PC_built_type_PC_SILO_num < 15 }
+		
+					num_of_civilian_factories > 50
+				}
+
+				AND = {
+					tag = ENG
+		
+					check_variable = { max_fuel_k < 2500 }
+
+					check_variable = { EAI_PC_built_type_PC_SILO_num < 20 }
+		
+					num_of_civilian_factories > 50
+				}
+			}
+		}
+
+		set_temp_variable = { EAI_PC_build_fuel_silos_STRATEGIES = 1 }
+	}
+}
+
+### Radar
+
+@EAI_PC_build_radar_TYPE_ID = 3
+@EAI_PC_build_radar_PRIO = 1900
+EAI_PC_build_radar = {
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_RADAR }
+	set_temp_variable = { _project_type_id = @EAI_PC_build_radar_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_build_radar_PRIO }
+	set_temp_variable = { _project_cancel_unbuildable = 1 }
+
+	EAI_PC_build_radar_STRATEGIES = yes
+
+	if = { 
+		limit = { 
+			check_variable = { EAI_PC_build_radar_STRATEGIES = 1 }
+			set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+			EAI_PC_get_total_queued_num = yes
+			check_variable = { queued_type_num_ < 2 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_build_radar" }
+
+		random_scope_in_array = { array = controlled_states 
+			limit = { 
+				EAI_radar_location_2 = yes 
+				EAI_PC_can_build_project = yes 
+				NOT = { EAI_PC_has_same_type_project_here = yes } 
+			}
+
+			EAI_PC_start_project = yes
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_build_radar_STRATEGIES = {
+
+	set_temp_variable = { EAI_PC_build_radar_STRATEGIES = 0 }
+
+	if = {
+		limit = {
+			OR = {
+
+				### Strategies
+
+				AND = {
+					threat > 0.5
+
+					any_of_scopes = { array = controlled_states 
+
+						EAI_radar_location_2 = yes 
+						EAI_PC_can_build_project = yes 
+						NOT = { EAI_PC_has_same_type_project_here = yes } 
+					}
+				}
+			}
+		}
+
+		set_temp_variable = { EAI_PC_build_radar_STRATEGIES = 1 }
+	}
+}
+
+### Radar
+
+@EAI_PC_build_radar_2_TYPE_ID = 15
+@EAI_PC_build_radar_2_PRIO = 1900
+EAI_PC_build_radar_2 = {
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_RADAR }
+	set_temp_variable = { _project_type_id = @EAI_PC_build_radar_2_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_build_radar_2_PRIO }
+
+	EAI_PC_build_radar_2_STRATEGIES = yes
+
+	if = {
+		limit = {
+			check_variable = { EAI_PC_build_radar_2_STRATEGIES = 1 }
+
+			set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+			set_temp_variable = { _get_queued_num_type_id = _project_type_id }
+			EAI_PC_get_total_queued_num = yes
+			check_variable = { queued_type_num_ < 2 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_build_radar_2" }
+
+		random_scope_in_array = { array = _target_states_
+
+			EAI_PC_start_project = yes
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_build_radar_2_STRATEGIES = {
+
+	set_temp_variable = { EAI_PC_build_radar_2_STRATEGIES = 0 }
+
+	clear_temp_array = _target_states_
+
+	if = {
+		limit = { # Doesn't really work because Iceland can't build radar
+			tag = USA
+			100 = {
+				CONTROLLER = { 
+					is_ai = yes
+					is_in_faction_with = USA 
+					has_war_together_with = USA
+				}
+			}
+		}
+
+		add_to_temp_array = { _target_states_ = 100.id }
+
+		set_temp_variable = { _project_target_level = 3 }
+		set_temp_variable = { _project_queue_num = 1 }
+		set_temp_variable = { _project_build_for_ally = 1 }
+
+		set_temp_variable = { EAI_PC_build_radar_2_STRATEGIES = 1 }
+	}
+}
+
+### Resource
+
+@EAI_PC_resource_extraction_TYPE_ID = 4
+@EAI_PC_resource_extraction_PRIO = 1000
+EAI_PC_resource_extraction = {
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_INF }
+	set_temp_variable = { _project_type_id = @EAI_PC_resource_extraction_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_resource_extraction_PRIO }
+	set_temp_variable = { _project_cancel_unbuildable = 1 }
+
+	EAI_PC_resource_extraction_STRATEGIES = yes
+	
+	if = {
+		limit = {
+			check_variable = { EAI_PC_resource_extraction_STRATEGIES = 1 }
+			set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+			EAI_PC_get_total_queued_num = yes
+			check_variable = { queued_type_num_ < 2 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_resource_extraction" }
+
+		if = { limit = { check_variable = { EAI_has_resource_slot_scores = 0 } }
+
+			EAI_get_resource_slot_scores = yes
+		}
+
+		for_each_scope_loop = { array = EAI_resource_slot_scores
+
+			if = { 
+				limit = { 
+					EAI_PC_can_build_project = yes
+					NOT = { EAI_PC_has_same_type_project_here = yes }
+				}
+
+				EAI_PC_start_project = yes
+				set_temp_variable = { break = 1 }
+			}
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_resource_extraction_STRATEGIES = {
+
+	set_temp_variable = { EAI_PC_resource_extraction_STRATEGIES = 0 }
+
+	if = {
+		limit = {
+			OR = {
+
+				### Strategies
+
+				# Needs resources and has a state with a lot of resources
+				AND = {
+					any_of_scopes = { array = controlled_states
+
+						EAI_PC_can_build_project = yes
+						NOT = { EAI_PC_has_same_type_project_here = yes }
+
+						OR = {
+							AND = { has_resources_amount = { resource = oil amount > 50 } 			ROOT = { has_war = yes fuel_ratio < 0.5 } }
+							AND = { has_resources_amount = { resource = aluminium amount > 50 } 	check_variable = { ROOT.EAI_needs_aluminium = 3 } }
+							AND = { has_resources_amount = { resource = rubber amount > 50 } 		check_variable = { ROOT.EAI_needs_rubber = 3 } }
+							AND = { has_resources_amount = { resource = tungsten amount > 50 } 		check_variable = { ROOT.EAI_needs_tungsten = 3 } }
+							AND = { has_resources_amount = { resource = steel amount > 50 } 		check_variable = { ROOT.EAI_needs_steel = 3 } }
+							AND = { has_resources_amount = { resource = chromium amount > 50 } 		check_variable = { ROOT.EAI_needs_chromium = 3 } }
+						}
+					}
+				}
+
+				# Minors increase resources for trade and to help faction
+				AND = {
+					is_major = no
+
+					OR = {
+						has_war = no
+						AND = {
+							NOT = { has_country_flag = EAI_MILITARY_trend_losing_war }
+							any_allied_country = {
+								is_major = yes
+							}
+						}
+					}
+
+					any_of_scopes = { array = controlled_states
+
+						EAI_PC_can_build_project = yes
+						NOT = { EAI_PC_has_same_type_project_here = yes }
+
+						OR = {
+							AND = { has_resources_amount = { resource = oil amount > 50 } }
+							AND = { has_resources_amount = { resource = aluminium amount > 50 } }
+							AND = { has_resources_amount = { resource = rubber amount > 50 } }
+							AND = { has_resources_amount = { resource = tungsten amount > 50 } }
+							AND = { has_resources_amount = { resource = steel amount > 50 } }
+							AND = { has_resources_amount = { resource = chromium amount > 50 } }
+						}
+					}
+				}
+			}
+		}
+
+		set_temp_variable = { EAI_PC_resource_extraction_STRATEGIES = 1 }
+	}
+}
+
+### Infrastructure
+
+@EAI_PC_resource_extraction_2_TYPE_ID = 10
+@EAI_PC_resource_extraction_2_PRIO = 2000
+EAI_PC_resource_extraction_2 = { # arr:_target_states_
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_INF }
+	set_temp_variable = { _project_type_id = @EAI_PC_resource_extraction_2_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_resource_extraction_2_PRIO }
+	set_temp_variable = { _project_cancel_unbuildable = 1 }
+
+	EAI_PC_resource_extraction_2_STRATEGIES = yes
+	
+	if = {
+		limit = {
+			check_variable = { EAI_PC_resource_extraction_2_STRATEGIES = 1 }
+			set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+			set_temp_variable = { _get_queued_num_type_id = _project_type_id }
+			EAI_PC_get_total_queued_num = yes
+			check_variable = { queued_type_num_ < 2 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_resource_extraction_2" }
+
+		set_temp_variable = { _match_project_type_id = _project_type_id }
+		for_each_scope_loop = { array = _target_states_
+
+			if = { 
+				limit = { 
+					EAI_PC_can_build_project = yes
+					NOT = { EAI_PC_has_same_type_project_here = yes }
+				}
+
+				EAI_PC_start_project = yes
+				set_temp_variable = { break = 1 }
+			}
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_resource_extraction_2_STRATEGIES = { # arr:_target_states_
+
+	set_temp_variable = { EAI_PC_resource_extraction_2_STRATEGIES = 0 }
+
+	clear_temp_array = _target_states_
+
+	if = {
+		limit = {
+			OR = {
+				has_war = yes
+				date > 1940.1.1
+			}
+		}
+
+		### EAI_needs_aluminium
+	
+			if = {
+				limit = {
+					check_variable = { EAI_needs_aluminium = 3 }
+					any_controlled_state = {
+						has_resources_amount = { resource = aluminium amount > 30 }
+						EAI_available_INF = yes
+					}
+				}
+		
+				every_controlled_state = {
+					limit = {
+						has_resources_amount = { resource = aluminium amount > 30 }
+						EAI_available_INF = yes
+					}
+					add_to_temp_array = { _target_states_ = THIS.id }
+				}
+		
+				set_temp_variable = { EAI_PC_resource_extraction_2_STRATEGIES = 1 }
+			}
+
+		### EAI_needs_rubber
+
+			if = {
+				limit = {
+					check_variable = { EAI_needs_rubber = 3 }
+					any_controlled_state = {
+						has_resources_amount = { resource = rubber amount > 30 }
+						EAI_available_INF = yes
+					}
+				}
+		
+				every_controlled_state = {
+					limit = {
+						has_resources_amount = { resource = rubber amount > 30 }
+						EAI_available_INF = yes
+					}
+					add_to_temp_array = { _target_states_ = THIS.id }
+				}
+		
+				set_temp_variable = { EAI_PC_resource_extraction_2_STRATEGIES = 1 }
+			}
+
+		### EAI_needs_tungsten
+
+			if = {
+				limit = {
+					check_variable = { EAI_needs_tungsten = 3 }
+					any_controlled_state = {
+						has_resources_amount = { resource = tungsten amount > 30 }
+						EAI_available_INF = yes
+					}
+				}
+		
+				every_controlled_state = {
+					limit = {
+						has_resources_amount = { resource = tungsten amount > 30 }
+						EAI_available_INF = yes
+					}
+					add_to_temp_array = { _target_states_ = THIS.id }
+				}
+		
+				set_temp_variable = { EAI_PC_resource_extraction_2_STRATEGIES = 1 }
+			}
+
+		### EAI_needs_steel
+
+			if = {
+				limit = {
+					check_variable = { EAI_needs_steel = 3 }
+					any_controlled_state = {
+						has_resources_amount = { resource = steel amount > 30 }
+						EAI_available_INF = yes
+					}
+				}
+		
+				every_controlled_state = {
+					limit = {
+						has_resources_amount = { resource = steel amount > 30 }
+						EAI_available_INF = yes
+					}
+					add_to_temp_array = { _target_states_ = THIS.id }
+				}
+		
+				set_temp_variable = { EAI_PC_resource_extraction_2_STRATEGIES = 1 }
+			}
+
+		### EAI_needs_chromium
+
+			if = {
+				limit = {
+					check_variable = { EAI_needs_chromium = 3 }
+					any_controlled_state = {
+						has_resources_amount = { resource = chromium amount > 30 }
+						EAI_available_INF = yes
+					}
+				}
+		
+				every_controlled_state = {
+					limit = {
+						has_resources_amount = { resource = chromium amount > 30 }
+						EAI_available_INF = yes
+					}
+					add_to_temp_array = { _target_states_ = THIS.id }
+				}
+		
+				set_temp_variable = { EAI_PC_resource_extraction_2_STRATEGIES = 1 }
+			}
+
+		###
+
+	}
+}
+
+### Conversion
+
+@EAI_PC_conversion_to_civ_TYPE_ID = 5
+@EAI_PC_conversion_to_civ_PRIO = 3000
+EAI_PC_conversion_to_civ = {
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_MTC }
+	set_temp_variable = { _project_type_id = @EAI_PC_conversion_to_civ_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_conversion_to_civ_PRIO }
+	set_temp_variable = { _project_cancel_unbuildable = 0 }
+
+	EAI_PC_conversion_to_civ_STRATEGIES = yes
+	
+	if = {
+		limit = {
+			check_variable = { EAI_PC_conversion_to_civ_STRATEGIES = 1 }
+			set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+			EAI_PC_get_total_queued_num = yes
+			check_variable = { queued_type_num_ < 2 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_conversion_to_civ_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_conversion_to_civ" }
+
+		if = { limit = { check_variable = { EAI_has_shared_slot_scores = 0 } }
+
+			EAI_get_shared_slot_scores = yes
+		}
+
+		for_each_scope_loop = { array = EAI_shared_slot_scores
+
+			if = { 
+				limit = { 
+					EAI_PC_can_build_project = yes
+					NOT = { EAI_PC_has_same_type_project_here = yes }
+				}
+
+				EAI_PC_start_project = yes
+				set_temp_variable = { break = 1 }
+			}
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_conversion_to_civ_STRATEGIES = {
+
+	set_temp_variable = { EAI_PC_conversion_to_civ_STRATEGIES = 0 }
+
+	if = {
+		limit = {
+			OR = {
+
+				### Strategies
+
+				AND = {
+					OR = {
+						check_variable = { EAI_aluminium_resource_massive_shortage = 3 }
+						check_variable = { EAI_rubber_resource_massive_shortage = 3 }
+						check_variable = { EAI_steel_resource_massive_shortage = 3 }
+					}
+				}
+			}
+		}
+
+		set_temp_variable = { EAI_PC_conversion_to_civ_STRATEGIES = 1 }
+	}
+}
+
+### Land facility
+
+@EAI_PC_build_land_facility_TYPE_ID = 6
+@EAI_PC_build_land_facility_PRIO = 1750
+EAI_PC_build_land_facility = {
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_LFACILITY }
+	set_temp_variable = { _project_type_id = @EAI_PC_build_land_facility_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_build_land_facility_PRIO }
+	set_temp_variable = { _project_cancel_unbuildable = 1 }
+
+	EAI_PC_build_land_facility_STRATEGIES = yes
+
+	if = { 
+		limit = { 
+			check_variable = { EAI_PC_build_land_facility_STRATEGIES = 1 }
+			set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+			EAI_PC_get_total_queued_num = yes
+			check_variable = { queued_type_num_ < 1 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_build_land_facility" }
+
+		if = { limit = { check_variable = { EAI_has_land_facility_scores = 0 } }
+
+			EAI_get_land_facility_scores = yes
+		}
+
+		for_each_scope_loop = { array = EAI_land_facility_scores
+
+			if = { limit = { EAI_PC_can_build_project = yes NOT = { EAI_PC_has_same_type_project_here = yes } }
+
+				EAI_PC_start_project = yes
+				set_temp_variable = { break = 1 }
+			}
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_build_land_facility_STRATEGIES = {
+
+	set_temp_variable = { EAI_PC_build_land_facility_STRATEGIES = 0 }
+
+	if = {
+		limit = {
+			OR = {
+
+				### Strategies
+
+				AND = {
+					EAI_SP_build_land_facility = yes
+				}
+			}
+		}
+
+		set_temp_variable = { EAI_PC_build_land_facility_STRATEGIES = 1 }
+	}
+}
+
+### Naval facility
+
+@EAI_PC_build_naval_facility_TYPE_ID = 7
+@EAI_PC_build_naval_facility_PRIO = 1750
+EAI_PC_build_naval_facility = {
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_NFACILITY }
+	set_temp_variable = { _project_type_id = @EAI_PC_build_naval_facility_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_build_naval_facility_PRIO }
+	set_temp_variable = { _project_cancel_unbuildable = 1 }
+
+	EAI_PC_build_naval_facility_STRATEGIES = yes
+
+	if = { 
+		limit = { 
+			check_variable = { EAI_PC_build_naval_facility_STRATEGIES = 1 }
+			set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+			EAI_PC_get_total_queued_num = yes
+			check_variable = { queued_type_num_ < 1 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_build_naval_facility" }
+
+		if = { limit = { check_variable = { EAI_has_naval_facility_scores = 0 } }
+
+			EAI_get_naval_facility_scores = yes
+		}
+
+		for_each_scope_loop = { array = EAI_naval_facility_scores
+
+			if = { limit = { EAI_PC_can_build_project = yes NOT = { EAI_PC_has_same_type_project_here = yes } }
+
+				EAI_PC_start_project = yes
+				set_temp_variable = { break = 1 }
+			}
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_build_naval_facility_STRATEGIES = {
+
+	set_temp_variable = { EAI_PC_build_naval_facility_STRATEGIES = 0 }
+
+	if = {
+		limit = {
+			OR = {
+
+				### Strategies
+
+				AND = {
+					EAI_SP_build_naval_facility = yes
+				}
+			}
+		}
+
+		set_temp_variable = { EAI_PC_build_naval_facility_STRATEGIES = 1 }
+	}
+}
+
+### Air facility
+
+@EAI_PC_build_air_facility_TYPE_ID = 8
+@EAI_PC_build_air_facility_PRIO = 1800
+EAI_PC_build_air_facility = {
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_AFACILITY }
+	set_temp_variable = { _project_type_id = @EAI_PC_build_air_facility_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_build_air_facility_PRIO }
+	set_temp_variable = { _project_cancel_unbuildable = 1 }
+
+	EAI_PC_build_air_facility_STRATEGIES = yes
+
+	if = { 
+		limit = { 
+			check_variable = { EAI_PC_build_air_facility_STRATEGIES = 1 }
+			set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+			EAI_PC_get_total_queued_num = yes
+			check_variable = { queued_type_num_ < 1 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_build_air_facility" }
+
+		if = { limit = { check_variable = { EAI_has_air_facility_scores = 0 } }
+
+			EAI_get_air_facility_scores = yes
+		}
+
+		for_each_scope_loop = { array = EAI_air_facility_scores
+
+			if = { limit = { EAI_PC_can_build_project = yes NOT = { EAI_PC_has_same_type_project_here = yes } }
+
+				EAI_PC_start_project = yes
+				set_temp_variable = { break = 1 }
+			}
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_build_air_facility_STRATEGIES = {
+
+	set_temp_variable = { EAI_PC_build_air_facility_STRATEGIES = 0 }
+
+	if = {
+		limit = {
+			OR = {
+
+				### Strategies
+
+				AND = {
+					EAI_SP_build_air_facility = yes
+				}
+			}
+		}
+
+		set_temp_variable = { EAI_PC_build_air_facility_STRATEGIES = 1 }
+	}
+}
+
+### Nuclear facility
+
+@EAI_PC_build_nuclear_facility_TYPE_ID = 9
+@EAI_PC_build_nuclear_facility_PRIO = 1750
+EAI_PC_build_nuclear_facility = {
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_BFACILITY }
+	set_temp_variable = { _project_type_id = @EAI_PC_build_nuclear_facility_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_build_nuclear_facility_PRIO }
+	set_temp_variable = { _project_cancel_unbuildable = 1 }
+
+	EAI_PC_build_nuclear_facility_STRATEGIES = yes
+
+	if = { 
+		limit = { 
+			check_variable = { EAI_PC_build_nuclear_facility_STRATEGIES = 1 }
+			set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+			EAI_PC_get_total_queued_num = yes
+			check_variable = { queued_type_num_ < 1 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_build_nuclear_facility" }
+
+		if = { limit = { check_variable = { EAI_has_nuclear_facility_scores = 0 } }
+
+			EAI_get_nuclear_facility_scores = yes
+		}
+
+		for_each_scope_loop = { array = EAI_nuclear_facility_scores
+
+			if = { limit = { EAI_PC_can_build_project = yes NOT = { EAI_PC_has_same_type_project_here = yes } }
+
+				EAI_PC_start_project = yes
+				set_temp_variable = { break = 1 }
+			}
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_build_nuclear_facility_STRATEGIES = {
+
+	set_temp_variable = { EAI_PC_build_nuclear_facility_STRATEGIES = 0 }
+
+	if = {
+		limit = {
+			OR = {
+
+				### Strategies
+
+				AND = {
+					EAI_SP_build_nuclear_facility = yes
+				}
+			}
+		}
+
+		set_temp_variable = { EAI_PC_build_nuclear_facility_STRATEGIES = 1 }
+	}
+}
+
+### Rocket site
+
+@EAI_PC_rocket_site_TYPE_ID = 11
+@EAI_PC_rocket_site_PRIO = 1750
+EAI_PC_rocket_site = { # arr:_target_states_
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_RSITE }
+	set_temp_variable = { _project_type_id = @EAI_PC_rocket_site_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_rocket_site_PRIO }
+	set_temp_variable = { _project_replace_shared = 1 }
+
+	EAI_PC_rocket_site_STRATEGIES = yes
+	
+	if = {
+		limit = {
+			check_variable = { EAI_PC_rocket_site_STRATEGIES = 1 }
+			set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+			set_temp_variable = { _get_queued_num_type_id = _project_type_id }
+			EAI_PC_get_total_queued_num = yes
+			check_variable = { queued_type_num_ < 2 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_rocket_site" }
+
+		for_each_scope_loop = { array = _target_states_
+
+			if = { 
+				limit = { 
+					check_variable = { building_level@rocket_site < 1 }
+					NOT = { EAI_PC_has_same_type_project_here = yes }
+				}
+
+				EAI_PC_start_project = yes
+				set_temp_variable = { break = 1 }
+			}
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_rocket_site_STRATEGIES = { # arr:_target_states_
+
+	set_temp_variable = { EAI_PC_rocket_site_STRATEGIES = 0 }
+
+	clear_temp_array = _target_states_
+
+	if = {
+		limit = {
+			tag = GER
+			has_war_with = ENG
+		}
+
+		add_to_temp_array = { _target_states_ = 14.id }
+		add_to_temp_array = { _target_states_ = 15.id }
+		add_to_temp_array = { _target_states_ = 29.id }
+
+		set_temp_variable = { EAI_PC_rocket_site_STRATEGIES = 1 }
+	}
+}
+
+### Naval base for ally
+
+@EAI_PC_naval_base_for_ally_TYPE_ID = 12
+@EAI_PC_naval_base_for_ally_PRIO = 1800
+EAI_PC_naval_base_for_ally = { # arr:_target_states_
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_NBASE }
+	set_temp_variable = { _project_type_id = @EAI_PC_naval_base_for_ally_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_naval_base_for_ally_PRIO }
+
+	EAI_PC_naval_base_for_ally_STRATEGIES = yes
+	
+	if = {
+		limit = {
+			check_variable = { EAI_PC_naval_base_for_ally_STRATEGIES = 1 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_naval_base_for_ally" }
+
+		EAI_PC_save_project_inputs = yes
+		for_each_loop = { array = _target_states_
+
+			var:v = {
+				EAI_PC_get_project_inputs_provincial = yes
+				set_temp_variable = { _project_province_id = _target_provinces_^i }
+				EAI_PC_start_project = yes
+			}
+		}
+
+		### Boost construction if has these types queued
+
+		set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+		set_temp_variable = { _get_queued_num_type_id = _project_type_id }
+		if = { 
+			limit = { 
+				EAI_PC_get_total_queued_num = yes
+				check_variable = { queued_type_num_ > 0 } 
+			} 
+			set_country_flag = { flag = EAI_PC_override_max_factories value = 1 days = 30 }
+			set_variable = { EAI_PC_override_max_factories = 30 }
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_naval_base_for_ally_STRATEGIES = { # arr:_target_states_:_target_provinces_
+
+	set_temp_variable = { EAI_PC_naval_base_for_ally_STRATEGIES = 0 }
+
+	clear_temp_array = _target_states_
+	clear_temp_array = _target_provinces_
+
+	if = {
+		limit = {
+			tag = USA
+			is_in_faction_with = ENG
+			ENG = { is_ai = yes }
+			has_war = yes
+			date > 1940.1.1
+		}
+
+		# Gibraltar
+		add_to_temp_array = { _target_states_ = 118.id }
+		add_to_temp_array = { _target_provinces_ = 4135 }
+
+		# Malta
+		add_to_temp_array = { _target_states_ = 116.id }
+		add_to_temp_array = { _target_provinces_ = 12003 }
+
+		# Alexandria
+		add_to_temp_array = { _target_states_ = 447.id }
+		add_to_temp_array = { _target_provinces_ = 4076 }
+
+		set_temp_variable = { _project_target_level = 10 }
+		set_temp_variable = { _project_queue_num = 10 }
+		set_temp_variable = { _project_build_for_ally = 1 }
+
+		set_temp_variable = { EAI_PC_naval_base_for_ally_STRATEGIES = 1 }
+	}
+}
+
+### Naval base in invasion areas
+
+@EAI_PC_naval_base_invasion_TYPE_ID = 15
+@EAI_PC_naval_base_invasion_PRIO = 1900
+EAI_PC_naval_base_invasion = { # arr:_target_states_
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_NBASE }
+	set_temp_variable = { _project_type_id = @EAI_PC_naval_base_invasion_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_naval_base_invasion_PRIO }
+
+	EAI_PC_naval_base_invasion_STRATEGIES = yes
+	
+	if = {
+		limit = {
+			check_variable = { EAI_PC_naval_base_invasion_STRATEGIES = 1 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_naval_base_invasion" }
+
+		###
+
+			EAI_PC_save_project_inputs = yes
+			for_each_loop = { array = _target_states_
+
+				var:v = {
+					EAI_PC_get_project_inputs_provincial = yes
+					set_temp_variable = { _project_province_id = _target_provinces_^i }
+					add_to_temp_array = { _valid_provinces = _project_province_id }
+					EAI_PC_start_project = yes
+				}
+			}
+			set_temp_variable = { _strategy_id = _project_type_id }
+			EAI_PC_validate_queued_provincial_projects = yes
+
+		### Assign more IC to PC if these types are queued
+
+			set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+			set_temp_variable = { _get_queued_num_type_id = _project_type_id }
+			if = { 
+				limit = { 
+					EAI_PC_get_total_queued_num = yes
+					check_variable = { queued_type_num_ > 0 } 
+				} 
+				set_country_flag = { flag = EAI_PC_override_max_factories_factor value = 1 days = 30 }
+				set_variable = { EAI_PC_override_max_factories_factor = 0.5 }
+			}
+
+		###
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_naval_base_invasion_STRATEGIES = { # arr:_target_states_:_target_provinces_
+
+	set_temp_variable = { EAI_PC_naval_base_invasion_STRATEGIES = 0 }
+
+	clear_temp_array = _target_states_
+	clear_temp_array = _target_provinces_
+
+	if = {
+		limit = {
+			OR = {
+				tag = USA
+				tag = GER
+				tag = JAP
+			}
+			check_variable = { EAI_MILITARY_INVASION_states^num > 0 }
+		}
+		for_each_scope_loop = { array = EAI_MILITARY_INVASION_states
+			if = { 
+				limit = { 
+					is_coastal = yes
+				}
+				for_each_loop = { array = global.EAI_MAP_state_province_ids@THIS index = i value = _project_province_id
+					if = { 
+						limit = { 
+							set_temp_variable = { _get_province_type_id = _project_province_id }
+							EAI_PC_province_is_naval_base = yes
+							var:global.province_controllers^_project_province_id = { ROOT = { EAI_PREV_on_same_side_with_THIS = yes } }
+						}  
+						add_to_temp_array = { _target_states_ = THIS.id }
+						add_to_temp_array = { _target_provinces_ = _project_province_id }
+					}
+				}
+			}
+		}
+		set_temp_variable = { _project_target_level = 8 }
+		set_temp_variable = { _project_build_for_ally = 1 }
+
+		set_temp_variable = { EAI_PC_naval_base_invasion_STRATEGIES = 1 }
+	}
+}
+
+### Infrastructure for supply
+
+@EAI_PC_infrastructure_for_supply_TYPE_ID = 13
+@EAI_PC_infrastructure_for_supply_PRIO = 1800
+EAI_PC_infrastructure_for_supply = { # arr:_target_states_
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_INF }
+	set_temp_variable = { _project_type_id = @EAI_PC_infrastructure_for_supply_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_infrastructure_for_supply_PRIO }
+
+	EAI_PC_infrastructure_for_supply_STRATEGIES = yes
+	
+	if = {
+		limit = {
+			check_variable = { EAI_PC_infrastructure_for_supply_STRATEGIES = 1 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_infrastructure_for_supply" }
+
+		EAI_PC_save_project_inputs = yes
+		for_each_loop = { array = _target_states_
+
+			var:v = {
+				EAI_PC_get_project_inputs = yes
+				EAI_PC_start_project = yes
+			}
+		}
+
+		### Boost construction if has these types queued
+
+		set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+		set_temp_variable = { _get_queued_num_type_id = _project_type_id }
+		if = { 
+			limit = { 
+				EAI_PC_get_total_queued_num = yes
+				check_variable = { queued_type_num_ > 0 } 
+			} 
+			set_country_flag = { flag = EAI_PC_override_max_factories value = 1 days = 30 }
+			set_variable = { EAI_PC_override_max_factories = 30 }
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_infrastructure_for_supply_STRATEGIES = { # arr:_target_states_
+
+	set_temp_variable = { EAI_PC_infrastructure_for_supply_STRATEGIES = 0 }
+
+	clear_temp_array = _target_states_
+	clear_temp_array = _target_provinces_
+
+	if = {
+		limit = {
+			tag = USA
+			is_in_faction_with = ENG
+			ENG = { is_ai = yes }
+			has_war = yes
+			date > 1940.1.1
+		}
+
+		# Gibraltar
+		add_to_temp_array = { _target_states_ = 118.id }
+
+		# Malta
+		add_to_temp_array = { _target_states_ = 116.id }
+
+		# Alexandria
+		add_to_temp_array = { _target_states_ = 447.id }
+
+		set_temp_variable = { _project_target_level = 5 }
+		set_temp_variable = { _project_queue_num = 5 }
+		set_temp_variable = { _project_build_for_ally = 1 }
+
+		set_temp_variable = { EAI_PC_infrastructure_for_supply_STRATEGIES = 1 }
+	}
+}
+
+### Anti-air
+
+@EAI_PC_antiair_TYPE_ID = 14
+@EAI_PC_antiair_PRIO = 1800
+EAI_PC_antiair = { # arr:_target_states_
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_AA }
+	set_temp_variable = { _project_type_id = @EAI_PC_antiair_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_antiair_PRIO }
+
+	EAI_PC_antiair_STRATEGIES = yes
+	
+	if = {
+		limit = {
+			check_variable = { EAI_PC_antiair_STRATEGIES = 1 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_antiair" }
+
+		EAI_PC_save_project_inputs = yes
+		for_each_loop = { array = _target_states_
+
+			var:v = {
+				EAI_PC_get_project_inputs = yes
+				EAI_PC_start_project = yes
+			}
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_antiair_STRATEGIES = { # arr:_target_states_
+
+	set_temp_variable = { EAI_PC_antiair_STRATEGIES = 0 }
+
+	clear_temp_array = _target_states_
+	clear_temp_array = _target_provinces_
+
+	if = {
+		limit = {
+			tag = ENG
+			has_war = yes
+			date > 1940.1.1
+		}
+
+		# Malta
+		add_to_temp_array = { _target_states_ = 116.id }
+
+		set_temp_variable = { _project_target_level = 5 }
+		set_temp_variable = { _project_queue_num = 5 }
+
+		set_temp_variable = { EAI_PC_antiair_STRATEGIES = 1 }
+	}
+}
+
+### Railway
+
+@EAI_PC_railway_TYPE_ID = 16
+@EAI_PC_railway_PRIO = 1800
+@EAI_PC_railway_INTERVAL = 3
+EAI_PC_railway = {
+
+	if = { limit = { check_variable = { EAI_PC_railway_INTERVAL = 0 } }
+	
+		set_variable = { EAI_PC_railway_INTERVAL = @EAI_PC_railway_INTERVAL }
+
+		set_temp_variable = { _project_building_type = global.EAI_PC_RAIL }
+		set_temp_variable = { _project_build_for_ally = 1 }
+		set_temp_variable = { _project_type_id = @EAI_PC_railway_TYPE_ID }
+		set_temp_variable = { _project_priority = @EAI_PC_railway_PRIO }
+		set_temp_variable = { _project_queue_num = 3 }
+		set_temp_variable = { _project_queue_max = 3 }
+	
+		EAI_PC_railway_STRATEGIES = yes
+		
+		if = {
+			limit = {
+				check_variable = { EAI_PC_railway_STRATEGIES = 1 }
+			}
+	
+			if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_railway" }
+
+			###
+	
+				EAI_PC_save_project_inputs = yes
+				for_each_loop = { array = railway_end_provinces_ index = railway_i value = railway_v break = railway_b
+					set_temp_variable = { _pathfind_prov_start = railway_start_provinces_^railway_i }
+					set_temp_variable = { _pathfind_prov_end = railway_end_provinces_^railway_i }
+					set_temp_variable = { _pathfind_prov_type = 1 }
+					EAI_PATHFIND_PROV_get_path = yes
+					if = { limit = { check_variable = { pathfind_prov_success_ = 1 } }
+						for_each_loop = { array = pathfind_prov_path_ index = path_i value = path_v break = path_b
+							add_to_temp_array = { _valid_provinces = path_v }
+							set_temp_variable = { next_i = path_i }
+							add_to_temp_variable = { next_i = 1 }
+							if = { limit = { check_variable = { next_i < pathfind_prov_path_^num } }
+								EAI_PC_get_project_inputs_provincial = yes
+								set_temp_variable = { _project_province_id = path_v }
+								set_temp_variable = { _project_connect_id = pathfind_prov_path_^next_i }
+								set_temp_variable = { _project_target_level = railway_target_levels_^railway_i }
+								set_temp_variable = { _project_priority = railway_priorities_^railway_i }
+								var:global.EAI_MAP_province_state_id^path_v = { EAI_PC_start_project = yes }
+								set_temp_variable = { _designated_railway_network_^path_v = 1 }
+								set_temp_variable = { _designated_railway_network_^pathfind_prov_path_^next_i = 1 }
+							}
+						}
+					}
+				}
+				set_temp_variable = { _strategy_id = _project_type_id }
+				EAI_PC_validate_queued_provincial_projects = yes
+
+			### Assign more IC to PC if these types are queued
+
+				set_temp_variable = { _get_queued_num_building_type = _project_building_type }
+				set_temp_variable = { _get_queued_num_type_id = _project_type_id }
+				if = { 
+					limit = { 
+						EAI_PC_get_total_queued_num = yes
+						check_variable = { queued_type_num_ > 0 } 
+					} 
+					set_country_flag = { flag = EAI_PC_override_max_factories_factor value = 1 days = 30 }
+					set_variable = { EAI_PC_override_max_factories_factor = 0.5 }
+				}
+
+			###
+		}
+	
+		EAI_PC_clear_project_inputs = yes
+	}
+	else = {
+		add_to_variable = { EAI_PC_railway_INTERVAL = -1 }
+	}
+}
+
+EAI_PC_railway_STRATEGIES = { # >>> arr:railway_start_provinces_:railway_end_provinces_:railway_target_levels_:railway_priorities_
+
+	set_temp_variable = { EAI_PC_railway_STRATEGIES = 0 }
+
+	clear_temp_array = railway_start_provinces_
+	clear_temp_array = railway_end_provinces_
+	clear_temp_array = railway_target_levels_
+
+	### Barbarossa - SOV GER
+
+		if = {
+			limit = {
+				OR = {
+					tag = SOV
+					tag = GER
+				}
+				OR = {
+					has_war_with = SOV
+					has_war_with = GER
+				}
+			}
+
+			### Capital province
+
+				if = { limit = { tag = SOV } set_temp_variable = { route_start = 6380 } }
+				if = { limit = { tag = GER } set_temp_variable = { route_start = 6521 } }
+
+			### Railway level
+
+				set_temp_variable = { route_level = 5 }
+
+				set_temp_variable = { route_priority = _project_priority }
+				set_temp_variable = { high_route_priority = route_priority }
+				multiply_temp_variable = { high_route_priority = 1.1 }
+
+			### Front hubs
+
+				every_controlled_state = {
+					limit = {
+						is_in_array = { global.EAI_MAP_barbarossa_theatre = THIS.id }
+						EAI_PC_state_has_supply_hub = yes
+					}
+					set_temp_variable = { _state = THIS.id }
+					EAI_MAP_get_nearby_states = yes
+					if = { limit = { any_of_scopes = { array = nearby_states_ CONTROLLER = { has_war_with = ROOT } check_variable = { distance_to@PREV < 100 } } }
+						for_each_loop = { array = global.EAI_MAP_state_province_ids@THIS index = prov_i value = _province_hub_id
+							if = { 
+								limit = { 
+									var:global.province_controllers^_province_hub_id = { is_in_array = { ROOT.faction_members = THIS.id } }
+									EAI_PC_prov_has_supply_hub = yes
+								}
+								if = { limit = { NOT = { is_in_array = { railway_end_provinces_ = _province_hub_id } } } 
+									add_to_temp_array = { railway_start_provinces_ = route_start } 
+									add_to_temp_array = { railway_end_provinces_ = _province_hub_id } 
+									add_to_temp_array = { railway_target_levels_ = route_level } 
+									add_to_temp_array = { railway_priorities_ = route_priority } 
+								}
+							}
+						}
+					}
+				}
+
+			###
+
+			if = { limit = { check_variable = { railway_end_provinces_^num > 0 } }
+
+				### Central point
+		
+					clear_temp_array = _set
+					for_each_loop = { array = railway_end_provinces_
+						add_to_temp_array = { _set = global.EAI_MAP_province_x_pos^v }
+					}
+					EAI_MATH_average = yes
+					set_temp_variable = { avg_x = average_ }
+		
+					clear_temp_array = _set
+					for_each_loop = { array = railway_end_provinces_
+						add_to_temp_array = { _set = global.EAI_MAP_province_y_pos^v }
+					}
+					EAI_MATH_average = yes
+					set_temp_variable = { avg_y = average_ }
+		
+				### Closest hub to central point
+		
+					set_temp_variable = { best_target_index = 0 }
+					set_temp_variable = { best_dist = 99999 }
+					for_each_loop = { array = railway_end_provinces_
+						set_temp_variable = { _point_a_x = global.EAI_MAP_province_x_pos^v }
+						set_temp_variable = { _point_a_y = global.EAI_MAP_province_y_pos^v }
+						set_temp_variable = { _point_b_x = avg_x }
+						set_temp_variable = { _point_b_y = avg_y }
+						EAI_MATH_get_distance_between_points_a_b = yes
+						if = { limit = { check_variable = { distance_ < best_dist } }
+							set_temp_variable = { best_target_index = i }
+							set_temp_variable = { best_dist = distance_ }
+						}
+					}
+		
+				### Build a path to the central hub first
+		
+					set_temp_variable = { tmp_start = railway_start_provinces_^0 }
+					set_temp_variable = { railway_start_provinces_^0 = railway_start_provinces_^best_target_index }
+					set_temp_variable = { railway_start_provinces_^best_target_index = tmp_start }
+		
+					set_temp_variable = { tmp_end = railway_end_provinces_^0 }
+					set_temp_variable = { railway_end_provinces_^0 = railway_end_provinces_^best_target_index }
+					set_temp_variable = { railway_end_provinces_^best_target_index = tmp_end }
+		
+					set_temp_variable = { tmp_level = railway_target_levels_^0 }
+					set_temp_variable = { railway_target_levels_^0 = railway_target_levels_^best_target_index }
+					set_temp_variable = { railway_target_levels_^best_target_index = tmp_level }
+		
+					set_temp_variable = { tmp_priority = railway_priorities_^0 }
+					set_temp_variable = { railway_priorities_^0 = railway_priorities_^best_target_index }
+					set_temp_variable = { railway_priorities_^best_target_index = tmp_priority }
+
+					set_temp_variable = { railway_priorities_^0 = high_route_priority }
+
+				### Build leningrad-stalingrad line
+
+					if = { limit = { tag = SOV }
+						add_to_temp_array = { array = railway_start_provinces_ index = 0 value = route_start }
+						add_to_temp_array = { array = railway_end_provinces_ index = 0 value = 3529 }
+						add_to_temp_array = { array = railway_target_levels_ index = 0 value = route_level }
+						add_to_temp_array = { array = railway_priorities_ index = 0 value = high_route_priority }
+
+						add_to_temp_array = { array = railway_start_provinces_ index = 0 value = route_start }
+						add_to_temp_array = { array = railway_end_provinces_ index = 0 value = 3151 }
+						add_to_temp_array = { array = railway_target_levels_ index = 0 value = route_level }
+						add_to_temp_array = { array = railway_priorities_ index = 0 value = high_route_priority }
+					}
+		
+				###
+		
+				set_temp_variable = { EAI_PC_railway_STRATEGIES = 1 }
+			}
+		}
+
+	### North Africa - ENG ITA
+
+		if = {
+			limit = {
+				date > 1941.1.1
+				OR = {
+					AND = {
+						if = { limit = { GER = { is_in_faction_with = ITA } } tag = GER }
+						else = { tag = ITA }
+						has_war_with = ENG
+					}
+					AND = {
+						if = { limit = { USA = { is_in_faction_with = ENG } } tag = USA }
+						else = { tag = ENG }
+						has_war_with = ITA
+					}
+				}
+			}
+
+			### Railway level
+
+				set_temp_variable = { route_level = 4 }
+
+				set_temp_variable = { route_priority = _project_priority }
+				set_temp_variable = { high_route_priority = route_priority }
+				multiply_temp_variable = { high_route_priority = 1.1 }
+
+			### Controlled hubs in area
+
+				clear_temp_array = supply_hubs
+				every_state = {
+					limit = {
+						OR = {
+							state = 447
+							state = 452
+							AND = {
+								is_coastal = yes
+								OR = {
+									region = 225
+									region = 126
+									region = 182
+								}
+							}
+						}
+						EAI_PC_state_has_supply_hub = yes
+					}
+					for_each_loop = { array = global.EAI_MAP_state_province_ids@THIS index = prov_i value = _province_hub_id
+						if = { 
+							limit = {
+								var:global.province_controllers^_province_hub_id = { is_in_array = { ROOT.faction_members = THIS.id } }
+								EAI_PC_prov_has_supply_hub = yes
+							}
+							if = { limit = { NOT = { is_in_array = { supply_hubs = _province_hub_id } } } add_to_temp_array = { supply_hubs = _province_hub_id } }
+						}
+					}
+				}
+
+			###
+
+			if = { limit = { check_variable = { supply_hubs^num > 0 } }
+
+				### Sort by x
+
+					clear_temp_array = _items_
+					clear_temp_array = _values_
+					for_each_loop = { array = supply_hubs
+						add_to_temp_array = { _items_ = v }
+						add_to_temp_array = { _values_ = global.EAI_MAP_province_x_pos^v }
+					}
+					EAI_MATH_sort_array = yes
+					for_each_loop = { array = _items_
+						set_variable = { supply_hubs^i = _items_^i }
+					}
+
+				### Link adjacent hubs
+
+					for_each_loop = { array = supply_hubs
+						set_temp_variable = { next_i = i }
+						add_to_temp_variable = { next_i = 1 }
+						if = { limit = { check_variable = { next_i < supply_hubs^num } }
+							add_to_temp_array = { railway_start_provinces_ = v }
+							add_to_temp_array = { railway_end_provinces_ = supply_hubs^next_i }
+							add_to_temp_array = { railway_target_levels_ = route_level }
+							add_to_temp_array = { railway_priorities_ = route_priority }
+						}
+					}
+
+				###
+		
+				if = { limit = { check_variable = { railway_end_provinces_^num > 0 } }
+				
+					set_temp_variable = { EAI_PC_railway_STRATEGIES = 1 }
+				}
+			}
+		}
+
+	###
+}
+
+### Hub
+
+@EAI_PC_supply_hub_TYPE_ID = 17
+@EAI_PC_supply_hub_PRIO = 1800
+EAI_PC_supply_hub = {
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_HUB }
+	set_temp_variable = { _project_type_id = @EAI_PC_supply_hub_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_supply_hub_PRIO }
+	set_temp_variable = { _project_queue_max = 1 }
+
+	EAI_PC_supply_hub_STRATEGIES = yes
+	
+	if = {
+		limit = {
+			check_variable = { EAI_PC_supply_hub_STRATEGIES = 1 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_supply_hub" }
+
+		EAI_PC_save_project_inputs = yes
+		for_each_loop = { array = supply_hub_provinces_
+			EAI_PC_get_project_inputs_provincial = yes
+			var:global.EAI_MAP_province_state_id^v = { EAI_PC_start_project = yes }
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_supply_hub_STRATEGIES = { # >>> arr:supply_hub_provinces_
+
+	set_temp_variable = { EAI_PC_supply_hub_STRATEGIES = 0 }
+
+	clear_temp_array = supply_hub_provinces_
+}
+
+### Airbase
+
+@EAI_PC_airbase_TYPE_ID = 18
+@EAI_PC_airbase_PRIO = 1800
+EAI_PC_airbase = {
+
+	set_temp_variable = { _project_building_type = global.EAI_PC_AIR }
+	set_temp_variable = { _project_type_id = @EAI_PC_airbase_TYPE_ID }
+	set_temp_variable = { _project_priority = @EAI_PC_airbase_PRIO }
+	set_temp_variable = { _project_queue_max = 6 }
+
+	EAI_PC_airbase_STRATEGIES = yes
+	
+	if = {
+		limit = {
+			check_variable = { EAI_PC_airbase_STRATEGIES = 1 }
+		}
+
+		if = { limit = { ROOT = { has_country_flag = EAI_construction_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | CONSTRUCTION: EAI_PC_airbase" }
+
+		EAI_PC_save_project_inputs = yes
+		for_each_scope_loop = { array = airbase_states_
+			EAI_PC_get_project_inputs = yes
+			EAI_PC_start_project = yes
+		}
+	}
+
+	EAI_PC_clear_project_inputs = yes
+}
+
+EAI_PC_airbase_STRATEGIES = { # >>> arr:airbase_states_
+
+	set_temp_variable = { EAI_PC_airbase_STRATEGIES = 0 }
+
+	clear_temp_array = airbase_states_
+	
+	if = {
+		limit = {
+			tag = ENG
+			has_war = yes
+			date > 1940.1.1
+		}
+
+		# Malta
+		add_to_temp_array = { airbase_states_ = 116.id }
+
+		set_temp_variable = { _project_target_level = 9 }
+		set_temp_variable = { _project_queue_num = 5 }
+
+		set_temp_variable = { EAI_PC_airbase_STRATEGIES = 1 }
+	}
+}
+
+###
+
+EAI_PC_validate_queued_provincial_projects = { # _strategy_id _valid_provinces
+
+	for_each_loop = { array = EAI_PC_queue value = _project_id
+		if = { 
+			limit = { 
+				check_variable = { EAI_PC_type_id^_project_id = _strategy_id }
+				NOT = { is_in_array = { _valid_provinces = EAI_PC_target_province^_project_id } }
+			}
+			add_to_temp_array = { _cancel_projects_PROVINCES = EAI_PC_target_province^_project_id }
+		}
+	}
+	if = { limit = { check_variable = { _cancel_projects_PROVINCES^num > 0 } } 
+		add_to_temp_array = { _cancel_projects_TYPE_IDS = _strategy_id }
+		set_temp_variable = { EAI_PC_cancel_projects_source = 5 }
+		EAI_PC_cancel_projects = yes
+	}
+
+	### Clear input
+
+	clear_temp_array = _valid_provinces
+}

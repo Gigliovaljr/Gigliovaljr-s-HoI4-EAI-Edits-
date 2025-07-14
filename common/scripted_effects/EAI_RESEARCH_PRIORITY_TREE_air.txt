@@ -1,0 +1,831 @@
+#######################################################################################
+###		Aircraft technologies
+#######################################################################################
+
+@PR_small_airframe = 1000
+@PR_medium_airframe = 1000
+@PR_large_airframe = 1000
+@PR_transport = 500
+@PR_engine_module = 1050
+@PR_bomb_module = 800
+@PR_air_torpedo_module = 800
+@PR_mg_module = 1000
+@PR_survivability_studies_module = 1000
+@PR_aa_cannon_module = 800
+@PR_range_improvements_module = 1000
+@PR_aircraft_construction_module = 800
+
+EAI_PR_STRATEGIES_aircraft_technologies = {
+
+	EAI_PR_STRATEGIES_small_airframe = yes
+	EAI_PR_STRATEGIES_medium_airframe = yes
+	EAI_PR_STRATEGIES_large_airframe = yes
+	EAI_PR_STRATEGIES_transport = yes
+	EAI_PR_STRATEGIES_engine_module = yes
+	EAI_PR_STRATEGIES_bomb_module = yes
+	EAI_PR_STRATEGIES_air_torpedo_module = yes
+	EAI_PR_STRATEGIES_mg_module = yes
+	EAI_PR_STRATEGIES_survivability_studies_module = yes
+	EAI_PR_STRATEGIES_aa_cannon_module = yes
+	EAI_PR_STRATEGIES_range_improvements_module = yes
+	EAI_PR_STRATEGIES_aircraft_construction_module = yes
+}
+
+###
+
+EAI_PR_STRATEGIES_small_airframe = {
+
+	if = { 
+		limit = { 
+			OR = {
+				AND = {
+					EAI_FTR_tech_focus = yes
+					num_of_military_factories > 15
+				}
+
+				AND = {
+					EAI_CAS_tech_focus = yes
+					num_of_military_factories > 15
+				}
+
+				AND = {
+					EAI_CV_tech_focus = yes
+					is_major = yes
+				}
+
+				AND = {
+					EAI_NAV_tech_focus = yes
+					is_major = yes
+				}
+			}
+		}
+
+		set_temp_variable = { prio_cat = @PR_small_airframe }
+
+		############################
+		# Strategies
+		############################
+
+			# if = { limit = { tag = SOV }
+			# 	if = {
+			# 		limit = {
+			# 			always = yes
+			# 		}
+				
+			# 		multiply_temp_variable = { prio_cat = 1 }
+			# 	}
+			# }
+
+			if = { limit = { check_variable = { EAI_FTR_tech_focus = yes } }
+
+				add_to_temp_variable = { prio_cat = 300 }
+			}
+
+			if = { limit = { is_major = no }
+			
+				set_temp_variable = { prio_mult = num_of_military_factories }
+				divide_temp_variable = { prio_mult = 50 }
+				clamp_temp_variable = { var = prio_mult min = 0 max = 1 }
+				multiply_temp_variable = { prio_cat = prio_mult }
+			}
+
+		############################
+
+		### iw_small_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:iw_small_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1936.6.1
+
+			set_temp_variable = { _year = 1936 }
+			EAI_PR_year_FACTOR = yes
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### basic_small_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:basic_small_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1936.6.1
+			
+			set_temp_variable = { _year = 1936 }
+			EAI_PR_year_FACTOR = yes
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### improved_small_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:improved_small_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1939.10.1
+			
+			set_temp_variable = { _year = 1940 }
+			EAI_PR_year_FACTOR = yes
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### advanced_small_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:advanced_small_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1943.10.1
+			
+			set_temp_variable = { _year = 1944 }
+			EAI_PR_year_FACTOR = yes
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### modern_small_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:modern_small_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			EAI_JET_tech_focus = yes
+			date > 1944.10.1
+			
+			set_temp_variable = { _year = 1945 }
+			EAI_PR_year_FACTOR = yes
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+	}
+}
+
+EAI_PR_STRATEGIES_medium_airframe = {
+
+	if = { 
+		limit = { 
+			OR = {
+				AND = {
+					EAI_HFTR_tech_focus = yes
+					num_of_military_factories > 15
+				}
+
+				AND = {
+					EAI_TAC_tech_focus = yes
+					num_of_military_factories > 15
+				}
+			}
+		}
+
+		set_temp_variable = { prio_cat = @PR_medium_airframe }
+
+		############################
+		# Strategies
+		############################
+
+			# if = { limit = { tag = SOV }
+			# 	if = {
+			# 		limit = {
+			# 			always = yes
+			# 		}
+				
+			# 		multiply_temp_variable = { prio_cat = 1 }
+			# 	}
+			# }
+
+			if = { limit = { check_variable = { EAI_HFTR_tech_focus = yes } }
+
+				add_to_temp_variable = { prio_cat = 300 }
+			}
+
+		############################
+
+		### iw_medium_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:iw_medium_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1936.6.1
+			
+			set_temp_variable = { _year = 1936 }
+			EAI_PR_year_FACTOR = yes
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### basic_medium_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:basic_medium_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1936.6.1
+			
+			set_temp_variable = { _year = 1936 }
+			EAI_PR_year_FACTOR = yes
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### improved_medium_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:improved_medium_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1940.1.1
+			
+			set_temp_variable = { _year = 1940 }
+			EAI_PR_year_FACTOR = yes
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### advanced_medium_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:advanced_medium_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1944.1.1
+			
+			set_temp_variable = { _year = 1944 }
+			EAI_PR_year_FACTOR = yes
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### modern_medium_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:modern_medium_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			EAI_JET_tech_focus = yes
+			date > 1945.1.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+	}
+}
+
+EAI_PR_STRATEGIES_large_airframe = {
+
+	if = { 
+		limit = { 
+			OR = {
+				EAI_STR_tech_focus = yes
+				EAI_MARITIME_tech_focus = yes
+			}
+			is_major = yes
+		}
+
+		set_temp_variable = { prio_cat = @PR_large_airframe }
+
+		############################
+		# Strategies
+		############################
+
+			# if = { limit = { tag = SOV }
+			# 	if = {
+			# 		limit = {
+			# 			always = yes
+			# 		}
+				
+			# 		multiply_temp_variable = { prio_cat = 1 }
+			# 	}
+			# }
+
+		############################
+
+		### iw_large_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:iw_large_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1936.6.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### basic_large_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:basic_large_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1936.6.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### improved_large_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:improved_large_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1940.1.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### advanced_large_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:advanced_large_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1944.1.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### modern_large_airframe
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:modern_large_airframe } set_temp_variable = { _prio_val = prio_cat }
+
+			EAI_JET_tech_focus = yes
+			date > 1945.1.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+	}
+}
+
+EAI_PR_STRATEGIES_transport = {
+
+	if = { 
+		limit = { 
+			always = yes
+		}
+
+		set_temp_variable = { prio_cat = @PR_transport }
+
+		############################
+		# Strategies
+		############################
+
+			# if = { limit = { tag = SOV }
+			# 	if = {
+			# 		limit = {
+			# 			always = yes
+			# 		}
+				
+			# 		multiply_temp_variable = { prio_cat = 1 }
+			# 	}
+			# }
+
+			if = {
+				limit = {
+					is_major = yes
+					num_of_factories > 150
+				}
+			
+				add_to_temp_variable = { prio_cat = 400 }
+			}
+
+		############################
+
+		### bba_early_transport_plane
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:bba_early_transport_plane } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1936.6.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### bba_improved_transport_plane
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:bba_improved_transport_plane } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1940.1.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### bba_strategic_airlifter
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:bba_strategic_airlifter } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1945.1.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+	}
+}
+
+EAI_PR_STRATEGIES_engine_module = {
+
+	if = { 
+		limit = { 
+			EAI_wants_to_build_aircraft = yes
+			num_of_military_factories > 15
+		}
+
+		set_temp_variable = { prio_cat = @PR_engine_module }
+
+		############################
+		# Strategies
+		############################
+
+			# if = { limit = { tag = SOV }
+			# 	if = {
+			# 		limit = {
+			# 			always = yes
+			# 		}
+				
+			# 		multiply_temp_variable = { prio_cat = 1 }
+			# 	}
+			# }
+
+			if = { limit = { is_major = no }
+			
+				set_temp_variable = { prio_mult = num_of_military_factories }
+				divide_temp_variable = { prio_mult = 50 }
+				clamp_temp_variable = { var = prio_mult min = 0 max = 1 }
+				multiply_temp_variable = { prio_cat = prio_mult }
+			}
+
+		############################
+
+		### engines_1
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:engines_1 } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1936.6.1
+			
+			set_temp_variable = { _year = 1936 }
+			EAI_PR_year_FACTOR = yes
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### engines_2
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:engines_2 } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1936.6.1
+			
+			set_temp_variable = { _year = 1936 }
+			EAI_PR_year_FACTOR = yes
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### engines_3
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:engines_3 } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1939.10.1
+			
+			set_temp_variable = { _year = 1940 }
+			EAI_PR_year_FACTOR = yes
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### engines_4
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:engines_4 } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1943.6.1
+			
+			set_temp_variable = { _year = 1944 }
+			EAI_PR_year_FACTOR = yes
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+	}
+}
+
+EAI_PR_STRATEGIES_bomb_module = {
+
+	if = { 
+		limit = { 
+			EAI_bomb_MODULE_FOCUS = yes
+			is_major = yes
+		}
+
+		set_temp_variable = { prio_cat = @PR_bomb_module }
+
+		############################
+		# Strategies
+		############################
+
+			# if = { limit = { tag = SOV }
+			# 	if = {
+			# 		limit = {
+			# 			always = yes
+			# 		}
+				
+			# 		multiply_temp_variable = { prio_cat = 1 }
+			# 	}
+			# }
+
+		############################
+
+		### early_bombs
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:early_bombs } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1936.6.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### heavy_bombs
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:heavy_bombs } set_temp_variable = { _prio_val = prio_cat }
+
+			always = no
+			date > 1940.1.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### armor_piercing_bombs
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:armor_piercing_bombs } set_temp_variable = { _prio_val = prio_cat }
+
+			always = no
+			date > 1931.6.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### rocket_artillery
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:rocket_artillery } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1940.1.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+	}
+}
+
+EAI_PR_STRATEGIES_air_torpedo_module = {
+
+	if = { 
+		limit = { 
+			EAI_torpedo_mounting_MODULE_FOCUS = yes
+			is_major = yes
+		}
+
+		set_temp_variable = { prio_cat = @PR_air_torpedo_module }
+
+		############################
+		# Strategies
+		############################
+
+			# if = { limit = { tag = SOV }
+			# 	if = {
+			# 		limit = {
+			# 			always = yes
+			# 		}
+				
+			# 		multiply_temp_variable = { prio_cat = 1 }
+			# 	}
+			# }
+
+		############################
+
+		### air_torpedoe_1
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:air_torpedoe_1 } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1936.6.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### air_torpedoe_2
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:air_torpedoe_2 } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1940.1.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### air_torpedoe_3
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:air_torpedoe_3 } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1944.1.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+	}
+}
+
+EAI_PR_STRATEGIES_mg_module = {
+
+	if = { 
+		limit = { 
+			EAI_aa_mg_MODULE_FOCUS = yes
+			num_of_military_factories > 15
+		}
+
+		set_temp_variable = { prio_cat = @PR_mg_module }
+
+		############################
+		# Strategies
+		############################
+
+			# if = { limit = { tag = SOV }
+			# 	if = {
+			# 		limit = {
+			# 			always = yes
+			# 		}
+				
+			# 		multiply_temp_variable = { prio_cat = 1 }
+			# 	}
+			# }
+
+			if = { limit = { is_major = no }
+			
+				set_temp_variable = { prio_mult = num_of_military_factories }
+				divide_temp_variable = { prio_mult = 50 }
+				clamp_temp_variable = { var = prio_mult min = 0 max = 1 }
+				multiply_temp_variable = { prio_cat = prio_mult }
+			}
+
+		############################
+
+		### aa_lmg
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:aa_lmg } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1936.6.1
+			
+			set_temp_variable = { _year = 1936 }
+			if = { limit = { has_war = yes } EAI_PR_year_FACTOR = yes }
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### aa_hmg
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:aa_hmg } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1939.1.1
+			
+			set_temp_variable = { _year = 1939 }
+			if = { limit = { has_war = yes } EAI_PR_year_FACTOR = yes }
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+	}
+}
+
+EAI_PR_STRATEGIES_survivability_studies_module = {
+
+	if = { 
+		limit = { 
+			OR = {
+				EAI_self_sealing_fuel_tanks_MODULE_FOCUS = yes
+				EAI_armor_plate_MODULE_FOCUS = yes
+			}
+			num_of_military_factories > 15
+		}
+
+		set_temp_variable = { prio_cat = @PR_survivability_studies_module }
+
+		############################
+		# Strategies
+		############################
+
+			# if = { limit = { tag = SOV }
+			# 	if = {
+			# 		limit = {
+			# 			always = yes
+			# 		}
+				
+			# 		multiply_temp_variable = { prio_cat = 1 }
+			# 	}
+			# }
+
+			if = { limit = { is_major = no }
+			
+				set_temp_variable = { prio_mult = num_of_military_factories }
+				divide_temp_variable = { prio_mult = 50 }
+				clamp_temp_variable = { var = prio_mult min = 0 max = 1 }
+				multiply_temp_variable = { prio_cat = prio_mult }
+			}
+
+		############################
+
+		### survivability_studies
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:survivability_studies } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1939.1.1
+			
+			set_temp_variable = { _year = 1939 }
+			if = { limit = { has_war = yes } EAI_PR_year_FACTOR = yes }
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+	}
+}
+
+EAI_PR_STRATEGIES_aa_cannon_module = {
+
+	if = { 
+		limit = { 
+			EAI_aa_cannon_MODULE_FOCUS = yes
+			is_major = yes
+		}
+
+		set_temp_variable = { prio_cat = @PR_aa_cannon_module }
+
+		############################
+		# Strategies
+		############################
+
+			# if = { limit = { tag = SOV }
+			# 	if = {
+			# 		limit = {
+			# 			always = yes
+			# 		}
+				
+			# 		multiply_temp_variable = { prio_cat = 1 }
+			# 	}
+			# }
+
+		############################
+
+		### aa_cannon_1
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:aa_cannon_1 } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1939.1.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### aa_cannon_2
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:aa_cannon_2 } set_temp_variable = { _prio_val = prio_cat }
+
+			always = no
+			date > 1943.1.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+
+		### aa_cannon_3
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:aa_cannon_3 } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1945.1.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+	}
+}
+
+EAI_PR_STRATEGIES_range_improvements_module = {
+
+	if = { 
+		limit = { 
+			OR = {
+				EAI_drop_tanks_MODULE_FOCUS = yes
+				EAI_fuel_tanks_MODULE_FOCUS = yes
+			}
+			num_of_military_factories > 15
+		}
+
+		set_temp_variable = { prio_cat = @PR_range_improvements_module }
+
+		############################
+		# Strategies
+		############################
+
+			# if = { limit = { tag = SOV }
+			# 	if = {
+			# 		limit = {
+			# 			always = yes
+			# 		}
+				
+			# 		multiply_temp_variable = { prio_cat = 1 }
+			# 	}
+			# }
+
+			if = { limit = { is_major = no }
+			
+				set_temp_variable = { prio_mult = num_of_military_factories }
+				divide_temp_variable = { prio_mult = 50 }
+				clamp_temp_variable = { var = prio_mult min = 0 max = 1 }
+				multiply_temp_variable = { prio_cat = prio_mult }
+			}
+
+		############################
+
+		### range_improvements
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:range_improvements } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1936.6.1
+			
+			set_temp_variable = { _year = 1936 }
+			if = { limit = { has_war = yes } EAI_PR_year_FACTOR = yes }
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+	}
+}
+
+EAI_PR_STRATEGIES_aircraft_construction_module = {
+
+	if = { 
+		limit = { 
+			OR = {
+				EAI_flying_boat_MODULE_FOCUS = yes
+				EAI_non_strategic_materials_MODULE_FOCUS = yes
+				EAI_dive_brakes_MODULE_FOCUS = yes
+			}
+			num_of_military_factories > 15
+		}
+
+		set_temp_variable = { prio_cat = @PR_aircraft_construction_module }
+
+		############################
+		# Strategies
+		############################
+
+			# if = { limit = { tag = SOV }
+			# 	if = {
+			# 		limit = {
+			# 			always = yes
+			# 		}
+				
+			# 		multiply_temp_variable = { prio_cat = 1 }
+			# 	}
+			# }
+
+			if = { limit = { is_major = no }
+			
+				set_temp_variable = { prio_mult = num_of_military_factories }
+				divide_temp_variable = { prio_mult = 50 }
+				clamp_temp_variable = { var = prio_mult min = 0 max = 1 }
+				multiply_temp_variable = { prio_cat = prio_mult }
+			}
+
+		############################
+
+		### aircraft_construction
+
+		if = { limit = { set_temp_variable = { _prio_tech = token:aircraft_construction } set_temp_variable = { _prio_val = prio_cat }
+
+			date > 1936.6.1
+				
+		} EAI_PR_add_to_priority_research_queue = yes }
+	}
+}

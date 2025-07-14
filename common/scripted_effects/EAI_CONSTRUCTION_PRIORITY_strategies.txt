@@ -1,0 +1,1235 @@
+############################################################################################################
+# 	Expert AI mod - priority construction AI
+############################################################################################################
+
+###############################################################
+### 	Startup strategies
+###############################################################
+
+@EAI_PC_startup_strategies_TYPE_ID = 100
+@EAI_PC_startup_strategies_PRIO = 3000
+EAI_PC_startup_strategies = {
+
+	set_temp_variable = { strategy_type_id = @EAI_PC_startup_strategies_TYPE_ID }
+	set_temp_variable = { strategy_type_prio = @EAI_PC_startup_strategies_PRIO }
+
+	if = { limit = { tag = SOV } EAI_PC_startup_strategy_SOV = yes }
+	if = { limit = { tag = JAP } EAI_PC_startup_strategy_JAP = yes }
+	if = { limit = { tag = USA } EAI_PC_startup_strategy_USA = yes }
+	if = { limit = { tag = MAN } EAI_PC_startup_strategy_MAN = yes }
+}
+
+EAI_PC_startup_strategy_SOV = {
+
+	### Moscow
+	219 = { 
+		set_temp_variable = { _project_building_type = global.EAI_PC_INF }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 1 }
+		EAI_PC_start_project = yes
+
+		set_temp_variable = { _project_building_type = global.EAI_PC_CIC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 20 }
+		EAI_PC_start_project = yes
+
+		set_temp_variable = { _project_building_type = global.EAI_PC_MTC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 6 }
+		EAI_PC_start_project = yes
+	}
+
+	### Leningrad
+	195 = { 
+		set_temp_variable = { _project_building_type = global.EAI_PC_MIC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 20 }
+		EAI_PC_start_project = yes
+
+		set_temp_variable = { _project_building_type = global.EAI_PC_MTC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 6 }
+		EAI_PC_start_project = yes
+	}
+
+	### Kharkov
+	221 = { 
+		set_temp_variable = { _project_building_type = global.EAI_PC_CIC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 20 }
+		EAI_PC_start_project = yes
+	}
+
+	### Stalingrad
+	217 = { 
+		set_temp_variable = { _project_building_type = global.EAI_PC_CIC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 20 }
+		EAI_PC_start_project = yes
+	}
+
+	### Stalino
+	227 = { 
+		set_temp_variable = { _project_building_type = global.EAI_PC_INF }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 1 }
+		EAI_PC_start_project = yes
+
+		set_temp_variable = { _project_building_type = global.EAI_PC_CIC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 20 }
+		EAI_PC_start_project = yes
+	}
+
+	### Kursk
+	220 = { 
+		set_temp_variable = { _project_building_type = global.EAI_PC_INF }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 1 }
+		EAI_PC_start_project = yes
+
+		set_temp_variable = { _project_building_type = global.EAI_PC_CIC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 20 }
+		EAI_PC_start_project = yes
+	}
+
+	### Cherni
+	193 = { 
+		set_temp_variable = { _project_building_type = global.EAI_PC_INF }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 1 }
+		EAI_PC_start_project = yes
+
+		set_temp_variable = { _project_building_type = global.EAI_PC_CIC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 20 }
+		EAI_PC_start_project = yes
+	}
+
+	### Krasnodar
+	234 = { 
+		set_temp_variable = { _project_building_type = global.EAI_PC_INF }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 1 }
+		EAI_PC_start_project = yes
+
+		set_temp_variable = { _project_building_type = global.EAI_PC_CIC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 20 }
+		EAI_PC_start_project = yes
+	}
+
+	### Ufa
+	651 = { 
+		set_temp_variable = { _project_building_type = global.EAI_PC_INF }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 1 }
+		EAI_PC_start_project = yes
+
+		set_temp_variable = { _project_building_type = global.EAI_PC_CIC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 20 }
+		EAI_PC_start_project = yes
+	}
+
+	### Crimea
+	137 = {
+		set_temp_variable = { _project_building_type = global.EAI_PC_INF }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 1 }
+		EAI_PC_start_project = yes
+	}
+}
+
+EAI_PC_startup_strategy_JAP = {
+
+	for_each_scope_loop = { array = controlled_states
+	
+		if = { limit = { check_variable = { infrastructure_level > 3 } }
+		
+			set_temp_variable = { _project_building_type = global.EAI_PC_CIC }
+			set_temp_variable = { _project_type_id = strategy_type_id }
+			set_temp_variable = { _project_priority = strategy_type_prio }
+			set_temp_variable = { _project_queue_num = 2 }
+			EAI_PC_start_project = yes
+		}
+	}
+	
+	### Shikoku
+	530 = { 
+		set_temp_variable = { _project_building_type = global.EAI_PC_NIC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 5 }
+		EAI_PC_start_project = yes
+	}	
+}
+
+EAI_PC_startup_strategy_MAN = {
+
+     ### Define states to develop infrastructure
+    clear_array = EAI_PC_MAN_TARGET_STATES_FOR_INFRA
+    add_to_array = { EAI_PC_MAN_TARGET_STATES_FOR_INFRA = 328 }
+    add_to_array = { EAI_PC_MAN_TARGET_STATES_FOR_INFRA = 716 }
+	add_to_array = { EAI_PC_MAN_TARGET_STATES_FOR_INFRA = 714 }
+
+    for_each_scope_loop = { array = EAI_PC_MAN_TARGET_STATES_FOR_INFRA
+        # Step 1: Check and calculate how much infrastructure is needed
+        set_temp_variable = { _project_building_type = global.EAI_PC_INF } # Specify infrastructure type
+        EAI_PC_get_total_building_level = yes                             # Fetch current level and queued levels
+
+        set_temp_variable = { needed_infra = 5 }                          # Target maximum level
+        subtract_from_temp_variable = { needed_infra = building_level_ }  # Calculate levels still needed
+
+        # Step 2: If more infrastructure is required, queue the projects
+        if = {
+            limit = { check_variable = { needed_infra > 0 } }
+
+            set_temp_variable = { _project_type_id = strategy_type_id }    # Use the MAN-specific strategy type ID
+            set_temp_variable = { _project_priority = strategy_type_prio } # High priority for these projects
+            set_temp_variable = { _project_queue_num = needed_infra }      # Queue the calculated number of levels
+
+            EAI_PC_start_project = yes
+        }
+    }
+}
+
+
+EAI_PC_startup_strategy_USA = {
+
+    ### Define states to develop infrastructure
+    clear_array = EAI_PC_USA_TARGET_STATES_FOR_INFRA
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 378 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 379 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 387 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 380 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 377 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 376 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 375 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 374 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 371 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 372 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 373 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 368 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 389 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 391 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 394 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 393 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 261 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 360 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 358 }
+    add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 357 }
+	add_to_array = { EAI_PC_USA_TARGET_STATES_FOR_INFRA = 388 }
+
+    for_each_scope_loop = { array = EAI_PC_USA_TARGET_STATES_FOR_INFRA
+        # Step 1: Check and calculate how much infrastructure is needed
+        set_temp_variable = { _project_building_type = global.EAI_PC_INF } # Specify infrastructure type
+        EAI_PC_get_total_building_level = yes                             # Fetch current level and queued levels
+
+        set_temp_variable = { needed_infra = 5 }                          # Target maximum level
+        subtract_from_temp_variable = { needed_infra = building_level_ }  # Calculate levels still needed
+
+        # Step 2: If more infrastructure is required, queue the projects
+        if = {
+            limit = { check_variable = { needed_infra > 0 } }
+
+            set_temp_variable = { _project_type_id = strategy_type_id }    # Use the USA-specific strategy type ID
+            set_temp_variable = { _project_priority = strategy_type_prio } # High priority for these projects
+            set_temp_variable = { _project_queue_num = needed_infra }      # Queue the calculated number of levels
+
+            EAI_PC_start_project = yes
+        }
+    }
+
+	### California
+	378 = { 
+		set_temp_variable = { _project_building_type = global.EAI_PC_NIC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 5 }
+		EAI_PC_start_project = yes
+	}
+
+    ### Oregon
+	385 = { 
+		set_temp_variable = { _project_building_type = global.EAI_PC_NIC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 5 }
+		EAI_PC_start_project = yes
+	}
+
+    ### Washington
+	386 = { 
+		set_temp_variable = { _project_building_type = global.EAI_PC_NIC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 5 }
+		EAI_PC_start_project = yes
+	}
+}
+
+
+###############################################################
+### 	Dynamic strategies
+###############################################################
+
+@EAI_PC_dynamic_strategies_TYPE_ID = 101
+@EAI_PC_dynamic_strategies_PRIO = 3000
+EAI_PC_dynamic_strategies = {
+
+	set_temp_variable = { strategy_type_id = @EAI_PC_dynamic_strategies_TYPE_ID }
+	set_temp_variable = { strategy_type_prio = @EAI_PC_dynamic_strategies_PRIO }
+
+	if = { 		limit = { tag = SOV } EAI_PC_dynamic_strategy_SOV = yes }
+	else_if = { limit = { tag = JAP } EAI_PC_dynamic_strategy_JAP = yes }
+	else_if = { limit = { tag = USA } EAI_PC_dynamic_strategy_USA = yes }
+
+	###
+
+	else = { EAI_PC_dynamic_strategy_GENERIC = yes }
+}
+
+@EAI_PC_dynamic_strategies_daily_TYPE_ID = 102
+@EAI_PC_dynamic_strategies_daily_PRIO = 3000
+EAI_PC_dynamic_strategies_daily = {
+
+	set_temp_variable = { strategy_type_id = @EAI_PC_dynamic_strategies_daily_TYPE_ID }
+	set_temp_variable = { strategy_type_id = @EAI_PC_dynamic_strategies_daily_PRIO }
+
+	if = { 		limit = { tag = SOV } EAI_PC_dynamic_strategy_SOV_daily = yes }
+	else_if = { limit = { tag = JAP } EAI_PC_dynamic_strategy_JAP_daily = yes }
+
+	###
+
+	else = { EAI_PC_dynamic_strategy_GENERIC_daily = yes }
+}
+
+### SOV
+
+EAI_PC_dynamic_strategy_SOV = {
+
+	###################################################################################################
+	### Null state
+	###################################################################################################
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 0 } }
+
+		### Transition
+		###########################
+
+		if = { limit = { set_temp_variable = { _transition_to = 1 } check_variable = { EAI_PC_changed_state = 0 }
+
+				always = yes
+
+			} EAI_PC_transition_state = yes 
+
+			### Transition effect
+			###########################
+
+			set_country_flag = EAI_PC_dynamic_strategy_delay_effect
+			set_country_flag = { flag = EAI_PC_dynamic_strategy_delay_effect_duration value = 1 days = 1 }
+		}
+	}
+
+	###################################################################################################
+	### State 1 - build CIC
+	###################################################################################################
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 1 } }
+
+		### Entry
+		###########################
+
+		if = { limit = { check_variable = { EAI_PC_changed_state = 1 } }
+
+			set_variable = { EAI_PC_changed_state = 0 }
+
+			### Entry effect
+			###########################
+
+			set_country_flag = EAI_block_AI_construction
+		}
+
+		### Transition
+		###########################
+
+		if = { limit = { set_temp_variable = { _transition_to = 1.5 } check_variable = { EAI_PC_changed_state = 0 }
+
+				OR = {
+					date > 1939.6.1
+					num_of_civilian_factories > 150
+				}
+
+			} EAI_PC_transition_state = yes 
+
+			### Transition effect
+			###########################
+		}
+
+		### Transition
+		###########################
+
+		if = { limit = { set_temp_variable = { _transition_to = 2 } check_variable = { EAI_PC_changed_state = 0 }
+
+				num_of_civilian_factories > 200
+
+			} EAI_PC_transition_state = yes
+
+			### Transition effect
+			###########################
+
+			add_to_temp_array = { _cancel_projects_TYPES = global.EAI_PC_CIC }
+			EAI_PC_cancel_projects = yes
+
+			EAI_BUILDING_reset_flags = yes
+		}
+
+		### Transition
+		###########################
+
+		if = { limit = { set_temp_variable = { _transition_to = 3 } check_variable = { EAI_PC_changed_state = 0 }
+
+				OR = {
+					any_enemy_country = { is_major = yes }
+					has_country_flag = EAI_MILITARY_trend_losing_war
+				}
+
+			} EAI_PC_transition_state = yes 
+
+			### Transition effect
+			###########################
+
+			add_to_temp_array = { _cancel_projects_TYPES = global.EAI_PC_CIC }
+			EAI_PC_cancel_projects = yes
+
+			EAI_BUILDING_reset_flags = yes
+
+			EAI_PC_clear_game_construction_queue = yes
+		} 
+
+		### Effect
+		###########################
+
+		if = { limit = { check_variable = { EAI_PC_changed_state = 0 } }
+
+			set_temp_variable = { _assign_fraction = 1 }
+			EAI_PC_set_max_factory_limit = yes
+
+			add_to_temp_array = { _queue_new_INF_for_construction_efficiency_TYPES = global.EAI_PC_CIC }
+			set_temp_variable = { _project_type_id = strategy_type_id }
+			set_temp_variable = { _project_priority = strategy_type_prio }
+			EAI_PC_queue_new_INF_for_construction_efficiency = yes
+
+			set_temp_variable = { _sort_mode = 0 }
+			add_to_temp_array = { _sort_projects_by_build_time_TYPES = global.EAI_PC_INF }
+			add_to_temp_array = { _sort_projects_by_build_time_TYPES = global.EAI_PC_CIC }
+			add_to_temp_array = { _sort_projects_by_build_time_TYPES = global.EAI_PC_MTC }
+			EAI_PC_sort_projects_by_build_time = yes
+
+			set_temp_variable = { _sort_mode = 0 }
+			add_to_temp_array = { _sort_projects_by_type_TYPES = global.EAI_PC_MTC } set_temp_variable = { _sort_projects_by_type_PRIO^global.EAI_PC_MTC = 0 }
+			add_to_temp_array = { _sort_projects_by_type_TYPES = global.EAI_PC_CIC } set_temp_variable = { _sort_projects_by_type_PRIO^global.EAI_PC_CIC = 0 }
+			add_to_temp_array = { _sort_projects_by_type_TYPES = global.EAI_PC_INF } set_temp_variable = { _sort_projects_by_type_PRIO^global.EAI_PC_INF = 1 }
+			EAI_PC_sort_projects_by_type = yes
+
+			set_temp_variable = { _sort_mode = 0 }
+			add_to_temp_array = { _sort_projects_per_state_by_type_TYPES = global.EAI_PC_INF } set_temp_variable = { _sort_projects_per_state_by_type_PRIO^global.EAI_PC_INF = 0 }
+			add_to_temp_array = { _sort_projects_per_state_by_type_TYPES = global.EAI_PC_CIC } set_temp_variable = { _sort_projects_per_state_by_type_PRIO^global.EAI_PC_CIC = 1 }
+			add_to_temp_array = { _sort_projects_per_state_by_type_TYPES = global.EAI_PC_MTC } set_temp_variable = { _sort_projects_per_state_by_type_PRIO^global.EAI_PC_MTC = 1 }
+			EAI_PC_sort_projects_per_state_by_type = yes
+
+			EAI_PC_sort_projects_by_priority = yes
+		}
+	}
+
+	###################################################################################################
+	### State 1.5 - CIC and MIC mixed
+	###################################################################################################
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 1.5 } }
+
+		### Entry
+		###########################
+
+		if = { limit = { check_variable = { EAI_PC_changed_state = 1 } }
+
+			set_variable = { EAI_PC_changed_state = 0 }
+
+			### Entry effect
+			###########################
+
+			set_country_flag = EAI_block_AI_construction
+		}
+
+		### Transition
+		###########################
+
+		if = { limit = { set_temp_variable = { _transition_to = 2 } check_variable = { EAI_PC_changed_state = 0 }
+
+				set_temp_variable = { _project_building_type = global.EAI_PC_CIC }
+				EAI_PC_get_total_queued_num = yes
+				add_to_temp_variable = { queued_type_num_ = num_of_civilian_factories }
+				check_variable = { queued_type_num_ > 200 }
+
+			} EAI_PC_transition_state = yes 
+
+			### Transition effect
+			###########################
+
+			add_to_temp_array = { _cancel_projects_TYPES = global.EAI_PC_CIC }
+			add_to_temp_array = { _cancel_projects_TYPES = global.EAI_PC_MTC }
+			EAI_PC_cancel_projects = yes
+
+			EAI_BUILDING_reset_flags = yes
+		}
+
+		### Transition
+		###########################
+
+		if = { limit = { set_temp_variable = { _transition_to = 3 } check_variable = { EAI_PC_changed_state = 0 }
+
+				OR = {
+					any_enemy_country = { is_major = yes }
+					has_country_flag = EAI_MILITARY_trend_losing_war
+				}
+
+			} EAI_PC_transition_state = yes 
+
+			### Transition effect
+			###########################
+
+			add_to_temp_array = { _cancel_projects_TYPES = global.EAI_PC_CIC }
+			add_to_temp_array = { _cancel_projects_TYPES = global.EAI_PC_MIC }
+			add_to_temp_array = { _cancel_projects_TYPES = global.EAI_PC_MTC }
+			EAI_PC_cancel_projects = yes
+
+			EAI_BUILDING_reset_flags = yes
+
+			EAI_PC_clear_game_construction_queue = yes
+		}
+
+		### Effect
+		###########################
+
+		if = { limit = { check_variable = { EAI_PC_changed_state = 0 } }
+
+			set_temp_variable = { _assign_fraction = 1 }
+			EAI_PC_set_max_factory_limit = yes
+
+			set_temp_variable = { _sort_mode = 0 }
+			add_to_temp_array = { _sort_projects_by_build_time_TYPES = global.EAI_PC_INF }
+			add_to_temp_array = { _sort_projects_by_build_time_TYPES = global.EAI_PC_CIC }
+			add_to_temp_array = { _sort_projects_by_build_time_TYPES = global.EAI_PC_MTC }
+			add_to_temp_array = { _sort_projects_by_build_time_TYPES = global.EAI_PC_MIC }
+			EAI_PC_sort_projects_by_build_time = yes
+
+			set_temp_variable = { _sort_mode = 0 }
+			add_to_temp_array = { _sort_projects_by_type_TYPES = global.EAI_PC_MTC } set_temp_variable = { _sort_projects_by_type_PRIO^global.EAI_PC_MTC = 0 }
+			add_to_temp_array = { _sort_projects_by_type_TYPES = global.EAI_PC_CIC } set_temp_variable = { _sort_projects_by_type_PRIO^global.EAI_PC_CIC = 0 }
+			add_to_temp_array = { _sort_projects_by_type_TYPES = global.EAI_PC_MIC } set_temp_variable = { _sort_projects_by_type_PRIO^global.EAI_PC_MIC = 0 }
+			add_to_temp_array = { _sort_projects_by_type_TYPES = global.EAI_PC_INF } set_temp_variable = { _sort_projects_by_type_PRIO^global.EAI_PC_INF = 1 }
+			EAI_PC_sort_projects_by_type = yes
+
+			set_temp_variable = { _sort_mode = 0 }
+			add_to_temp_array = { _sort_projects_per_state_by_type_TYPES = global.EAI_PC_INF } set_temp_variable = { _sort_projects_per_state_by_type_PRIO^global.EAI_PC_INF = 0 }
+			add_to_temp_array = { _sort_projects_per_state_by_type_TYPES = global.EAI_PC_CIC } set_temp_variable = { _sort_projects_per_state_by_type_PRIO^global.EAI_PC_CIC = 1 }
+			add_to_temp_array = { _sort_projects_per_state_by_type_TYPES = global.EAI_PC_MTC } set_temp_variable = { _sort_projects_per_state_by_type_PRIO^global.EAI_PC_MTC = 1 }
+			add_to_temp_array = { _sort_projects_per_state_by_type_TYPES = global.EAI_PC_MIC } set_temp_variable = { _sort_projects_per_state_by_type_PRIO^global.EAI_PC_MIC = 1 }
+			EAI_PC_sort_projects_per_state_by_type = yes
+
+			add_to_temp_array = { _build_types_in_equal_ratio_TYPES = global.EAI_PC_CIC }
+			add_to_temp_array = { _build_types_in_equal_ratio_TYPES = global.EAI_PC_MIC }
+			EAI_PC_build_types_in_equal_ratio = yes
+
+			EAI_PC_sort_projects_by_priority = yes
+		}
+	}
+
+	###################################################################################################
+	### State 2 - build MIC
+	###################################################################################################
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 2 } }
+
+		### Entry
+		###########################
+
+		if = { limit = { check_variable = { EAI_PC_changed_state = 1 } }
+
+			set_variable = { EAI_PC_changed_state = 0 }
+
+			### Entry effect
+			###########################
+
+			set_country_flag = EAI_block_AI_construction
+		}
+
+		### Transition
+		###########################
+
+		if = { limit = { set_temp_variable = { _transition_to = 3 } check_variable = { EAI_PC_changed_state = 0 }
+
+				OR = {
+					any_enemy_country = { is_major = yes }
+					has_country_flag = EAI_MILITARY_trend_losing_war
+				}
+				
+			} EAI_PC_transition_state = yes 
+
+			### Transition effect
+			###########################
+
+			add_to_temp_array = { _cancel_projects_TYPES = global.EAI_PC_MIC }
+			EAI_PC_cancel_projects = yes
+
+			EAI_BUILDING_reset_flags = yes
+
+			EAI_PC_clear_game_construction_queue = yes
+		}
+
+		### Effect
+		###########################
+
+		if = { limit = { check_variable = { EAI_PC_changed_state = 0 } }
+
+			set_temp_variable = { _assign_fraction = 1 }
+			EAI_PC_set_max_factory_limit = yes
+
+			set_temp_variable = { _sort_mode = 0 }
+			add_to_temp_array = { _sort_projects_by_build_time_TYPES = global.EAI_PC_INF }
+			add_to_temp_array = { _sort_projects_by_build_time_TYPES = global.EAI_PC_CIC }
+			add_to_temp_array = { _sort_projects_by_build_time_TYPES = global.EAI_PC_MTC }
+			add_to_temp_array = { _sort_projects_by_build_time_TYPES = global.EAI_PC_MIC }
+			EAI_PC_sort_projects_by_build_time = yes
+
+			set_temp_variable = { _sort_mode = 0 }
+			add_to_temp_array = { _sort_projects_by_type_TYPES = global.EAI_PC_CIC } set_temp_variable = { _sort_projects_by_type_PRIO^global.EAI_PC_CIC = 0 }
+			add_to_temp_array = { _sort_projects_by_type_TYPES = global.EAI_PC_MTC } set_temp_variable = { _sort_projects_by_type_PRIO^global.EAI_PC_MTC = 0 }
+			add_to_temp_array = { _sort_projects_by_type_TYPES = global.EAI_PC_MIC } set_temp_variable = { _sort_projects_by_type_PRIO^global.EAI_PC_MIC = 1 }
+			add_to_temp_array = { _sort_projects_by_type_TYPES = global.EAI_PC_INF } set_temp_variable = { _sort_projects_by_type_PRIO^global.EAI_PC_INF = 2 }
+			EAI_PC_sort_projects_by_type = yes
+
+			set_temp_variable = { _sort_mode = 0 }
+			add_to_temp_array = { _sort_projects_per_state_by_type_TYPES = global.EAI_PC_INF } set_temp_variable = { _sort_projects_per_state_by_type_PRIO^global.EAI_PC_INF = 0 }
+			add_to_temp_array = { _sort_projects_per_state_by_type_TYPES = global.EAI_PC_CIC } set_temp_variable = { _sort_projects_per_state_by_type_PRIO^global.EAI_PC_CIC = 1 }
+			add_to_temp_array = { _sort_projects_per_state_by_type_TYPES = global.EAI_PC_MTC } set_temp_variable = { _sort_projects_per_state_by_type_PRIO^global.EAI_PC_MTC = 1 }
+			add_to_temp_array = { _sort_projects_per_state_by_type_TYPES = global.EAI_PC_MIC } set_temp_variable = { _sort_projects_per_state_by_type_PRIO^global.EAI_PC_MIC = 2 }
+			EAI_PC_sort_projects_per_state_by_type = yes
+
+			EAI_PC_sort_projects_by_priority = yes
+		}
+	}
+
+	###################################################################################################
+	### State 3
+	###################################################################################################
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 3 } }
+
+		### Entry
+		###########################
+
+		if = { limit = { check_variable = { EAI_PC_changed_state = 1 } }
+
+			set_variable = { EAI_PC_changed_state = 0 }
+
+			### Entry effect
+			###########################
+
+			clr_country_flag = EAI_block_AI_construction
+		}
+
+		### Effect
+		###########################
+
+		if = { limit = { check_variable = { EAI_PC_changed_state = 0 } }
+
+			set_temp_variable = { _assign_fraction = 0.35 }
+			set_temp_variable = { _assign_max = 45 }
+			if = { limit = { has_global_flag = { flag = EAI_GER_blitz_russia_365d value = 1 days < 180 } }
+				add_to_temp_variable = { _assign_fraction = 0.35 }
+				add_to_temp_variable = { _assign_max = 30 }
+			}
+			EAI_PC_set_max_factory_limit = yes
+
+			EAI_PC_sort_projects_by_build_time = yes
+			EAI_PC_sort_projects_by_priority = yes
+
+			# Low prio
+			clear_temp_array = _sort_projects_TYPES
+			add_to_temp_array = { _sort_projects_TYPES = global.EAI_PC_BUNKER }
+			add_to_temp_array = { _sort_projects_TYPES = global.EAI_PC_CBUNKER }
+			clear_temp_array = _sort_projects_TYPE_IDS
+			add_to_temp_array = { _sort_projects_TYPE_IDS = 500 }
+			add_to_temp_array = { _sort_projects_TYPE_IDS = 501 }
+			add_to_temp_array = { _sort_projects_TYPE_IDS = 502 }
+			add_to_temp_array = { _sort_projects_TYPE_IDS = 402 }
+			EAI_PC_sort_projects_by_enemy_distance = yes
+
+			# High prio
+			clear_temp_array = _sort_projects_TYPES
+			add_to_temp_array = { _sort_projects_TYPES = global.EAI_PC_BUNKER }
+			add_to_temp_array = { _sort_projects_TYPES = global.EAI_PC_CBUNKER }
+			clear_temp_array = _sort_projects_TYPE_IDS
+			add_to_temp_array = { _sort_projects_TYPE_IDS = 400 }
+			add_to_temp_array = { _sort_projects_TYPE_IDS = 401 }
+			add_to_temp_array = { _sort_projects_TYPE_IDS = 503 }
+			EAI_PC_sort_projects_by_enemy_distance = yes
+		}
+	}
+}
+
+EAI_PC_dynamic_strategy_SOV_daily = {
+
+	### State 1
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 1 } }
+
+		if = { limit = { has_country_flag = EAI_PC_dynamic_strategy_delay_effect NOT = { has_country_flag = EAI_PC_dynamic_strategy_delay_effect_duration } }
+
+			clr_country_flag = EAI_PC_dynamic_strategy_delay_effect
+			EAI_PC_clear_game_construction_queue = yes
+		}
+
+		if = { 
+			limit = { 
+				check_variable = { EAI_PC_reserved_factories_available > 0 }
+				date > 1937.1.1
+			}
+
+			if = { limit = { has_country_flag = EAI_priority_construction_detailed_logging } log = "[GetYear] [GetMonth] | AI | [This.GetName] | PC: EAI_PC_dynamic_strategy_SOV_daily" }
+
+			set_temp_variable = { _queue_new_shared_types_with_factories_FACTORIES = 1 }
+			add_to_temp_array = { _queue_new_shared_types_with_factories_TYPES = global.EAI_PC_CIC }
+			set_temp_variable = { _project_type_id = strategy_type_id }
+			set_temp_variable = { _project_priority = strategy_type_prio }
+			EAI_PC_queue_new_shared_types = yes
+		}
+	}
+
+	### State 1.5
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 1.5 } }
+
+		if = { 
+			limit = { 
+				check_variable = { EAI_PC_reserved_factories_available > 0 }
+				date > 1937.1.1
+			}
+
+			if = { limit = { has_country_flag = EAI_priority_construction_detailed_logging } log = "[GetYear] [GetMonth] | AI | [This.GetName] | PC: EAI_PC_dynamic_strategy_SOV_daily" }
+
+			set_temp_variable = { _queue_new_shared_types_with_factories_FACTORIES = EAI_PC_reserved_factories_available }
+			add_to_temp_array = { _queue_new_shared_types_with_factories_TYPES = global.EAI_PC_CIC }
+			add_to_temp_array = { _queue_new_shared_types_with_factories_TYPES = global.EAI_PC_MIC }
+			set_temp_variable = { _project_type_id = strategy_type_id }
+			set_temp_variable = { _project_priority = strategy_type_prio }
+			EAI_PC_queue_new_shared_types = yes
+		}
+	}
+
+	### State 2
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 2 } }
+
+		if = { 
+			limit = { 
+				check_variable = { EAI_PC_reserved_factories_available > 0 }
+				date > 1937.1.1
+			}
+
+			if = { limit = { has_country_flag = EAI_priority_construction_detailed_logging } log = "[GetYear] [GetMonth] | AI | [This.GetName] | PC: EAI_PC_dynamic_strategy_SOV_daily" }
+
+			set_temp_variable = { _queue_new_shared_types_with_factories_FACTORIES = EAI_PC_reserved_factories_available }
+			add_to_temp_array = { _queue_new_shared_types_with_factories_TYPES = global.EAI_PC_MIC }
+			set_temp_variable = { _project_type_id = strategy_type_id }
+			set_temp_variable = { _project_priority = strategy_type_prio }
+			EAI_PC_queue_new_shared_types = yes
+		}
+	}
+}
+
+### JAP
+
+EAI_PC_dynamic_strategy_JAP = {
+
+	###################################################################################################
+	### Null state
+	###################################################################################################
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 0 } }
+
+		### Transition
+		###########################
+
+		if = { limit = { set_temp_variable = { _transition_to = 1 } check_variable = { EAI_PC_changed_state = 0 }
+
+				always = yes
+
+			} EAI_PC_transition_state = yes 
+
+			### Transition effect
+			###########################
+
+			set_country_flag = EAI_PC_dynamic_strategy_delay_effect
+			set_country_flag = { flag = EAI_PC_dynamic_strategy_delay_effect_duration value = 1 days = 1 }
+		}
+	}
+
+	###################################################################################################
+	### State 1 - build CIC
+	###################################################################################################
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 1 } }
+
+		### Entry
+		###########################
+
+		if = { limit = { check_variable = { EAI_PC_changed_state = 1 } }
+
+			set_variable = { EAI_PC_changed_state = 0 }
+
+			### Entry effect
+			###########################
+
+			set_country_flag = EAI_block_AI_construction
+		}
+
+		### Transition
+		###########################
+
+		if = { limit = { set_temp_variable = { _transition_to = 2 } check_variable = { EAI_PC_changed_state = 0 }
+
+				num_of_civilian_factories > 50
+
+			} EAI_PC_transition_state = yes 
+
+			### Transition effect
+			###########################
+
+			add_to_temp_array = { _cancel_projects_TYPES = global.EAI_PC_CIC }
+			EAI_PC_cancel_projects = yes
+
+			EAI_BUILDING_reset_flags = yes
+
+			EAI_PC_clear_game_construction_queue = yes
+		} 
+
+		### Effect
+		###########################
+
+		if = { limit = { check_variable = { EAI_PC_changed_state = 0 } }
+
+			set_temp_variable = { _assign_fraction = 1 }
+			EAI_PC_set_max_factory_limit = yes
+
+			EAI_PC_manage_civilian_factories = yes
+			add_to_variable = { EAI_PC_reserved_factories_available = EAI_TRADE_needed_trade_factories }
+
+			set_temp_variable = { _sort_mode = 0 }
+			add_to_temp_array = { _sort_projects_by_build_time_TYPES = global.EAI_PC_CIC }
+			EAI_PC_sort_projects_by_build_time = yes
+
+			EAI_PC_sort_projects_by_priority = yes
+		}
+	}
+
+	###################################################################################################
+	### State 2 - exit PC
+	###################################################################################################
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 2 } }
+
+		### Entry
+		###########################
+
+		if = { limit = { check_variable = { EAI_PC_changed_state = 1 } }
+
+			set_variable = { EAI_PC_changed_state = 0 }
+
+			### Entry effect
+			###########################
+
+			clr_country_flag = EAI_block_AI_construction
+		}
+
+		### Effect
+		###########################
+
+		if = { limit = { check_variable = { EAI_PC_changed_state = 0 } }
+
+			set_temp_variable = { _assign_fraction = 0.15 }
+			set_temp_variable = { _assign_max = 15 }
+			EAI_PC_factory_limit_defensive_modifier = yes
+			EAI_PC_factory_limit_resource_modifier = yes
+			EAI_PC_set_max_factory_limit = yes
+
+			EAI_PC_sort_projects_by_build_time = yes
+			EAI_PC_sort_projects_by_priority = yes
+
+			# Sort fort projects
+			clear_temp_array = _sort_projects_TYPES
+			add_to_temp_array = { _sort_projects_TYPES = global.EAI_PC_BUNKER }
+			add_to_temp_array = { _sort_projects_TYPES = global.EAI_PC_CBUNKER }
+			EAI_PC_sort_projects_by_enemy_distance = yes
+		}
+	}
+}
+
+EAI_PC_dynamic_strategy_JAP_daily = {
+
+	### State 1
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 1 } }
+
+		if = { limit = { has_country_flag = EAI_PC_dynamic_strategy_delay_effect NOT = { has_country_flag = EAI_PC_dynamic_strategy_delay_effect_duration } }
+
+			clr_country_flag = EAI_PC_dynamic_strategy_delay_effect
+			EAI_PC_clear_game_construction_queue = yes
+		}
+
+		if = { 
+			limit = {
+				check_variable = { EAI_PC_reserved_factories_available > 0 }
+			}
+
+			set_temp_variable = { _queue_new_shared_types_with_factories_FACTORIES = EAI_PC_reserved_factories_available }
+			add_to_temp_array = { _queue_new_shared_types_with_factories_TYPES = global.EAI_PC_CIC }
+			set_temp_variable = { _project_type_id = strategy_type_id }
+			set_temp_variable = { _project_priority = strategy_type_prio }
+			EAI_PC_queue_new_shared_types = yes
+		}
+	}
+}
+
+### USA
+
+EAI_PC_dynamic_strategy_USA = {
+
+    ###################################################################################################
+    ### State 0: Null State
+    ###################################################################################################
+
+    if = { limit = { check_variable = { EAI_PC_strategy_state = 0 } }
+
+        ### Transition to State 1
+        if = { 
+            limit = { 
+                set_temp_variable = { _transition_to = 1 } 
+                check_variable = { EAI_PC_changed_state = 0 }
+                always = yes
+            }
+            EAI_PC_transition_state = yes
+
+            ### Effect of Transition
+            set_country_flag = EAI_PC_dynamic_strategy_delay_effect
+            set_country_flag = { flag = EAI_PC_dynamic_strategy_delay_effect_duration value = 1 days = 1 }
+        }
+    }
+
+    ###################################################################################################
+    ### State 1: Full Factory Fraction Until 1937
+    ###################################################################################################
+
+    if = { limit = { check_variable = { EAI_PC_strategy_state = 1 } }
+
+        ### Entry Effect
+        if = { 
+            limit = { check_variable = { EAI_PC_changed_state = 1 } }
+            set_variable = { EAI_PC_changed_state = 0 }
+            set_country_flag = EAI_block_AI_construction
+        }
+
+        ### Effect Until 1937
+        if = {
+            limit = { date < 1937.6.1 }
+            set_temp_variable = { _assign_fraction = 1 }   # Allow full factory utilization
+            EAI_PC_set_max_factory_limit = yes
+        }
+
+        ### Transition After 1937
+        else = {
+            set_temp_variable = { _transition_to = 2 }
+            EAI_PC_transition_state = yes
+        }
+    }
+
+    ###################################################################################################
+    ### State 2: Generic Behavior After 1937
+    ###################################################################################################
+
+    if = { limit = { check_variable = { EAI_PC_strategy_state = 2 } }
+
+        ### Entry Effect
+        if = { 
+            limit = { check_variable = { EAI_PC_changed_state = 1 } }
+            set_variable = { EAI_PC_changed_state = 0 }
+            clr_country_flag = EAI_block_AI_construction
+        }
+
+        ### Default Behavior
+        if = { 
+            limit = { check_variable = { EAI_PC_changed_state = 0 } }
+
+            set_temp_variable = { _assign_fraction = 0.35 } # Default fraction
+            set_temp_variable = { _assign_max = 30 }        # Default maximum factories
+            EAI_PC_set_max_factory_limit = yes
+
+            EAI_PC_sort_projects_by_build_time = yes
+            EAI_PC_sort_projects_by_priority = yes
+
+            # Sort fort projects
+            add_to_temp_array = { _sort_projects_TYPES = global.EAI_PC_BUNKER }
+            add_to_temp_array = { _sort_projects_TYPES = global.EAI_PC_CBUNKER }
+            EAI_PC_sort_projects_by_enemy_distance = yes
+        }
+    }
+}
+
+EAI_PC_dynamic_strategy_USA_daily = {
+
+    ###################################################################################################
+    ### State 1: Queue Projects During Early Phase
+    ###################################################################################################
+
+    if = { limit = { check_variable = { EAI_PC_strategy_state = 1 } }
+
+        if = { 
+            limit = { 
+                has_country_flag = EAI_PC_dynamic_strategy_delay_effect 
+                NOT = { has_country_flag = EAI_PC_dynamic_strategy_delay_effect_duration }
+            }
+            clr_country_flag = EAI_PC_dynamic_strategy_delay_effect
+            EAI_PC_clear_game_construction_queue = yes
+        }
+
+        ### Queue Projects with Reserved Factories
+        if = {
+            limit = {
+                check_variable = { EAI_PC_reserved_factories_available > 0 }
+            }
+            set_temp_variable = { _queue_new_shared_types_with_factories_FACTORIES = EAI_PC_reserved_factories_available }
+            add_to_temp_array = { _queue_new_shared_types_with_factories_TYPES = global.EAI_PC_CIC }
+            set_temp_variable = { _project_type_id = strategy_type_id }
+            set_temp_variable = { _project_priority = strategy_type_prio }
+            EAI_PC_queue_new_shared_types = yes
+        }
+    }
+
+    ###################################################################################################
+    ### State 2: Generic Daily Behavior
+    ###################################################################################################
+
+    if = { limit = { check_variable = { EAI_PC_strategy_state = 2 } }
+
+        if = { 
+            limit = { 
+                check_variable = { EAI_PC_reserved_factories_available > 0 }
+            }
+            set_temp_variable = { _queue_new_shared_types_with_factories_FACTORIES = EAI_PC_reserved_factories_available }
+            add_to_temp_array = { _queue_new_shared_types_with_factories_TYPES = global.EAI_PC_MIC }
+            set_temp_variable = { _project_type_id = strategy_type_id }
+            set_temp_variable = { _project_priority = strategy_type_prio }
+            EAI_PC_queue_new_shared_types = yes
+        }
+    }
+}
+
+### GENERIC
+
+EAI_PC_dynamic_strategy_GENERIC = {
+
+	###################################################################################################
+	### Null state
+	###################################################################################################
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 0 } }
+
+		### Transition
+		###########################
+
+		if = { limit = { set_temp_variable = { _transition_to = 1 } check_variable = { EAI_PC_changed_state = 0 }
+
+				always = yes
+
+			} EAI_PC_transition_state = yes 
+
+			### Transition effect
+			###########################
+
+			set_country_flag = EAI_PC_dynamic_strategy_delay_effect
+			set_country_flag = { flag = EAI_PC_dynamic_strategy_delay_effect_duration value = 1 days = 1 }
+		}
+	}
+
+	###################################################################################################
+	### State 1
+	###################################################################################################
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 1 } }
+
+		### Entry
+		###########################
+
+		if = { limit = { check_variable = { EAI_PC_changed_state = 1 } }
+
+			set_variable = { EAI_PC_changed_state = 0 }
+
+			### Entry effect
+			###########################
+		}
+
+		### Effect
+		###########################
+
+		if = { limit = { check_variable = { EAI_PC_changed_state = 0 } }
+
+			if = {
+				limit = {
+					OR = {
+						AND = {
+							tag = ENG
+							num_of_military_factories < 100
+						}
+
+						AND = {
+							tag = FRA
+							num_of_military_factories < 75
+						}
+
+						AND = {
+							tag = ITA
+							num_of_military_factories < 75
+						}
+					}
+				}
+			
+				set_temp_variable = { _assign_fraction = 0.10 }
+				set_temp_variable = { _assign_max = 30 }
+			}
+			
+			else = {
+				set_temp_variable = { _assign_fraction = 0.35 }
+				set_temp_variable = { _assign_max = 30 }
+			}
+
+			EAI_PC_factory_limit_defensive_modifier = yes
+			EAI_PC_set_max_factory_limit = yes
+
+			EAI_PC_sort_projects_by_build_time = yes
+			EAI_PC_sort_projects_by_priority = yes
+
+			# Sort fort projects
+			add_to_temp_array = { _sort_projects_TYPES = global.EAI_PC_BUNKER }
+			add_to_temp_array = { _sort_projects_TYPES = global.EAI_PC_CBUNKER }
+			EAI_PC_sort_projects_by_enemy_distance = yes
+		}
+	}
+}
+
+EAI_PC_dynamic_strategy_GENERIC_daily = {
+
+	### State 1
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 1 } }
+
+		if = { limit = { has_country_flag = EAI_PC_dynamic_strategy_delay_effect NOT = { has_country_flag = EAI_PC_dynamic_strategy_delay_effect_duration } }
+
+			clr_country_flag = EAI_PC_dynamic_strategy_delay_effect
+		}
+	}
+}
+
+###############################################################
+### 	On research strategies
+###############################################################
+
+@EAI_PC_on_research_TYPE_ID = 103
+@EAI_PC_on_research_PRIO = 3000
+EAI_PC_on_research = {
+
+	set_temp_variable = { strategy_type_id = @EAI_PC_on_research_TYPE_ID }
+	set_temp_variable = { strategy_type_prio = @EAI_PC_on_research_PRIO }
+
+	if = { limit = { tag = SOV } EAI_PC_on_research_SOV = yes }
+}
+
+EAI_PC_on_research_SOV = {
+
+	### SOV
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 1 } }
+
+		if = { 
+			limit = { 
+				OR = {
+					check_variable = { new_tech = token:dispersed_industry } 
+					check_variable = { new_tech = token:dispersed_industry2 } 
+					check_variable = { new_tech = token:dispersed_industry3 } 
+					check_variable = { new_tech = token:dispersed_industry4 } 
+					check_variable = { new_tech = token:concentrated_industry } 
+					check_variable = { new_tech = token:concentrated_industry2 } 
+					check_variable = { new_tech = token:concentrated_industry3 } 
+					check_variable = { new_tech = token:concentrated_industry4 } 
+				}
+			}
+
+			if = { limit = { has_country_flag = EAI_priority_construction_detailed_logging } log = "[GetYear] [GetMonth] | AI | [This.GetName] | PC: EAI_PC_on_research_SOV" }
+
+			set_temp_variable = { _queue_new_shared_types_with_factories_FACTORIES = 100 }
+			set_temp_variable = { _queue_new_shared_types_with_factories_INF_LEVEL = 3 }
+			add_to_temp_array = { _queue_new_shared_types_with_factories_TYPES = global.EAI_PC_CIC }
+			set_temp_variable = { _project_type_id = strategy_type_id }
+			set_temp_variable = { _project_priority = strategy_type_prio }
+			EAI_PC_queue_new_shared_types = yes
+		}
+	}
+
+	if = { limit = { check_variable = { EAI_PC_strategy_state = 1.5 } }
+
+		if = { 
+			limit = { 
+				OR = {
+					check_variable = { new_tech = token:dispersed_industry } 
+					check_variable = { new_tech = token:dispersed_industry2 } 
+					check_variable = { new_tech = token:dispersed_industry3 } 
+					check_variable = { new_tech = token:dispersed_industry4 } 
+					check_variable = { new_tech = token:concentrated_industry } 
+					check_variable = { new_tech = token:concentrated_industry2 } 
+					check_variable = { new_tech = token:concentrated_industry3 } 
+					check_variable = { new_tech = token:concentrated_industry4 } 
+				}
+			}
+
+			if = { limit = { has_country_flag = EAI_priority_construction_detailed_logging } log = "[GetYear] [GetMonth] | AI | [This.GetName] | PC: EAI_PC_on_research_SOV" }
+
+			set_temp_variable = { _queue_new_shared_types_with_factories_FACTORIES = 100 }
+			set_temp_variable = { _queue_new_shared_types_with_factories_INF_LEVEL = 3 }
+			add_to_temp_array = { _queue_new_shared_types_with_factories_TYPES = global.EAI_PC_CIC }
+			add_to_temp_array = { _queue_new_shared_types_with_factories_TYPES = global.EAI_PC_MIC }
+			set_temp_variable = { _project_type_id = strategy_type_id }
+			set_temp_variable = { _project_priority = strategy_type_prio }
+			EAI_PC_queue_new_shared_types = yes
+		}
+	}
+}

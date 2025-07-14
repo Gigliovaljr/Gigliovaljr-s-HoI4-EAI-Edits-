@@ -1,0 +1,1393 @@
+############################################################################################################
+#	Expert AI mod 
+############################################################################################################
+
+EAI_MILITARY_daily_update = {
+
+	EAI_MILITARY_operational_pause_timer = yes
+
+	EAI_MILITARY_NAVAL_save_navy = yes
+
+	# USSR - declare war on Finland on the exact historical date
+	if = {
+		limit = {
+			tag = SOV
+			is_historical_focus_on = yes
+			has_completed_focus = SOV_secure_leningrad
+			NOT = { has_country_flag = EAI_SOV_declared_war_on_FIN }
+			date > 1939.11.30
+			has_wargoal_against = FIN
+			NOT = { has_war_with = FIN }
+			FIN = {
+				NOT = {
+					is_in_faction = yes
+					is_subject = yes
+				}
+			}
+		}
+
+		set_country_flag = EAI_SOV_declared_war_on_FIN
+		declare_war_on = {
+			target = FIN
+			type = take_claimed_state
+		}
+	}
+}
+
+EAI_MILITARY_weekly_update = {
+
+	EAI_MILITARY_special_military_strategies = yes
+}
+
+EAI_MILITARY_bimonthly_update = {
+
+	EAI_MILITARY_defensive_front_strategy = yes
+
+	EAI_MILITARY_track_submarine_losses = yes
+
+	EAI_MILITARY_garrison_state_strategies = yes
+}
+
+EAI_MILITARY_monthly_update = {
+
+	EAI_MILITARY_track_fighter_losses = yes
+
+	EAI_MILITARY_save_airforce_strategy = yes
+}
+
+###############################################################
+### War trend
+###############################################################
+
+EAI_MILITARY_track_state_control_time = {
+
+	every_state = {
+
+		if = {
+			limit = {
+				OR = {
+					check_variable = { EAI_MILITARY_state_controller = 0 }
+					NOT = { check_variable = { EAI_MILITARY_state_controller = controller } }
+				}
+			}
+
+			set_variable = { EAI_MILITARY_state_controller = controller }
+		
+			clr_state_flag = EAI_MILITARY_track_state_control_timer
+			set_state_flag = EAI_MILITARY_track_state_control_timer
+		}
+	}
+}
+
+EAI_MILITARY_track_province_control_time = {
+
+	every_state = {
+
+		set_temp_variable = { tmp_controller = controller }
+
+		if = { 
+			limit = { 
+				CONTROLLER = { has_war = yes } 
+
+				OR = {
+					CONTROLLER = { NOT = { has_full_control_of_state = PREV } }
+					any_neighbor_state = {
+						OR = {
+							CONTROLLER = { has_war_with = var:tmp_controller }
+							var:tmp_controller = { 
+								controls_state = PREV
+								NOT = { has_full_control_of_state = PREV } 
+							}
+						}
+					}
+				}
+			}
+
+			set_state_flag = EAI_MILITARY_track_province_control_time_flag
+
+			for_each_loop = { array = global.EAI_MAP_state_province_ids@THIS index = control_i value = control_v
+
+				# set_temp_variable = { _get_province_id_neighbors = control_v }
+				# EAI_MAP_get_province_neighbors = yes
+
+				if = {
+					limit = {
+						OR = {
+							check_variable = { global.EAI_MAP_province_controller^control_v = 0 }
+							NOT = { var:global.EAI_MAP_province_controller^control_v = { controls_province = control_v } }
+							# NOT = {
+							# 	any_of = { array = province_neighbors_ value = neighbor_id
+								
+							# 		var:global.province_controllers^neighbor_id = { has_war_with = var:global.EAI_MAP_province_controller^control_v }
+							# 	}
+							# }
+						}
+					}
+				
+					set_variable = { global.EAI_MAP_province_controller^control_v = global.province_controllers^control_v }
+					set_variable = { global.EAI_MAP_province_control_days^control_v = 0 }
+				}
+				else = {
+				
+					add_to_variable = { global.EAI_MAP_province_control_days^control_v = 1 }
+				}
+			}
+		}
+		else_if = { limit = { has_state_flag = EAI_MILITARY_track_province_control_time_flag }
+
+			clr_state_flag = EAI_MILITARY_track_province_control_time_flag
+
+			for_each_loop = { array = global.EAI_MAP_state_province_ids@THIS index = control_i value = control_v
+
+				set_variable = { global.EAI_MAP_province_controller^control_v = global.province_controllers^control_v }
+				set_variable = { global.EAI_MAP_province_control_days^control_v = 0 }
+			}
+		}
+	}
+}
+
+EAI_MILITARY_track_war_trend = {
+
+	if = { limit = { has_war = yes }
+	
+		### Track provinces weekly
+
+			set_temp_variable = { total_controlled_provinces = 0 }
+		
+			clear_temp_array = check_states
+			every_controlled_state = {
+				if = { limit = { NOT = { is_in_array = { check_states = THIS.id } } } add_to_temp_array = { check_states = THIS.id } }
+				every_neighbor_state = {
+					if = { limit = { NOT = { is_in_array = { check_states = THIS.id } } } add_to_temp_array = { check_states = THIS.id } }
+				}
+			}
+
+			for_each_scope_loop = { array = check_states
+				for_each_loop = { array = global.EAI_MAP_state_province_ids@THIS
+					if = { limit = { PREV = { controls_province = v } } add_to_temp_variable = { total_controlled_provinces = 1 } }
+				}
+			}
+
+			# Discard peaceful exchanges from war trend calculations
+			add_to_temp_variable = { total_controlled_provinces = EAI_MILITARY_trend_adjust_num_provinces }
+
+		### Set trend
+
+			add_to_array = { array = EAI_MILITARY_num_controlled_provinces_weekly index = 0 value = total_controlled_provinces }
+			set_temp_variable = { resize = 18 }
+			clamp_temp_variable = { var = resize min = 0 max = EAI_MILITARY_num_controlled_provinces_weekly^num }
+			resize_array = { EAI_MILITARY_num_controlled_provinces_weekly = resize }
+
+			if = { limit = { check_variable = { EAI_MILITARY_num_controlled_provinces_weekly^num > 3 } }
+			
+				### Trend calculation
+
+					set_temp_variable = { _long = 18 }
+					set_temp_variable = { _short = 6 }
+					set_temp_variable = { arr_size = EAI_MILITARY_num_controlled_provinces_weekly^num }
+					clamp_temp_variable = { var = arr_size min = 0 max = _long }
+					resize_temp_array = { _data = arr_size }
+					for_each_loop = { array = _data index = data_i value = data_v
+						set_temp_variable = { _data^data_i = EAI_MILITARY_num_controlled_provinces_weekly^data_i }
+					}
+					EAI_MATH_trend = yes
+					set_temp_variable = { war_trend = trend_ }
+			
+				### Define winning and losing
+
+					@war_trend_winning = 0.008
+					@war_trend_losing = -0.008
+
+					set_temp_variable = { _val_ = war_trend }
+					EAI_MATH_abs = yes
+					set_variable = { EAI_MILITARY_trend_value = _val_ }
+
+				### Set trends (var shows the relative abs change, flag shows the state and duration)
+			
+					# Losing
+					if = { limit = { check_variable = { war_trend < @war_trend_losing } }
+					
+						if = { limit = { NOT = { has_country_flag = EAI_MILITARY_trend_losing_war } } set_country_flag = EAI_MILITARY_trend_losing_war }
+						if = { limit = { has_country_flag = EAI_war_trend_logging } log = "[GetYear] [GetMonth] | AI | [This.GetName] | EAI_MILITARY_track_war_trend: LOSING WAR = [?EAI_MILITARY_trend_value|%]" }
+					}
+					else = { clr_country_flag = EAI_MILITARY_trend_losing_war }
+
+					# Winning
+					if = { limit = { check_variable = { war_trend > @war_trend_winning } }
+					
+						if = { limit = { NOT = { has_country_flag = EAI_MILITARY_trend_winning_war } } set_country_flag = EAI_MILITARY_trend_winning_war }
+						if = { limit = { has_country_flag = EAI_war_trend_logging } log = "[GetYear] [GetMonth] | AI | [This.GetName] | EAI_MILITARY_track_war_trend: WINNING WAR = [?EAI_MILITARY_trend_value|%]" }
+					}
+					else = { clr_country_flag = EAI_MILITARY_trend_winning_war }
+
+					# Stagnant
+					if = { 
+						limit = { 
+							NOT = { check_variable = { war_trend < @war_trend_losing } }
+							NOT = { check_variable = { war_trend > @war_trend_winning } }
+						}
+					
+						if = { limit = { NOT = { has_country_flag = EAI_MILITARY_trend_stagnant_war } } set_country_flag = EAI_MILITARY_trend_stagnant_war }
+					}
+					else = { clr_country_flag = EAI_MILITARY_trend_stagnant_war }
+
+				###
+			}
+
+		###
+	}
+	else = {
+		EAI_MILITARY_track_war_trend_reset = yes
+	}
+}
+
+EAI_MILITARY_track_war_trend_reset = {
+
+	clear_array = EAI_MILITARY_num_controlled_provinces_weekly
+	clear_variable = EAI_MILITARY_trend_adjust_num_provinces
+	clr_country_flag = EAI_MILITARY_trend_stagnant_war
+	clr_country_flag = EAI_MILITARY_trend_winning_war
+	clr_country_flag = EAI_MILITARY_trend_losing_war
+}
+
+EAI_MILITARY_print_trend = {
+
+	log = "*********************** EAI_MILITARY_print_trend"
+	log = "Data:"
+
+	for_each_loop = { array = EAI_MILITARY_num_controlled_provinces_weekly index = _y value = _y_val
+		log = ">[?_y]=[?_y_val]"
+	}
+
+	if = {
+		limit = {
+			has_country_flag = EAI_MILITARY_trend_stagnant_war
+		}
+	
+		log = "EAI_MILITARY_trend_stagnant_war"
+		log = "EAI_MILITARY_trend_value=[?EAI_MILITARY_trend_value|%]"
+	}
+	else_if = {
+		limit = {
+			has_country_flag = EAI_MILITARY_trend_winning_war
+		}
+
+		log = "EAI_MILITARY_trend_winning_war"
+		log = "EAI_MILITARY_trend_value=[?EAI_MILITARY_trend_value|%]"
+	}
+	else_if = {
+		limit = {
+			has_country_flag = EAI_MILITARY_trend_losing_war
+		}
+
+		log = "EAI_MILITARY_trend_losing_war"
+		log = "EAI_MILITARY_trend_value=[?EAI_MILITARY_trend_value|%]"
+	}
+
+	log = "*********************** EAI_MILITARY_print_trend"
+}
+
+### Army size trend
+
+EAI_MILITARY_track_army_trend = {
+
+	if = { limit = { has_war = yes }
+
+		### Set trend
+
+			add_to_array = { array = EAI_MILITARY_army_size_k_weekly index = 0 value = deployed_army_manpower_k }
+			set_temp_variable = { resize = 18 }
+			clamp_temp_variable = { var = resize min = 0 max = EAI_MILITARY_army_size_k_weekly^num }
+			resize_array = { EAI_MILITARY_army_size_k_weekly = resize }
+
+			if = { limit = { check_variable = { EAI_MILITARY_army_size_k_weekly^num > 3 } }
+			
+				### Trend calculation
+
+					set_temp_variable = { _long = 18 }
+					set_temp_variable = { _short = 6 }
+					set_temp_variable = { arr_size = EAI_MILITARY_army_size_k_weekly^num }
+					clamp_temp_variable = { var = arr_size min = 0 max = _long }
+					resize_temp_array = { _data = arr_size }
+					for_each_loop = { array = _data index = data_i value = data_v
+						set_temp_variable = { _data^data_i = EAI_MILITARY_army_size_k_weekly^data_i }
+					}
+					EAI_MATH_trend = yes
+			
+				### Set trend
+
+					set_variable = { EAI_MILITARY_deployed_army_k_trend_value = trend_ }
+
+				###
+			}
+
+		###
+	}
+	else = {
+		clear_array = EAI_MILITARY_army_size_k_weekly
+	}
+}
+
+###############################################################
+### Misc
+###############################################################
+
+### Garrison
+
+EAI_MILITARY_garrison_state_strategies = {
+
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					has_war = yes
+					alliance_naval_strength_ratio < 3
+				}
+
+				### Strategies
+
+				AND = {
+					tag = JAP
+					OR = {
+						date > 1941.1.1
+						alliance_naval_strength_ratio < 3
+					}
+				}
+
+				AND = {
+					tag = USA
+					JAP = { is_ai = no }
+					OR = {
+						date > 1941.1.1
+						alliance_naval_strength_ratio < 3
+					}
+				}
+			}
+		}
+		
+		set_country_flag = EAI_MILITARY_garrison_state_strategies
+	}
+	else = { clr_country_flag = EAI_MILITARY_garrison_state_strategies }
+}
+
+### Naval
+
+EAI_MILITARY_NAVAL_save_navy = {
+
+	set_temp_variable = { save_navy = 0 }
+
+	### ITA
+
+	# if = { limit = { tag = ITA }
+	
+	# 	if = {
+	# 		limit = {
+	# 			EAI_NAV_equipment_production = yes
+	# 			has_deployed_air_force_size = { size < 400 type = naval_bomber }
+
+	# 			num_of_military_factories > 25
+
+	# 			alliance_naval_strength_ratio < 1.0
+
+	# 			NOT = {
+	# 				any_state = {
+	# 					region = 23
+	# 					OR = {
+	# 						CONTROLLER = { has_war_with = ROOT }
+	# 						ROOT = { 
+	# 							controls_state = PREV
+	# 							NOT = { has_full_control_of_state = PREV } 
+	# 						}
+	# 					}
+	# 				}
+	# 			}
+	# 		}
+		
+	# 		set_temp_variable = { save_navy = 1 }
+	# 	}
+	# }
+
+	###
+
+	if = { limit = { check_variable = { save_navy = 1 } }
+		
+		if = { limit = { NOT = { has_country_flag = EAI_MILITARY_NAVAL_save_navy } }
+	
+			if = { limit = { has_country_flag = EAI_military_strategy_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | MILITARY: EAI_MILITARY_NAVAL_save_navy" }
+			set_country_flag = EAI_MILITARY_NAVAL_save_navy
+		}
+	}
+	else_if = { limit = { has_country_flag = EAI_MILITARY_NAVAL_save_navy }
+	
+		if = { limit = { has_country_flag = EAI_military_strategy_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | MILITARY: EAI_MILITARY_NAVAL_save_navy END" }
+		clr_country_flag = EAI_MILITARY_NAVAL_save_navy
+	}
+}
+
+EAI_MILITARY_track_submarine_losses = {
+
+	subtract_from_variable = { EAI_previous_subs = num_ships_with_type@submarine }
+
+	if = { limit = { check_variable = { EAI_previous_subs > 0 } }
+
+		divide_variable = { EAI_previous_subs = num_ships_with_type@submarine }
+		if = { limit = { check_variable = { EAI_previous_subs > 0.05 } } # lost more than 5%
+			set_country_flag = { flag = EAI_halt_sub_missions value = 1 days = 14 }
+		}
+	}
+
+	set_variable = { EAI_previous_subs = num_ships_with_type@submarine }
+}
+
+### Air
+
+EAI_MILITARY_track_fighter_losses = { # monthly # Doesn't work well due to produced fighters
+
+	set_temp_variable = { EAI_previous_fighters_temp = EAI_previous_fighters }
+	subtract_from_variable = { EAI_previous_fighters = num_fighters_deployed }
+	set_variable = { EAI_monthly_fighters_lost_fraction = EAI_previous_fighters }
+
+	if = { limit = { check_variable = { EAI_previous_fighters > 0 } }
+
+		divide_variable = { EAI_monthly_fighters_lost_fraction = EAI_previous_fighters_temp }
+	}
+	else = {
+
+		set_variable = { EAI_monthly_fighters_lost_fraction = 0 }
+	}
+
+	set_variable = { EAI_previous_fighters = num_fighters_deployed }
+}
+
+EAI_MILITARY_save_airforce_strategy = {
+
+	if = { 
+		limit = { 
+			has_war = yes 
+			has_capitulated = no
+		}
+
+		### Stop air missions when overwhelmed by enemy airforce
+
+		if = { 
+			limit = { 
+				NOT = { has_country_flag = EAI_MILITARY_save_airforce_strategy }
+
+				OR = {
+					has_deployed_air_force_size = { size < 1000 type = fighter } 
+					check_variable = { EAI_monthly_fighters_lost_fraction > 0.25 }
+				}
+			}
+
+			EAI_calc_air_force_sizes =  yes
+
+			### Factions are grouped into one value under the faction leader, unallied countries are separate 
+
+			for_each_scope_loop = { array = enemy_air_force_sizes
+
+				if = { 
+					limit = { 
+
+						# Compare ROOT + allies against the enemy faction airforce
+						if = { limit = { is_faction_leader = yes }
+
+							set_temp_variable = { air_difference = faction_air_force_size_@THIS }
+							subtract_from_temp_variable = { air_difference = friendly_air_force_size }
+
+							set_temp_variable = { air_ratio = friendly_air_force_size }
+							clamp_temp_variable = { var = faction_air_force_size_@THIS min = 1 }
+							divide_temp_variable = { air_ratio = faction_air_force_size_@THIS }
+						}
+
+						# Compare ROOT + allies against the enemy country airforce
+						else = {
+
+							set_temp_variable = { air_difference = air_force_size_@THIS }
+							subtract_from_temp_variable = { air_difference = friendly_air_force_size }
+
+							set_temp_variable = { air_ratio = friendly_air_force_size }
+							clamp_temp_variable = { var = air_force_size_@THIS min = 1 }
+							divide_temp_variable = { air_ratio = air_force_size_@THIS }
+						}
+
+						### SOV
+						
+							if = { limit = { tag = SOV }
+								check_variable = { air_difference > 800 }
+								check_variable = { air_ratio < 0.5 }
+							}
+
+						###
+
+							else = {
+								check_variable = { air_difference > 800 } # enemy has > 800 fighters
+								check_variable = { air_ratio < 0.25 } # ratio to enemy < 0.25
+							}
+
+						###
+					}
+
+					ROOT = { 
+						set_country_flag = EAI_MILITARY_save_airforce_strategy
+						set_country_flag = { flag = EAI_MILITARY_save_airforce_strategy_min_duration value = 1 days = 60 }
+						# clear_variable = EAI_no_surrender_progression_months
+
+						if = { limit = { has_country_flag = EAI_military_strategy_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | AIR PRODUCTION: EAI_MILITARY_save_airforce_strategy" }
+					}
+				}
+			}
+		}
+
+		### Resume
+
+		else_if = { 
+			limit = { 
+				has_country_flag = EAI_MILITARY_save_airforce_strategy 
+				NOT = { has_country_flag = EAI_MILITARY_save_airforce_strategy_min_duration }
+			}
+
+			### Has rebuilt its airforce
+
+			if = { 
+				limit = { 
+					### SOV
+						
+						if = { limit = { tag = SOV }
+							has_deployed_air_force_size = { size > 3000 type = fighter } 
+						}
+
+					###
+
+						else = {
+							has_deployed_air_force_size = { size > 2000 type = fighter } 
+						}
+
+					###
+				}
+
+				clr_country_flag = EAI_MILITARY_save_airforce_strategy
+				if = { limit = { has_country_flag = EAI_military_strategy_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | AIR PRODUCTION: discontinuing EAI_MILITARY_save_airforce_strategy" }
+			}
+
+			### Enemies weak
+
+			else = {
+				
+				EAI_calc_air_force_sizes =  yes
+
+				###
+
+				for_each_scope_loop = { array = enemy_air_force_sizes
+
+					# Compare ROOT + allies against the enemy faction airforce
+					if = { limit = { is_faction_leader = yes }
+
+						set_temp_variable = { air_difference = faction_air_force_size_@THIS }
+						subtract_from_temp_variable = { air_difference = friendly_air_force_size }
+
+						set_temp_variable = { air_ratio = friendly_air_force_size }
+						clamp_temp_variable = { var = faction_air_force_size_@THIS min = 1 }
+						divide_temp_variable = { air_ratio = faction_air_force_size_@THIS }
+					}
+
+					# Compare ROOT + allies against the enemy country airforce
+					else = {
+
+						set_temp_variable = { air_difference = air_force_size_@THIS }
+						subtract_from_temp_variable = { air_difference = friendly_air_force_size }
+
+						set_temp_variable = { air_ratio = friendly_air_force_size }
+						clamp_temp_variable = { var = air_force_size_@THIS min = 1 }
+						divide_temp_variable = { air_ratio = air_force_size_@THIS }
+					}
+
+					if = { limit = { ROOT = { has_country_flag = EAI_military_strategy_logging } } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | air_difference=[?air_difference] air_ratio=[?air_ratio]" }
+
+					if = {
+						limit = {
+							### SOV
+						
+								if = { limit = { tag = SOV }
+									OR = {
+										check_variable = { air_difference > 400 }
+										check_variable = { air_ratio < 0.7 }
+									}
+								}
+
+							###
+
+								else = {
+									OR = {
+										check_variable = { air_difference > 400 }
+										check_variable = { air_ratio < 0.30 }
+									}
+								}
+
+							###
+						}
+
+						set_temp_variable = { break = 1 }
+					}
+				}
+
+				if = { limit = { check_variable = { break = 0 } }
+
+					clr_country_flag = EAI_MILITARY_save_airforce_strategy
+					if = { limit = { has_country_flag = EAI_military_strategy_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | AIR PRODUCTION: discontinuing EAI_MILITARY_save_airforce_strategy" }
+				}
+			}
+		}
+	}
+
+	else = { clr_country_flag = EAI_MILITARY_save_airforce_strategy }
+}
+
+### Fronts
+
+EAI_MILITARY_defensive_front_strategy = {
+
+	if = { limit = { has_war = yes }
+
+		### critically low on equipment
+
+		if = { 
+			limit = { 
+				NOT = { has_country_flag = EAI_MILITARY_defensive_front_strategy_equipment }
+				check_variable = { EAI_fielded_eq_ratio < 0.6 }
+			}
+
+			if = { limit = { NOT = { has_country_flag = EAI_MILITARY_defensive_front_strategy } }
+
+				if = { limit = { has_country_flag = EAI_front_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | FRONT: stopping attacks due to low equipment" }
+			}
+
+			set_country_flag = EAI_MILITARY_defensive_front_strategy
+			set_country_flag = EAI_MILITARY_defensive_front_strategy_equipment
+		}
+		else_if = {
+			limit = {
+				has_country_flag = EAI_MILITARY_defensive_front_strategy_equipment
+				check_variable = { EAI_fielded_eq_ratio > 0.9 }
+			}
+
+			if = { limit = { has_country_flag = EAI_front_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | FRONT: CANCEL stopping attacks due to low equipment" }
+
+			clr_country_flag = EAI_MILITARY_defensive_front_strategy
+			clr_country_flag = EAI_MILITARY_defensive_front_strategy_equipment
+		}
+
+		### Out of manpower
+
+		if = { 
+			limit = {
+				NOT = { has_country_flag = EAI_MILITARY_defensive_front_strategy_manpower }
+
+				EAI_reserve_manpower_less_than_5p = yes
+				
+				OR = { # Can upgrade law or is currently conscripting
+					EAI_LAW_upgrade_manpower_law = yes
+					conscription_ratio < 1
+				}
+			}
+
+			if = { limit = { NOT = { has_country_flag = EAI_MILITARY_defensive_front_strategy } }
+
+				if = { limit = { has_country_flag = EAI_front_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | FRONT: stopping attacks due to low manpower" }
+			}
+
+			set_country_flag = EAI_MILITARY_defensive_front_strategy
+			set_country_flag = EAI_MILITARY_defensive_front_strategy_manpower
+		}
+		else_if = {
+			limit = {
+				has_country_flag = EAI_MILITARY_defensive_front_strategy_manpower
+
+				OR = { # Cancel if:
+					EAI_reserve_manpower_more_than_10p = yes
+					
+					NOT = { # Cant upgrade law and not conscripting more
+						EAI_LAW_upgrade_manpower_law = yes
+						conscription_ratio < 1
+					}
+				}
+			}
+
+			if = { limit = { has_country_flag = EAI_front_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | FRONT: CANCEL stopping attacks due to low manpower" }
+
+			clr_country_flag = EAI_MILITARY_defensive_front_strategy
+			clr_country_flag = EAI_MILITARY_defensive_front_strategy_manpower
+		}
+
+		### weak vs countries
+
+		every_enemy_country = {
+
+			if = {
+				limit = {
+					ROOT = { 
+						NOT = { is_in_array = { EAI_MILITARY_defensive_front_strategy_at = PREV.id } }
+
+						alliance_strength_ratio < 0.5
+						strength_ratio = { tag = PREV ratio < 0.25 }
+					}
+				}
+
+				if = { limit = { has_country_flag = EAI_front_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | FRONT: stopping attacks vs [This.GetTag] (weak)" }
+
+				ROOT = { add_to_array = { EAI_MILITARY_defensive_front_strategy_at = PREV.id } }
+			}
+			else_if = {
+				limit = {
+					ROOT = {
+						is_in_array = { EAI_MILITARY_defensive_front_strategy_at = PREV.id }
+					
+						NOT = {
+							alliance_strength_ratio < 0.5
+							strength_ratio = { tag = PREV ratio < 0.25 }
+						}
+					}
+				}
+
+				if = { limit = { has_country_flag = EAI_front_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | FRONT: CANCEL stopping attacks vs [This.GetTag] (weak)" }
+
+				ROOT = { remove_from_array = { EAI_MILITARY_defensive_front_strategy_at = PREV.id } }
+			}
+		}
+	}
+}
+
+### Operational
+
+EAI_MILITARY_operational_pause_timer = { # Daily
+
+    if = { 
+        limit = { 
+            has_war = yes
+
+            NOT = { has_country_flag = EAI_MILITARY_operational_pause_timer_initialized }
+        }
+
+        random_list = {
+            1 = { 
+                set_country_flag = EAI_MILITARY_operational_pause_timer_initialized
+            }
+            60 = {}
+        }
+    }
+    else_if = { 
+        limit = { 
+            has_war = no
+
+            has_country_flag = EAI_MILITARY_operational_pause_timer_initialized
+        }
+
+        clr_country_flag = EAI_MILITARY_operational_pause_timer_initialized
+    }
+
+    if = { 
+        limit = { 
+            has_country_flag = EAI_MILITARY_operational_pause_timer_initialized
+
+            NOT = { 
+                has_country_flag = EAI_MILITARY_operational_pause_timer
+                has_country_flag = EAI_operational_resume_timer
+            }
+        }
+
+		@PAUSE_DURATION_BASE = 7
+		@PAUSE_DURATION_MAX_ADDED = 7
+        
+        set_temp_variable = { pause_duration = @PAUSE_DURATION_MAX_ADDED }
+        multiply_temp_variable = { pause_duration = random }
+        add_to_temp_variable = { pause_duration = @PAUSE_DURATION_BASE }
+        round_temp_variable = pause_duration
+
+		@RESUME_DURATION_BASE = 60
+		@RESUME_DURATION_ADDED = 40
+        
+        set_temp_variable = { resume_duration = @RESUME_DURATION_ADDED }
+        multiply_temp_variable = { resume_duration = random }
+        add_to_temp_variable = { resume_duration = @RESUME_DURATION_BASE }
+        round_temp_variable = resume_duration 
+        add_to_temp_variable = { resume_duration = pause_duration }
+
+		@INITIAL_RESUME_DURATION_BASE = 14
+
+		set_temp_variable = { initial_resume_duration = @INITIAL_RESUME_DURATION_BASE }
+		add_to_temp_variable = { initial_resume_duration = pause_duration }
+
+        meta_effect = {
+            text = { 
+                set_country_flag = { flag = EAI_MILITARY_operational_pause_timer value = 1 days = [x] }
+                set_country_flag = { flag = EAI_operational_initial_resume_timer value = 1 days = [z] }
+                set_country_flag = { flag = EAI_operational_resume_timer value = 1 days = [y] }
+            }
+            x = "[?pause_duration]"
+            y = "[?resume_duration]"
+            z = "[?initial_resume_duration]"
+        }
+        if = { limit = { has_country_flag = EAI_military_strategy_logging }  log = "[GetYear] [GetMonth] | AI | [Root.GetName] | EAI_MILITARY_operational_pause_timer [?pause_duration] [?resume_duration] [?initial_resume_duration]" }
+    }
+}
+
+##############################################################################################################################
+### Special military strategies
+##############################################################################################################################
+
+EAI_MILITARY_special_military_strategies = { # Weekly
+
+	EAI_MILITARY_barbarossa_SECTOR_update = yes
+	EAI_MILITARY_pacific_war_COMBINED_update = yes
+
+	EAI_MILITARY_north_africa_LIMITER = yes
+	EAI_MILITARY_spanish_cw_LIMITER = yes
+	EAI_MILITARY_china_war_LIMITER = yes
+	EAI_MILITARY_barbarossa_LIMITER = yes
+
+	EAI_MILITARY_INVASION_update = yes
+
+	### Eastern front script
+
+		if = {
+			limit = {
+				tag = GER
+				NOT = { has_completed_focus = GER_war_with_the_ussr }
+				focus_progress = { focus = GER_war_with_the_ussr progress > 0.1 }
+				NOT = { SOV = { has_country_flag = EAI_SOV_eastern_garrison } }
+			}
+
+			SOV = { set_country_flag = { flag = EAI_SOV_eastern_garrison days = 300 value = 1 } }
+		}
+
+	### Japanese home island defense
+
+		if = {
+			limit = {
+				tag = JAP
+				has_war = yes
+			}
+			clear_temp_array = _our_side_
+			clear_temp_array = _their_side_
+			clear_temp_array = _states_
+			set_temp_variable = { _id = THIS.id }
+			for_each_loop = { array = enemies add_to_temp_array = { _targets = v } }
+			EAI_get_sides = yes
+			for_each_loop = { array = our_side_ add_to_temp_array = { _our_side_ = v } }
+			for_each_loop = { array = their_side_ add_to_temp_array = { _their_side_ = v } }
+			for_each_loop = { array = global.EAI_MAP_japanese_homeland_theatre add_to_temp_array = { _states_ = v } }
+			EAI_MAP_get_province_control_pct = yes
+
+			if = { limit = { check_variable = { our_control_pct_ < 1.0 } }
+				set_country_flag = { flag = EAI_JAP_homeland_invaded value = 1 days = 90 }
+			}
+		}
+
+	### UK home island defense
+
+		if = {
+			limit = {
+				tag = ENG
+				has_war = yes
+			}
+			clear_temp_array = _our_side_
+			clear_temp_array = _their_side_
+			clear_temp_array = _states_
+			set_temp_variable = { _id = THIS.id }
+			for_each_loop = { array = enemies add_to_temp_array = { _targets = v } }
+			EAI_get_sides = yes
+			for_each_loop = { array = our_side_ add_to_temp_array = { _our_side_ = v } }
+			for_each_loop = { array = their_side_ add_to_temp_array = { _their_side_ = v } }
+			for_each_loop = { array = global.EAI_MAP_britain_theatre add_to_temp_array = { _states_ = v } }
+			EAI_MAP_get_province_control_pct = yes
+
+			if = { limit = { check_variable = { our_control_pct_ < 1.0 } }
+				set_country_flag = { flag = EAI_ENG_homeland_invaded value = 1 days = 90 }
+			}
+		}
+
+	###
+}
+
+EAI_MILITARY_strategy_priorities = { # var:_strategy_id var:_strategy_prio var:has_priority_
+
+	set_temp_variable = { has_priority_ = 0 }
+	if = {
+		limit = {
+			OR = {
+				AND = {
+					NOT = { has_variable = EAI_MILITARY_strategy_id }
+				}
+				AND = {
+					has_variable = EAI_MILITARY_strategy_id
+					OR = {
+						check_variable = { EAI_MILITARY_strategy_id = _strategy_id }
+						check_variable = { EAI_MILITARY_strategy_prio < _strategy_prio }
+					}
+				}
+			}
+		}
+		if = { limit = { has_country_flag = EAI_military_strategy_logging } log = "[GetYear] [GetMonth] | AI | [This.GetName] | EAI_MILITARY_strategy_priorities has priority _strategy_id=[?_strategy_id] _strategy_prio=[?_strategy_prio]" }
+		set_temp_variable = { has_priority_ = 1 }
+	}
+	else = {
+		if = { limit = { has_country_flag = EAI_military_strategy_logging } log = "[GetYear] [GetMonth] | AI | [This.GetName] | EAI_MILITARY_strategy_priorities has no priority _strategy_id=[?_strategy_id] _strategy_prio=[?_strategy_prio]"	 }
+	}
+}
+
+EAI_MILITARY_assign_strategy = { # var:_strategy_id var:__strategy_prio
+
+	if = { limit = { has_country_flag = EAI_military_strategy_logging } log = "[GetYear] [GetMonth] | AI | [This.GetName] | EAI_MILITARY_assign_strategy _strategy_id=[?_strategy_id] _strategy_prio=[?_strategy_prio]" }
+
+	if = { 
+		limit = { 
+			has_variable = EAI_MILITARY_strategy_id 
+			NOT = { check_variable = { _strategy_id = EAI_MILITARY_strategy_id } }
+			NOT = { is_in_array = { EAI_MILITARY_cancel_strategies = EAI_MILITARY_strategy_id } }
+		} 
+		add_to_array = { EAI_MILITARY_cancel_strategies = EAI_MILITARY_strategy_id }
+	}
+	set_variable = { EAI_MILITARY_strategy_id = _strategy_id }
+	set_variable = { EAI_MILITARY_strategy_prio = _strategy_prio }
+}
+
+EAI_MILITARY_clear_this_strategy = { # var:_strategy_id
+
+	if = { limit = { check_variable = { EAI_MILITARY_strategy_id = _strategy_id } }
+
+		if = { limit = { has_country_flag = EAI_military_strategy_logging } log = "[GetYear] [GetMonth] | AI | [This.GetName] | EAI_MILITARY_clear_this_strategy _strategy_id=[?_strategy_id] _strategy_prio=[?EAI_MILITARY_strategy_prio]" }
+
+		clear_variable = EAI_MILITARY_strategy_id
+		clear_variable = EAI_MILITARY_strategy_prio
+
+		if = { limit = { is_in_array = { EAI_MILITARY_cancel_strategies = _strategy_id } }
+			remove_from_array = { EAI_MILITARY_cancel_strategies = _strategy_id }
+		}
+	}
+}
+
+##############################################################################################################################
+### Limiters
+##############################################################################################################################
+
+###############################################################
+### North Africa
+###############################################################
+
+EAI_MILITARY_north_africa_LIMITER = {
+	if = {
+		limit = {
+			OR = { 
+				tag = ITA 
+				tag = ENG 
+			}
+		}
+	
+		if = {
+			limit = {
+				is_historical_focus_on = yes
+				OR = {
+					AND = { has_war_with = ITA ITA = { is_ai = yes } }
+					AND = { has_war_with = ENG ENG = { is_ai = yes } }
+				}
+			}
+	
+			set_country_flag = EAI_MILITARY_north_africa_LIMITER_active
+	
+			set_temp_variable = { base_control_pct_allowed_ITA = 0.72 }
+			set_temp_variable = { target_start_year = 4 }
+			set_temp_variable = { target_end_year = 8 }
+	
+			### Max control pct
+	
+				if = { limit = { tag = ITA }
+					set_temp_variable = { base_control_pct_allowed = base_control_pct_allowed_ITA }
+				}
+				if = { limit = { tag = ENG }
+					set_temp_variable = { _val_ = base_control_pct_allowed_ITA }
+					EAI_MATH_complement = yes
+					set_temp_variable = { base_control_pct_allowed = _val_ }
+				}
+				set_temp_variable = { _val_ = base_control_pct_allowed }
+				EAI_MATH_complement = yes
+				set_temp_variable = { max_added_control_pct_allowed = _val_ }
+	
+				set_temp_variable = { target_start_day = target_start_year }
+				multiply_temp_variable = { target_start_day = 365 }
+	
+				set_temp_variable = { target_end_day = target_end_year }
+				multiply_temp_variable = { target_end_day = 365 }
+	
+				set_temp_variable = { expected_length = target_end_day }
+				subtract_from_temp_variable = { expected_length = target_start_day }
+	
+				set_temp_variable = { current_day = global.EAI_days_elapsed }
+				subtract_from_temp_variable = { current_day = target_start_day }
+				
+				set_temp_variable = { _val_ = current_day }
+				set_temp_variable = { _min = 0 }
+				set_temp_variable = { _max = expected_length }
+				EAI_MATH_normalize = yes
+				set_temp_variable = { _scale = max_added_control_pct_allowed }
+				EAI_MATH_scale = yes
+				set_temp_variable = { added_control_pct_allowed = _val_ }
+	
+				set_temp_variable = { max_control_pct = base_control_pct_allowed }
+				add_to_temp_variable = { max_control_pct = added_control_pct_allowed }
+	
+			### Our control pct
+	
+				clear_temp_array = _our_side_
+				clear_temp_array = _their_side_
+				clear_temp_array = _states_
+				set_temp_variable = { _id = THIS.id }
+				for_each_loop = { array = enemies add_to_temp_array = { _targets = v } }
+				EAI_get_sides = yes
+				for_each_loop = { array = our_side_ add_to_temp_array = { _our_side_ = v } }
+				for_each_loop = { array = their_side_ add_to_temp_array = { _their_side_ = v } }
+				for_each_loop = { array = global.EAI_MAP_north_africa_theatre add_to_temp_array = { _states_ = v } }
+				EAI_MAP_get_province_control_pct = yes
+	
+			### Enable
+	
+				set_variable = { EAI_MILITARY_north_africa_LIMITER = our_control_pct_ }
+	
+				if = { limit = { NOT = { check_variable = { our_control_pct_ < max_control_pct } } }
+					set_country_flag = EAI_MILITARY_north_africa_LIMITER
+				}
+				else = {
+					clr_country_flag = EAI_MILITARY_north_africa_LIMITER
+				}
+	
+			###
+		}
+		else_if = { limit = { has_country_flag = EAI_MILITARY_north_africa_LIMITER_active }
+			clr_country_flag = EAI_MILITARY_north_africa_LIMITER_active
+			clr_country_flag = EAI_MILITARY_north_africa_LIMITER
+		}
+	}
+}
+
+###############################################################
+### Spanish Civil War
+###############################################################
+
+EAI_MILITARY_spanish_cw_LIMITER = {
+	if = {
+		limit = {
+			OR = {
+				tag = SPA
+				tag = SPB
+				tag = SPC
+				tag = SPD
+				original_tag = SPR
+			}
+		}
+	
+		if = {
+			limit = {
+				is_historical_focus_on = yes
+				has_civil_war = yes
+				NOT = { EAI_player_intervening = yes }
+			}
+	
+			set_country_flag = EAI_MILITARY_spanish_cw_LIMITER_active
+	
+			set_temp_variable = { base_control_pct_allowed = 0.5 }
+			set_temp_variable = { target_start_year = 0 }
+			set_temp_variable = { target_end_year = 3.5 }
+	
+			### Max control pct
+	
+				set_temp_variable = { _val_ = base_control_pct_allowed }
+				EAI_MATH_complement = yes
+				set_temp_variable = { added_control_pct_allowed = _val_ }
+	
+				set_temp_variable = { target_start_day = target_start_year }
+				multiply_temp_variable = { target_start_day = 365 }
+	
+				set_temp_variable = { target_end_day = target_end_year }
+				multiply_temp_variable = { target_end_day = 365 }
+	
+				set_temp_variable = { expected_length = target_end_day }
+				subtract_from_temp_variable = { expected_length = target_start_day }
+	
+				set_temp_variable = { current_day = global.EAI_days_elapsed }
+				subtract_from_temp_variable = { current_day = target_start_day }
+				
+				set_temp_variable = { _val_ = current_day }
+				set_temp_variable = { _min = 0 }
+				set_temp_variable = { _max = expected_length }
+				EAI_MATH_normalize = yes
+				EAI_MATH_square = yes # Slow down the early push
+				set_temp_variable = { _scale = added_control_pct_allowed }
+				EAI_MATH_scale = yes
+				set_temp_variable = { added_control_pct_allowed = _val_ }
+	
+				set_temp_variable = { max_control_pct = base_control_pct_allowed }
+				add_to_temp_variable = { max_control_pct = added_control_pct_allowed }
+	
+			### Our control pct
+	
+				clear_temp_array = _our_side_
+				clear_temp_array = _their_side_
+				clear_temp_array = _states_
+				set_temp_variable = { _id = THIS.id }
+				for_each_loop = { array = enemies add_to_temp_array = { _targets = v } }
+				EAI_get_sides = yes
+				for_each_loop = { array = our_side_ add_to_temp_array = { _our_side_ = v } }
+				for_each_loop = { array = their_side_ add_to_temp_array = { _their_side_ = v } }
+				for_each_loop = { array = global.EAI_MAP_spanish_cw_theatre add_to_temp_array = { _states_ = v } }
+				EAI_MAP_get_province_control_pct = yes
+	
+			### Surrender progress of the biggest faction
+	
+				set_temp_variable = { biggest_enemy_id = 0 }
+				set_temp_variable = { biggest_enemy_num = 0 }
+				every_enemy_country = {
+					limit = {
+						OR = {
+							tag = SPA
+							tag = SPB
+							tag = SPC
+							tag = SPD
+							original_tag = SPR
+						}
+					}
+					set_temp_variable = { _country_id = THIS.id }
+					EAI_MAP_get_num_provinces = yes
+					if = { limit = { check_variable = { num_provinces_ > biggest_enemy_num } } 
+						set_temp_variable = { biggest_enemy_id = _country_id }
+						set_temp_variable = { biggest_enemy_num = num_provinces_ }
+					}
+				}
+				
+			### Enable
+	
+				set_variable = { EAI_MILITARY_spanish_cw_LIMITER = our_control_pct_ }
+	
+				if = { 
+					limit = { 
+						OR = {
+							NOT = { check_variable = { our_control_pct_ < max_control_pct } } 
+							NOT = { var:biggest_enemy_id = { surrender_progress < var:max_control_pct } }
+						}
+					}
+					set_country_flag = EAI_MILITARY_spanish_cw_LIMITER
+				}
+				else = {
+					clr_country_flag = EAI_MILITARY_spanish_cw_LIMITER
+				}
+	
+			###
+		}
+		else_if = { limit = { has_country_flag = EAI_MILITARY_spanish_cw_LIMITER_active }
+			clr_country_flag = EAI_MILITARY_spanish_cw_LIMITER_active
+			clr_country_flag = EAI_MILITARY_spanish_cw_LIMITER
+		}
+	}
+}
+
+###############################################################
+### Sino-Japanese historical limiter
+###############################################################
+
+EAI_MILITARY_china_war_LIMITER = {
+	if = {
+		limit = {
+			tag = CHI
+		}
+	
+		if = {
+			limit = {
+				is_historical_focus_on = yes
+			}
+
+			@EAI_MILITARY_china_war_LIMITER_china_army_limit_factor = 0.8
+	
+			### Combined army size
+	
+				set_temp_variable = { total_army_size_k = 0 }
+				every_country = { 
+					limit = { 
+						is_literally_china = yes
+						if = { limit = { CHI = { has_war = yes } }
+							OR = {
+								has_war_together_with = CHI
+								tag = CHI
+							}
+						}
+					}
+					add_to_temp_variable = { total_army_size_k = deployed_army_manpower_k }
+				}
+	
+			### Japan
+	
+				set_temp_variable = { JAP_total_army_size_k = 0 }
+				every_country = { 
+					limit = { 
+						OR = {
+							tag = JAP
+							is_in_faction_with = JAP
+						}
+					}
+					add_to_temp_variable = { JAP_total_army_size_k = deployed_army_manpower_k }
+				}
+	
+			### Set limits
+				
+				multiply_temp_variable = { JAP_total_army_size_k = @EAI_MILITARY_china_war_LIMITER_china_army_limit_factor }
+				set_variable = { global.EAI_MILITARY_china_war_LIMITER_total_army_size_k = total_army_size_k }
+				set_variable = { global.EAI_MILITARY_china_war_LIMITER_total_army_size_limit_k = JAP_total_army_size_k }
+	
+			###
+		}
+	}
+}
+
+###############################################################
+### Barbarossa historical limiter
+###############################################################
+
+EAI_MILITARY_barbarossa_LIMITER = {
+	if = {
+		limit = {
+			OR = { 
+				tag = SOV 
+				tag = GER 
+			}
+		}
+	
+		if = {
+			limit = {
+				check_variable = { global.EAI_eastern_front = 2 }
+				is_historical_focus_on = yes
+				OR = {
+					AND = { has_war_with = SOV GER = { is_ai = yes } }
+					AND = { has_war_with = GER SOV = { is_ai = yes } }
+				}
+			}
+	
+			set_country_flag = EAI_MILITARY_barbarossa_LIMITER_active
+	
+			set_temp_variable = { target_start_year = 5.5 }
+			set_temp_variable = { careful_threshold = 0.00 }
+			set_temp_variable = { hold_threshold = 0.03 }
+	
+			### Define historical control % and date within global.EAI_MAP_barbarossa_theatre
+	
+				if = { limit = { NOT = { has_global_flag = EAI_MILITARY_barbarossa_LIMITER_init } }
+	
+					set_global_flag = EAI_MILITARY_barbarossa_LIMITER_init
+				
+					clear_array = global.EAI_MILITARY_barbarossa_LIMITER_control_pct
+					clear_array = global.EAI_MILITARY_barbarossa_LIMITER_control_day
+					
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_pct = 0.118 } # 41.6
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_day = 0.0 }
+			
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_pct = 0.479 } # 42.1
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_day = 0.5 }
+			
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_pct = 0.479 } # 42.6
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_day = 1.0 }
+			
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_pct = 0.564 } # 43.1
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_day = 1.5 }
+			
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_pct = 0.479 } # 43.6
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_day = 2.0 }
+			
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_pct = 0.333 } # 44.1
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_day = 2.5 }
+			
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_pct = 0.267 } # 44.6
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_day = 3.0 }
+			
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_pct = 0.113 } # 45.1
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_day = 3.5 }
+			
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_pct = 0.0 } # 45.6
+					add_to_array = { global.EAI_MILITARY_barbarossa_LIMITER_control_day = 4.0 }
+			
+					for_each_loop = { array = global.EAI_MILITARY_barbarossa_LIMITER_control_day
+						set_temp_variable = { tmp = v }		
+						add_to_temp_variable = { tmp = target_start_year }
+						multiply_temp_variable = { tmp = 365 }
+						set_variable = { global.EAI_MILITARY_barbarossa_LIMITER_control_day^i = tmp }
+					}
+				}
+	
+			### Historical control % of current day in current time period
+	
+				set_temp_variable = { current_day = global.EAI_days_elapsed }
+				for_each_loop = { array = global.EAI_MILITARY_barbarossa_LIMITER_control_day
+					set_temp_variable = { next_time_period = i }
+					add_to_temp_variable = { next_time_period = 1 }
+					if = { limit = { check_variable = { next_time_period = global.EAI_MILITARY_barbarossa_LIMITER_control_day^num } }
+						set_temp_variable = { current_time_period = i }	
+						set_temp_variable = { next_time_period = i }
+						set_temp_variable = { break = 1 }
+					}
+					else_if = { 
+						limit = {
+							NOT = { check_variable = { current_day < v } }
+							check_variable = { current_day < global.EAI_MILITARY_barbarossa_LIMITER_control_day^next_time_period }
+						}
+						set_temp_variable = { current_time_period = i }
+						set_temp_variable = { next_time_period = next_time_period }
+						set_temp_variable = { break = 1 }
+					}
+				}
+				set_temp_variable = { _min = global.EAI_MILITARY_barbarossa_LIMITER_control_day^current_time_period }
+				set_temp_variable = { _max = global.EAI_MILITARY_barbarossa_LIMITER_control_day^next_time_period }
+				set_temp_variable = { _val_ = current_day }
+				EAI_MATH_normalize = yes
+				set_temp_variable = { _amount = _val_ }
+				set_temp_variable = { _from = global.EAI_MILITARY_barbarossa_LIMITER_control_pct^current_time_period }
+				set_temp_variable = { _to = global.EAI_MILITARY_barbarossa_LIMITER_control_pct^next_time_period }
+				EAI_MATH_lerp = yes
+				if = { limit = { tag = GER } 
+					set_temp_variable = { max_control_pct = lerp_ }
+				}
+				else_if = { limit = { tag = SOV }
+					set_temp_variable = { _val_ = lerp_ }
+					EAI_MATH_complement = yes
+					set_temp_variable = { max_control_pct = _val_ }
+				}
+	
+			### Our control pct
+	
+				clear_temp_array = _our_side_
+				clear_temp_array = _their_side_
+				clear_temp_array = _states_
+				set_temp_variable = { _id = THIS.id }
+				for_each_loop = { array = enemies add_to_temp_array = { _targets = v } }
+				EAI_get_sides = yes
+				for_each_loop = { array = our_side_ add_to_temp_array = { _our_side_ = v } }
+				for_each_loop = { array = their_side_ add_to_temp_array = { _their_side_ = v } }
+				for_each_loop = { array = global.EAI_MAP_barbarossa_theatre add_to_temp_array = { _states_ = v } }
+				EAI_MAP_get_province_control_pct = yes
+	
+			### Enable
+	
+				set_variable = { EAI_MILITARY_barbarossa_LIMITER = our_control_pct_ }
+
+				set_temp_variable = { diff = our_control_pct_ }
+				subtract_from_temp_variable = { diff = max_control_pct }
+
+				if = { limit = { check_variable = { diff > hold_threshold } } 
+					set_variable = { EAI_MILITARY_barbarossa_LIMITER = 2 } 
+				}
+				else_if = { limit = { check_variable = { diff > careful_threshold } } 
+					set_variable = { EAI_MILITARY_barbarossa_LIMITER = 1 } 
+				}
+				else = { clear_variable = EAI_MILITARY_barbarossa_LIMITER }
+	
+			###
+		}
+		else_if = { limit = { has_country_flag = EAI_MILITARY_barbarossa_LIMITER_active }
+			clr_country_flag = EAI_MILITARY_barbarossa_LIMITER_active
+			clear_variable = EAI_MILITARY_barbarossa_LIMITER
+		}
+	}
+}

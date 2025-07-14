@@ -1,0 +1,1857 @@
+############################################################################################################
+#	Expert AI mod - scripted template AI effects
+############################################################################################################
+
+### AI template flags
+#
+#	-enables the correct template scripts for AI countries
+#
+#	set_country_flag = { flag = EAI_MOTORIZED_ROLE value = AB }
+#	A = doctrine
+#	B = width
+#
+#	set_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = ABCD }
+#	A = doctrine
+#	B = width
+#	C = design
+#	D = variant
+
+EAI_TEMPLATE_set_variables = {
+
+	set_variable = { global.EAI_TEMPLATE_INFANTRY = 1 }
+	set_variable = { global.EAI_TEMPLATE_MOTORIZED = 2 }
+	set_variable = { global.EAI_TEMPLATE_MARINE = 3 }
+	set_variable = { global.EAI_TEMPLATE_MOUNTAINEER = 4 }
+	set_variable = { global.EAI_TEMPLATE_LIGHT_ARMOR = 5 }
+	set_variable = { global.EAI_TEMPLATE_MEDIUM_ARMOR = 6 }
+	set_variable = { global.EAI_TEMPLATE_HEAVY_ARMOR = 7 }
+	set_variable = { global.EAI_TEMPLATE_MODERN_ARMOR = 8 }
+	set_variable = { global.EAI_TEMPLATE_GARRISON = 9 }
+	set_variable = { global.EAI_TEMPLATE_SUPPRESSION = 10 }
+}
+
+EAI_TEMPLATE_set_template_flags = {
+
+	EAI_TEMPLATE_set_infantry_template_flags = yes
+	EAI_TEMPLATE_set_mass_infantry_template_flags = yes
+	EAI_TEMPLATE_set_marine_template_flags = yes
+	EAI_TEMPLATE_set_mountaineer_template_flags = yes
+	EAI_TEMPLATE_set_motorized_template_flags = yes
+	EAI_TEMPLATE_set_armor_template_flags = yes
+	# EAI_TEMPLATE_light_armor_stages = yes
+	# EAI_TEMPLATE_medium_armor_stages = yes
+	# EAI_TEMPLATE_heavy_armor_stages = yes
+	EAI_TEMPLATE_set_suppression_template_flags = yes
+	EAI_TEMPLATE_set_garrison_template_flags = yes
+}
+
+EAI_TEMPLATE_transition_state = {
+
+	if = { limit = { has_country_flag = EAI_template_upgrade_logging } log = "[GetYear] [GetMonth] | AI | [PREV.GetName] | TEMPLATE: role=[?role_index] state=[?EAI_TEMPLATE_state^role_index]" }
+	set_variable = { EAI_TEMPLATE_state^role_index = _transition_to }
+	set_variable = { EAI_TEMPLATE_changed_state = 1 }
+	if = { limit = { has_country_flag = EAI_template_upgrade_logging } log = "TRANSITION TO: [?EAI_TEMPLATE_state^role_index]" }
+}
+
+EAI_TEMPLATE_block_field_upgrade = {
+
+	clr_country_flag = EAI_TEMPLATE_block_upgrade_fielded_ARMOR_to_MECH
+	clr_country_flag = EAI_TEMPLATE_block_upgrade_fielded_ARMOR_to_MODERN
+	clr_country_flag = EAI_TEMPLATE_block_upgrade_fielded_INFANTRY
+
+	### ARMOR
+
+	if = { limit = { has_country_flag = EAI_TEMPLATE_upgrade_fielded_ARMOR_to_MECH }
+	
+		if = { limit = { has_equipment = { mechanized_equipment < 400 } }
+		
+			set_country_flag = EAI_TEMPLATE_block_upgrade_fielded_ARMOR_to_MECH
+		}
+	}
+
+	if = { limit = { has_country_flag = EAI_TEMPLATE_upgrade_fielded_ARMOR_to_MODERN }
+	
+		if = { limit = { has_equipment = { modern_tank_chassis < 400 } }
+		
+			set_country_flag = EAI_TEMPLATE_block_upgrade_fielded_ARMOR_to_MODERN
+		}
+	}
+
+	### INFANTRY
+
+	if = { limit = { tag = JAP }
+	
+		# Workaround to JAP choosing armor template for its infantry at the start
+		if = {
+			limit = {
+				date < 1936.6.1
+			}
+	
+			set_country_flag = EAI_TEMPLATE_block_upgrade_fielded_INFANTRY
+		}
+	}
+}
+
+##################################################
+# 	INFANTRY
+##################################################
+
+EAI_TEMPLATE_set_infantry_template_flags = {
+
+	clr_country_flag = EAI_INFANTRY_ROLE
+	clr_country_flag = EAI_INFANTRY_TEMPLATE
+
+	# DOCTRINE: GENERIC
+	if = { limit = { NOT = { check_variable = { EAI_FOCUS/LAND/land_doctrine = global.EAI_MA_DOCTRINE } } }
+
+		if = { 		limit = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_20W_INF_WIDTH } } EAI_TEMPLATE_generic_20w_infantry_role = yes }
+		else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_26W_INF_WIDTH } } EAI_TEMPLATE_generic_26w_infantry_role = yes }
+		else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_40W_INF_WIDTH } } EAI_TEMPLATE_generic_40w_infantry_role = yes }
+		else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_10W_INF_WIDTH } } EAI_TEMPLATE_generic_10w_infantry_role = yes }
+	}
+
+	# DOCTRINE: MA
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/land_doctrine = global.EAI_MA_DOCTRINE } }
+
+		if = { 		limit = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_20W_INF_WIDTH } } EAI_TEMPLATE_mass_assault_20w_infantry_role = yes }
+		else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_40W_INF_WIDTH } } EAI_TEMPLATE_mass_assault_40w_infantry_role = yes }
+		else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_10W_INF_WIDTH } } EAI_TEMPLATE_generic_10w_infantry_role = yes }
+	}
+
+	if = { limit = { EAI_TEMPLATE_use_mass_infantry = yes }
+		set_country_flag = EAI_MASS_INFANTRY_TEMPLATE
+		set_variable = { EAI_TEMPLATE_use_mass_infantry_target = mass_infantry_target_size }
+		# log = "[GetYear] [GetMonth] | AI | [Root.GetName] | TEMPLATES: EAI_TEMPLATE_use_mass_infantry"
+	}
+	else_if = { limit = { EAI_TEMPLATE_use_mass_infantry_abort = yes }
+		clr_country_flag = EAI_MASS_INFANTRY_TEMPLATE
+		# log = "[GetYear] [GetMonth] | AI | [Root.GetName] | TEMPLATES: EAI_TEMPLATE_use_mass_infantry_abort"
+	}
+}
+
+###
+
+EAI_TEMPLATE_generic_20w_infantry_role = {
+
+	set_country_flag = { flag = EAI_INFANTRY_ROLE value = 1 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_A_INF_DESIGN } }
+
+		### VARIANT: EARLY
+		if = { limit = { EAI_infantry_variant_focus_EARLY = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 112 }
+		}
+
+		### VARIANT: CHEAP
+		else_if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 110 }
+		}
+
+		### VARIANT: REGULAR
+		else = {
+			if = { limit = { EAI_STRATEGY_plans_on_using_rangers = yes }
+
+				set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 113 }
+			}
+			else = {
+
+				set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 111 }
+			}
+		}
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_B_INF_DESIGN } }
+
+		### VARIANT: EARLY
+		if = { limit = { EAI_infantry_variant_focus_EARLY = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 122 }
+		}
+
+		### VARIANT: CHEAP
+		else_if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 120 }
+		}
+
+		### VARIANT: REGULAR
+		else = {
+			if = { limit = { EAI_STRATEGY_plans_on_using_rangers = yes }
+
+				set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 123 }
+			}
+			else = {
+
+				set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 121 }
+			}
+		}
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_C_INF_DESIGN } }
+
+		### VARIANT: EARLY
+		if = { limit = { EAI_infantry_variant_focus_EARLY = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 132 }
+		}
+
+		### VARIANT: CHEAP
+		else_if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 130 }
+		}
+
+		### VARIANT: REGULAR
+		else = {
+			if = { limit = { EAI_STRATEGY_plans_on_using_rangers = yes }
+
+				set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 133 }
+			}
+			else = {
+
+				set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 131 }
+			}
+		}
+	}
+}
+EAI_TEMPLATE_generic_26w_infantry_role = {
+
+	set_country_flag = { flag = EAI_INFANTRY_ROLE value = 2 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_A_INF_DESIGN } }
+
+		### VARIANT: EARLY
+		if = { limit = { EAI_infantry_variant_focus_EARLY = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 212 }
+		}
+
+		### VARIANT: CHEAP
+		else_if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 210 }
+		}
+
+		### VARIANT: REGULAR
+		else = {
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 211 }
+		}
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_B_INF_DESIGN } }
+
+		### VARIANT: EARLY
+		if = { limit = { EAI_infantry_variant_focus_EARLY = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 222 }
+		}
+
+		### VARIANT: CHEAP
+		else_if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 220 }
+		}
+
+		### VARIANT: REGULAR
+		else = {
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 221 }
+		}
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_C_INF_DESIGN } }
+
+		### VARIANT: EARLY
+		if = { limit = { EAI_infantry_variant_focus_EARLY = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 232 }
+		}
+
+		### VARIANT: CHEAP
+		else_if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 230 }
+		}
+
+		### VARIANT: REGULAR
+		else = {
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 231 }
+		}
+	}
+}
+EAI_TEMPLATE_generic_40w_infantry_role = {
+
+	set_country_flag = { flag = EAI_INFANTRY_ROLE value = 3 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_A_INF_DESIGN } }
+
+		### VARIANT: EARLY
+		if = { limit = { EAI_infantry_variant_focus_EARLY = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 312 }
+		}
+
+		### VARIANT: CHEAP
+		else_if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 310 }
+		}
+
+		### VARIANT: REGULAR
+		else = {
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 311 }
+		}
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_B_INF_DESIGN } }
+
+		### VARIANT: EARLY
+		if = { limit = { EAI_infantry_variant_focus_EARLY = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 322 }
+		}
+
+		### VARIANT: CHEAP
+		else_if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 320 }
+		}
+
+		### VARIANT: REGULAR
+		else = {
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 321 }
+		}
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_C_INF_DESIGN } }
+
+		### VARIANT: EARLY
+		if = { limit = { EAI_infantry_variant_focus_EARLY = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 332 }
+		}
+
+		### VARIANT: CHEAP
+		else_if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 330 }
+		}
+
+		### VARIANT: REGULAR
+		else = {
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 331 }
+		}
+	}
+}
+EAI_TEMPLATE_generic_10w_infantry_role = {
+
+	set_country_flag = { flag = EAI_INFANTRY_ROLE value = 4 }
+
+	### DESIGN: CHEAP
+	if = { limit = { num_of_military_factories < 75 }
+
+		### VARIANT: REGULAR
+		if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 411 }
+		}
+
+		### VARIANT: LARGE
+		else = {
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 412 }
+		}
+	}
+
+	### DESIGN: UPGRADE
+	else_if = { limit = { NOT = { num_of_military_factories < 75 } }
+
+		### VARIANT: REGULAR
+		if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 421 }
+		}
+
+		### VARIANT: LARGE
+		else = {
+
+			set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 422 }
+		}
+	}
+}
+
+###
+
+EAI_TEMPLATE_mass_assault_20w_infantry_role = {
+
+	set_country_flag = { flag = EAI_INFANTRY_ROLE value = 41 }
+
+	### Width 18w
+
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_20W_INF_WIDTH } }
+
+		### Design A
+
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_A_INF_DESIGN } }
+
+			### Cheap
+
+			if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+				### Regular size
+
+				if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4110 }
+				}
+
+				### Large size
+
+				if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4111 }
+				}
+			}
+
+			### Expensive
+
+			if = { limit = { NOT = { EAI_infantry_variant_focus_CHEAP = yes } }
+
+				### Regular size
+
+				if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4112 }
+				}
+
+				### Large size
+
+				if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4113 }
+				}
+			}
+		}
+
+		### Design B
+
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_B_INF_DESIGN } }
+
+			### Cheap
+
+			if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+				### Regular size
+
+				if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4120 }
+				}
+
+				### Large size
+
+				if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4121 }
+				}
+			}
+
+			### Expensive
+
+			if = { limit = { NOT = { EAI_infantry_variant_focus_CHEAP = yes } }
+
+				### Regular size
+
+				if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4122 }
+				}
+
+				### Large size
+
+				if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4123 }
+				}
+			}
+		}
+
+		### Design C
+
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_C_INF_DESIGN } }
+
+			### Cheap
+
+			if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+				### Regular size
+
+				if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4130 }
+				}
+
+				### Large size
+
+				if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4131 }
+				}
+			}
+
+			### Expensive
+
+			if = { limit = { NOT = { EAI_infantry_variant_focus_CHEAP = yes } }
+
+				### Regular size
+
+				if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4132 }
+				}
+
+				### Large size
+
+				if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4133 }
+				}
+			}
+		}
+	}
+}
+EAI_TEMPLATE_mass_assault_40w_infantry_role = {
+
+	set_country_flag = { flag = EAI_INFANTRY_ROLE value = 43 }
+
+	### Width 35w
+
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_40W_INF_WIDTH } }
+
+		### Design A
+
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_A_INF_DESIGN } }
+
+			### Cheap
+
+			if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+				### Regular size
+
+				if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4310 }
+				}
+
+				### Large size
+
+				if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4311 }
+				}
+			}
+
+			### Expensive
+
+			if = { limit = { NOT = { EAI_infantry_variant_focus_CHEAP = yes } }
+			
+				### Regular size
+
+				if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4312 }
+				}
+
+				### Large size
+
+				if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4313 }
+				}
+			}
+		}
+
+		### Design B
+
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_B_INF_DESIGN } }
+
+			### Cheap
+
+			if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+				### Regular size
+
+				if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4320 }
+				}
+
+				### Large size
+
+				if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4321 }
+				}
+			}
+
+			### Expensive
+
+			if = { limit = { NOT = { EAI_infantry_variant_focus_CHEAP = yes } }
+
+				### Regular size
+
+				if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4322 }
+				}
+
+				### Large size
+
+				if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4323 }
+				}
+			}
+		}
+
+		### Design C
+
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_C_INF_DESIGN } }
+
+			### Cheap
+
+			if = { limit = { EAI_infantry_variant_focus_CHEAP = yes }
+
+				### Regular size
+
+				if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4330 }
+				}
+
+				### Large size
+
+				if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4331 }
+				}
+			}
+
+			### Expensive
+
+			if = { limit = { NOT = { EAI_infantry_variant_focus_CHEAP = yes } }
+
+				### Regular size
+
+				if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4332 }
+				}
+
+				### Large size
+
+				if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+					set_country_flag = { flag = EAI_INFANTRY_TEMPLATE value = 4333 }
+				}
+			}
+		}
+	}
+}
+
+##################################################
+# 	MASS INFANTRY
+##################################################
+
+EAI_TEMPLATE_set_mass_infantry_template_flags = {
+
+	if = { limit = { EAI_TEMPLATE_use_mass_infantry = yes }
+
+		set_variable = { EAI_TEMPLATE_use_mass_infantry_target = mass_infantry_target_size_ }
+		EAI_TEMPLATE_set_mass_infantry_template_flag = yes
+	}
+	else_if = { limit = { EAI_TEMPLATE_use_mass_infantry_abort = yes }
+
+		clr_country_flag = EAI_MASS_INFANTRY_TEMPLATE
+	}
+}
+
+EAI_TEMPLATE_set_mass_infantry_template_flag = {
+
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_20W_INF_WIDTH } }
+
+		### Regular size
+
+		if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+			set_country_flag = { flag = EAI_MASS_INFANTRY_TEMPLATE value = 10 }
+		}
+
+		### Large size
+
+		if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+			set_country_flag = { flag = EAI_MASS_INFANTRY_TEMPLATE value = 11 }
+		}
+	}
+
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_26W_INF_WIDTH } }
+
+		### Regular size
+
+		if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+			set_country_flag = { flag = EAI_MASS_INFANTRY_TEMPLATE value = 20 }
+		}
+
+		### Large size
+
+		if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+			set_country_flag = { flag = EAI_MASS_INFANTRY_TEMPLATE value = 21 }
+		}
+	}
+
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_40W_INF_WIDTH } }
+
+		### Regular size
+
+		if = { limit = { NOT = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+			set_country_flag = { flag = EAI_MASS_INFANTRY_TEMPLATE value = 30 }
+		}
+
+		### Large size
+
+		if = { limit = { OR = { has_tech = human_wave_offensive has_tech = vast_offensives } }
+
+			set_country_flag = { flag = EAI_MASS_INFANTRY_TEMPLATE value = 31 }
+		}
+	}
+}
+
+##################################################
+# 	MARINES
+##################################################
+
+EAI_TEMPLATE_set_marine_template_flags = {
+
+	clr_country_flag = EAI_MARINE_ROLE
+	clr_country_flag = EAI_MARINE_TEMPLATE
+
+	if = {
+		limit = {
+			check_variable = { EAI_FOCUS/LAND/spec_ops = global.EAI_MAR_SPEC_OPS }
+		}
+
+		if = {
+			limit = {
+				has_country_flag = EAI_TEMPLATE_marine_template_upgrade
+				OR = {
+					# If EAI_amphibious_division_focus = yes and has_country_flag = EAI_TEMPLATE_amphibious_template_upgrade
+					# then the if returns false regardless of has_global_flag = EAI_challenging_mode
+					AND = {
+						EAI_amphibious_division_focus = yes
+						has_country_flag = EAI_TEMPLATE_amphibious_template_upgrade
+					}
+					# If EAI_amphibious_division_focus = yes and has_country_flag = EAI_TEMPLATE_amphibious_template_upgrade is false
+					# then the if returns true only if has_global_flag = EAI_challenging_mode is false
+					AND = {
+						EAI_MODE_normal = yes
+						EAI_amphibious_division_focus = yes
+						NOT = { has_country_flag = EAI_TEMPLATE_amphibious_template_upgrade }
+					}
+					# If EAI_amphibious_division_focus = no and has_country_flag = EAI_TEMPLATE_amphibious_template_upgrade is false
+					# then the if always returns true regardless of has_global_flag = EAI_challenging_mode
+					AND = {
+						NOT = { EAI_amphibious_division_focus = yes }
+						NOT = { has_country_flag = EAI_TEMPLATE_amphibious_template_upgrade }
+					}
+				}
+			}
+			EAI_TEMPLATE_generic_40w_marine_role = yes
+		}	
+
+		if = { limit = { has_country_flag = EAI_TEMPLATE_amphibious_template_upgrade EAI_amphibious_division_focus = yes }
+		
+			EAI_TEMPLATE_generic_40w_amphibious_role = yes
+		}
+	}
+}
+
+###
+
+EAI_TEMPLATE_generic_20w_marine_role = {
+
+	set_country_flag = { flag = EAI_MARINE_ROLE value = 1 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_A_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 111 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_B_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 121 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_C_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 131 }
+	}
+}
+EAI_TEMPLATE_generic_26w_marine_role = {
+
+	set_country_flag = { flag = EAI_MARINE_ROLE value = 2 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_A_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 211 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_B_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 221 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_C_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 231 }
+	}
+}
+EAI_TEMPLATE_generic_40w_marine_role = {
+
+	set_country_flag = { flag = EAI_MARINE_ROLE value = 3 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_A_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+		
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 311 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_B_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+		
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 321 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_C_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+		
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 331 }
+	}
+}
+
+EAI_TEMPLATE_generic_20w_amphibious_role = {
+
+	set_country_flag = { flag = EAI_MARINE_ROLE value = 1 }
+
+	### DESIGN: A
+	if = { limit = { EAI_LARM_military_focus = yes }
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 141 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { EAI_MARM_military_focus = yes }
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 142 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { EAI_HARM_military_focus = yes }
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 143 }
+	}
+}
+EAI_TEMPLATE_generic_26w_amphibious_role = {
+
+	set_country_flag = { flag = EAI_MARINE_ROLE value = 2 }
+
+	### DESIGN: A
+	if = { limit = { EAI_LARM_military_focus = yes }
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 241 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { EAI_MARM_military_focus = yes }
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 242 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { EAI_HARM_military_focus = yes }
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 243 }
+	}
+}
+EAI_TEMPLATE_generic_40w_amphibious_role = {
+
+	set_country_flag = { flag = EAI_MARINE_ROLE value = 3 }
+
+	### DESIGN: A
+	if = { limit = { EAI_LARM_military_focus = yes }
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 341 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { EAI_MARM_military_focus = yes }
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 342 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { EAI_HARM_military_focus = yes }
+
+		set_country_flag = { flag = EAI_MARINE_TEMPLATE value = 343 }
+	}
+}
+
+##################################################
+# 	MOUNTAINEERS
+##################################################
+
+EAI_TEMPLATE_set_mountaineer_template_flags = {
+
+	clr_country_flag = EAI_MOUNTAINEER_ROLE
+	clr_country_flag = EAI_MOUNTAINEER_TEMPLATE
+
+	if = {
+		limit = {
+			has_country_flag = EAI_TEMPLATE_mountaineer_template_upgrade
+
+			check_variable = { EAI_FOCUS/LAND/spec_ops = global.EAI_MNT_SPEC_OPS }
+		}
+
+		# DOCTRINE: GENERIC
+		if = { 		limit = { OR = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_20W_INF_WIDTH } check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_10W_INF_WIDTH } } } EAI_TEMPLATE_generic_20w_mountaineer_role = yes }
+		else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_26W_INF_WIDTH } } EAI_TEMPLATE_generic_26w_mountaineer_role = yes }
+		else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_width = global.EAI_40W_INF_WIDTH } } EAI_TEMPLATE_generic_40w_mountaineer_role = yes }
+	}
+}
+
+###
+
+EAI_TEMPLATE_generic_20w_mountaineer_role = {
+
+	set_country_flag = { flag = EAI_MOUNTAINEER_ROLE value = 1 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_A_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+		
+		set_country_flag = { flag = EAI_MOUNTAINEER_TEMPLATE value = 111 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_B_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+		
+		set_country_flag = { flag = EAI_MOUNTAINEER_TEMPLATE value = 121 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_C_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+		
+		set_country_flag = { flag = EAI_MOUNTAINEER_TEMPLATE value = 131 }
+	}
+}
+EAI_TEMPLATE_generic_26w_mountaineer_role = {
+
+	set_country_flag = { flag = EAI_MOUNTAINEER_ROLE value = 2 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_A_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+		
+		set_country_flag = { flag = EAI_MOUNTAINEER_TEMPLATE value = 211 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_B_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+		
+		set_country_flag = { flag = EAI_MOUNTAINEER_TEMPLATE value = 221 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_C_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+		
+		set_country_flag = { flag = EAI_MOUNTAINEER_TEMPLATE value = 231 }
+	}
+}
+EAI_TEMPLATE_generic_40w_mountaineer_role = {
+
+	set_country_flag = { flag = EAI_MOUNTAINEER_ROLE value = 3 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_A_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+		
+		set_country_flag = { flag = EAI_MOUNTAINEER_TEMPLATE value = 311 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_B_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+		
+		set_country_flag = { flag = EAI_MOUNTAINEER_TEMPLATE value = 321 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/infantry_design = global.EAI_C_INF_DESIGN } }
+
+		### VARIANT: REGULAR
+		
+		set_country_flag = { flag = EAI_MOUNTAINEER_TEMPLATE value = 331 }
+	}
+}
+
+##################################################
+# 	MOTORIZED
+##################################################
+
+EAI_TEMPLATE_set_motorized_template_flags = {
+
+	clr_country_flag = EAI_MOTORIZED_TEMPLATE
+
+	if = { limit = { has_country_flag = EAI_TEMPLATE_mot_template_upgrade }
+	
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/motorized_design = global.EAI_A_MOT_DESIGN } }
+		
+			if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_20W_ARM_WIDTH } }
+		
+				set_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 11 }
+			}
+			if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_26W_ARM_WIDTH } }
+			
+				set_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 21 }
+			}
+			if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_40W_ARM_WIDTH } }
+			
+				set_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 31 }
+			}
+		}
+	
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/motorized_design = global.EAI_B_MOT_DESIGN } }
+		
+			if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_20W_ARM_WIDTH } }
+		
+				set_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 12 }
+			}
+			if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_26W_ARM_WIDTH } }
+			
+				set_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 22 }
+			}
+			if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_40W_ARM_WIDTH } }
+			
+				set_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 32 }
+			}
+		}
+	
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/motorized_design = global.EAI_C_MOT_DESIGN } }
+		
+			if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_20W_ARM_WIDTH } }
+		
+				set_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 13 }
+			}
+			if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_26W_ARM_WIDTH } }
+			
+				set_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 23 }
+			}
+			if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_40W_ARM_WIDTH } }
+			
+				set_country_flag = { flag = EAI_MOTORIZED_TEMPLATE value = 33 }
+			}
+		}
+	}
+}
+
+##################################################
+#   ARMOR
+##################################################
+
+EAI_TEMPLATE_set_armor_template_flags = {
+
+	if = { limit = { EAI_LARM_military_focus = yes has_country_flag = EAI_larm_template_upgrade }
+	
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_20W_ARM_WIDTH } }
+	
+			set_country_flag = { flag = EAI_LIGHT_ARMOR_TEMPLATE value = 11 }
+		}
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_26W_ARM_WIDTH } }
+		
+			set_country_flag = { flag = EAI_LIGHT_ARMOR_TEMPLATE value = 21 }
+		}
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_40W_ARM_WIDTH } }
+		
+			if = { limit = { EAI_40w_template_unlocked = yes }
+			
+				set_country_flag = { flag = EAI_LIGHT_ARMOR_TEMPLATE value = 31 }
+			}
+			else = {
+			
+				set_country_flag = { flag = EAI_LIGHT_ARMOR_TEMPLATE value = 21 }
+			}
+		}
+	}
+
+	if = { limit = { EAI_MARM_military_focus = yes has_country_flag = EAI_marm_template_upgrade }
+	
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_20W_ARM_WIDTH } }
+	
+			set_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 11 }
+		}
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_26W_ARM_WIDTH } }
+		
+			set_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 21 }
+		}
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_40W_ARM_WIDTH } }
+		
+			if = { limit = { EAI_40w_template_unlocked = yes }
+			
+				set_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 31 }
+			}
+			else = {
+			
+				set_country_flag = { flag = EAI_MEDIUM_ARMOR_TEMPLATE value = 21 }
+			}
+		}
+	}
+
+	if = { limit = { EAI_HARM_military_focus = yes has_country_flag = EAI_harm_template_upgrade }
+	
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_20W_ARM_WIDTH } }
+	
+			set_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 11 }
+		}
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_26W_ARM_WIDTH } }
+		
+			set_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 21 }
+		}
+		if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_width = global.EAI_40W_ARM_WIDTH } }
+		
+			if = { limit = { EAI_40w_template_unlocked = yes }
+			
+				set_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 31 }
+			}
+			else = {
+			
+				set_country_flag = { flag = EAI_HEAVY_ARMOR_TEMPLATE value = 21 }
+			}
+		}
+	}
+}
+##################################################
+# 	MODERN ARMOR
+##################################################
+
+### MARM
+
+EAI_TEMPLATE_generic_20w_modern_armor_role_MARM_0 = {
+
+	set_country_flag = { flag = EAI_MODERN_ARMOR_ROLE value = 11 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/medium_armor_design = global.EAI_A_MARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1111 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/medium_armor_design = global.EAI_B_MARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1121 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/medium_armor_design = global.EAI_C_MARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1131 }
+	}
+}
+EAI_TEMPLATE_generic_26w_modern_armor_role_MARM_0 = {
+
+	set_country_flag = { flag = EAI_MODERN_ARMOR_ROLE value = 12 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/medium_armor_design = global.EAI_A_MARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1211 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/medium_armor_design = global.EAI_B_MARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1221 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/medium_armor_design = global.EAI_C_MARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1231 }
+	}
+}
+EAI_TEMPLATE_generic_40w_modern_armor_role_MARM_0 = {
+
+	set_country_flag = { flag = EAI_MODERN_ARMOR_ROLE value = 13 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/medium_armor_design = global.EAI_A_MARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1311 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/medium_armor_design = global.EAI_B_MARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1321 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/medium_armor_design = global.EAI_C_MARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1331 }
+	}
+}
+
+### HARM
+
+EAI_TEMPLATE_generic_20w_modern_armor_role_HARM_0 = {
+
+	set_country_flag = { flag = EAI_MODERN_ARMOR_ROLE value = 11 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/heavy_armor_design = global.EAI_A_HARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1112 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/heavy_armor_design = global.EAI_B_HARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1122 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/heavy_armor_design = global.EAI_C_HARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1132 }
+	}
+}
+EAI_TEMPLATE_generic_26w_modern_armor_role_HARM_0 = {
+
+	set_country_flag = { flag = EAI_MODERN_ARMOR_ROLE value = 12 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/heavy_armor_design = global.EAI_A_HARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1212 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/heavy_armor_design = global.EAI_B_HARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1222 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/heavy_armor_design = global.EAI_C_HARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1232 }
+	}
+}
+EAI_TEMPLATE_generic_40w_modern_armor_role_HARM_0 = {
+
+	set_country_flag = { flag = EAI_MODERN_ARMOR_ROLE value = 13 }
+
+	### DESIGN: A
+	if = { limit = { check_variable = { EAI_FOCUS/LAND/heavy_armor_design = global.EAI_A_HARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1312 }
+	}
+
+	### DESIGN: B
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/heavy_armor_design = global.EAI_B_HARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1322 }
+	}
+
+	### DESIGN: C
+	else_if = { limit = { check_variable = { EAI_FOCUS/LAND/heavy_armor_design = global.EAI_C_HARM_DESIGN } }
+
+		set_country_flag = { flag = EAI_MODERN_ARMOR_TEMPLATE value = 1332 }
+	}
+}
+
+##################################################
+# 	SUPPRESSION
+##################################################
+
+EAI_TEMPLATE_set_suppression_template_flags = {
+
+	# clr_country_flag = EAI_SUPPRESSION_TEMPLATE
+
+	if = {
+		limit = {
+			has_country_flag = EAI_TEMPLATE_suppression_template_upgrade
+
+			NOT = { has_country_flag = EAI_SUPPRESSION_TEMPLATE }
+		}
+
+		set_country_flag = { flag = EAI_SUPPRESSION_TEMPLATE value = 1 } 
+	}
+
+	if = {
+		limit = {
+			has_country_flag = { flag = EAI_SUPPRESSION_TEMPLATE value = 1 }
+
+			has_tech = tech_military_police
+
+			set_temp_variable = { _check_xp = 100 }
+			EAI_XP_has_army_check_xp = yes
+			EAI_land_doctrine_completed = yes
+		}
+	
+		set_country_flag = { flag = EAI_SUPPRESSION_TEMPLATE value = 2 } 
+	}
+
+	if = {
+		limit = {
+			has_country_flag = { flag = EAI_SUPPRESSION_TEMPLATE value = 2 }
+
+			EAI_40w_template_unlocked = yes
+			EAI_land_doctrine_completed = yes
+		}
+	
+		set_country_flag = { flag = EAI_SUPPRESSION_TEMPLATE value = 3 } 
+	}
+}
+
+EAI_TEMPLATE_set_garrison_template_flags = {
+
+	clr_country_flag = EAI_GARRISON_TEMPLATE
+
+	if = { limit = { has_country_flag = EAI_TEMPLATE_garrison_template_upgrade }
+
+		if = { limit = { EAI_TEMPLATE_use_cheap_garrison = yes } set_country_flag = { flag = EAI_GARRISON_TEMPLATE value = 1 } }
+		else_if = { limit = { EAI_TEMPLATE_use_regular_garrison = yes } set_country_flag = { flag = EAI_GARRISON_TEMPLATE value = 2 } }
+		else_if = { limit = { EAI_TEMPLATE_use_expensive_garrison = yes } set_country_flag = { flag = EAI_GARRISON_TEMPLATE value = 3 } }
+		else = { set_country_flag = { flag = EAI_GARRISON_TEMPLATE value = 1 } }
+	}
+}
+
+############################################################################################################
+
+# Enables division types for the AI
+# Certain template types require a base template created for the AI which it can use as a starting point for upgrades
+
+EAI_TEMPLATE_enable_template_upgrades = {
+
+	EAI_TEMPLATE_armor_template_upgrade = yes
+    EAI_TEMPLATE_garrison_template_upgrade = yes
+    EAI_TEMPLATE_marine_template_upgrade = yes
+    EAI_TEMPLATE_amphibious_template_upgrade = yes
+    EAI_TEMPLATE_mountaineer_template_upgrade = yes
+    EAI_TEMPLATE_motorized_template_upgrade = yes
+	EAI_TEMPLATE_suppression_template_upgrade = yes
+}
+
+EAI_TEMPLATE_armor_template_upgrade = {
+
+	if = {
+		limit = {
+			NOT = { has_country_flag = EAI_larm_template_upgrade }
+			NOT = { EAI_amphibious_division_focus = yes } #Don't produce tank divisions as amphibious tank divisions are filling this role
+
+			### Focus req.
+
+			EAI_LARM_military_focus = yes
+
+			has_country_flag = EAI_military_focus_config_finished
+
+			### Industry req.
+
+			num_of_military_factories > 20
+
+			### Tech and design req.
+
+			has_tech = motorised_infantry
+			has_tech = basic_light_tank_chassis
+
+			### Priorities
+
+			OR = {
+				AND = { 
+					check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_LARM_FOCUS } 
+					set_temp_variable = { _check_xp = 25 }
+					EAI_XP_has_army_check_xp = yes
+				}
+	
+				AND = { 
+					check_variable = { EAI_FOCUS/LAND/attachment = global.EAI_LARM_ATTACHMENT } 
+					set_temp_variable = { _check_xp = 100 }
+					EAI_XP_has_army_check_xp = yes
+				} 
+	
+				set_temp_variable = { _check_xp = 450 }
+				EAI_XP_has_army_check_xp = yes
+			}
+
+			### Strategies
+
+				EAI_STRATEGY_CHL_mass_infantry_prioritize_tanks = yes
+				EAI_STRATEGY_CHL_wait_for_better_tanks = yes
+
+			###
+		}
+
+		set_country_flag = EAI_larm_template_upgrade
+
+		if = { limit = { has_country_flag = EAI_template_upgrade_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | TEMPLATES: EAI_larm_template_upgrade" } 
+	}
+
+	if = {
+		limit = {
+			NOT = { has_country_flag = EAI_marm_template_upgrade }
+			NOT = { EAI_amphibious_division_focus = yes } #Don't produce tank divisions as amphibious tank divisions are filling this role
+
+			### Focus req.
+
+			EAI_MARM_military_focus = yes
+
+			has_country_flag = EAI_military_focus_config_finished
+
+			### Industry req.
+
+			num_of_military_factories > 20
+
+			### Tech and design req.
+
+			has_tech = motorised_infantry
+			has_tech = basic_medium_tank_chassis
+
+			### Priorities
+
+			OR = {
+				AND = { 
+					check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_MARM_FOCUS } 
+					set_temp_variable = { _check_xp = 25 }
+					EAI_XP_has_army_check_xp = yes
+				}
+	
+				AND = { 
+					check_variable = { EAI_FOCUS/LAND/attachment = global.EAI_MARM_ATTACHMENT } 
+					set_temp_variable = { _check_xp = 100 }
+					EAI_XP_has_army_check_xp = yes
+				} 
+	
+				set_temp_variable = { _check_xp = 450 }
+				EAI_XP_has_army_check_xp = yes
+			}
+
+			### Strategies
+
+				EAI_STRATEGY_CHL_mass_infantry_prioritize_tanks = yes
+				EAI_STRATEGY_CHL_wait_for_better_tanks = yes
+
+			###
+		}
+
+		set_country_flag = EAI_marm_template_upgrade
+
+		if = { limit = { has_country_flag = EAI_template_upgrade_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | TEMPLATES: EAI_marm_template_upgrade" } 
+	}
+
+	if = {
+		limit = {
+			NOT = { has_country_flag = EAI_harm_template_upgrade }
+			NOT = { EAI_amphibious_division_focus = yes } #Don't produce tank divisions as amphibious tank divisions are filling this role
+			### Focus req.
+
+			EAI_HARM_military_focus = yes
+
+			has_country_flag = EAI_military_focus_config_finished
+
+			### Industry req.
+
+			num_of_military_factories > 20
+
+			### Tech and design req.
+
+			has_tech = motorised_infantry
+			has_tech = basic_heavy_tank_chassis
+
+			### Priorities
+
+			OR = {
+				AND = { 
+					check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_HARM_FOCUS } 
+					set_temp_variable = { _check_xp = 25 }
+					EAI_XP_has_army_check_xp = yes
+				}
+	
+				AND = { 
+					check_variable = { EAI_FOCUS/LAND/attachment = global.EAI_HARM_ATTACHMENT } 
+					set_temp_variable = { _check_xp = 100 }
+					EAI_XP_has_army_check_xp = yes
+				} 
+	
+				set_temp_variable = { _check_xp = 450 }
+				EAI_XP_has_army_check_xp = yes
+			}
+
+			### Strategies
+
+				EAI_STRATEGY_CHL_mass_infantry_prioritize_tanks = yes
+				EAI_STRATEGY_CHL_wait_for_better_tanks = yes
+
+			###
+		}
+
+		set_country_flag = EAI_harm_template_upgrade
+
+		if = { limit = { has_country_flag = EAI_template_upgrade_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | TEMPLATES: EAI_harm_template_upgrade" } 
+	}
+}
+
+EAI_TEMPLATE_marine_template_upgrade = {
+    if = {
+        limit = {
+			NOT = { has_country_flag = EAI_TEMPLATE_marine_template_upgrade }
+
+			### Focus req.
+
+			check_variable = { EAI_FOCUS/LAND/spec_ops = global.EAI_MAR_SPEC_OPS }
+
+            has_country_flag = EAI_military_focus_config_finished
+
+		    ### Industry req.
+
+		    num_of_military_factories > 10
+    
+		    ### Tech and design req.
+
+		    has_tech = marines
+
+		    ### Priorities
+
+			set_temp_variable = { _check_xp = 30 }
+			EAI_XP_has_army_check_xp = yes
+    
+		    if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_MARM_FOCUS } }
+		    	OR = { has_country_flag = EAI_marm_template_upgrade set_temp_variable = { _check_xp = 400 } EAI_XP_has_army_check_xp = yes }
+		    }
+		    else_if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_HARM_FOCUS } }
+		    	OR = { has_country_flag = EAI_harm_template_upgrade set_temp_variable = { _check_xp = 400 } EAI_XP_has_army_check_xp = yes }
+		    }
+		    else_if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_LARM_FOCUS } }
+		    	OR = { has_country_flag = EAI_larm_template_upgrade set_temp_variable = { _check_xp = 400 } EAI_XP_has_army_check_xp = yes }
+		    }
+		    else_if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_AT_FOCUS } }
+		    	OR = { has_country_flag = EAI_anti_tank_template_upgrade set_temp_variable = { _check_xp = 400 } EAI_XP_has_army_check_xp = yes }
+		    }
+        }
+
+        set_country_flag = EAI_TEMPLATE_marine_template_upgrade
+
+		if = { limit = { has_country_flag = EAI_template_upgrade_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | TEMPLATES: upgrading marine" } 
+    }
+}
+
+EAI_TEMPLATE_amphibious_template_upgrade = {
+
+    if = {
+        limit = {
+            has_country_flag = EAI_military_focus_config_finished
+
+		    NOT = { has_country_flag = EAI_TEMPLATE_amphibious_template_upgrade }
+
+			### Priorities
+
+		    EAI_amphibious_division_focus = yes
+
+		    ### Requirements
+
+			has_tech = amphibious_drive
+			has_tech = amphibious_mechanized_infantry
+
+			### Strategies
+			EAI_STRATEGY_CHL_wait_for_better_tanks = yes
+
+			OR = {
+				EAI_LARM_military_focus = yes
+				EAI_MARM_military_focus = yes
+				EAI_HARM_military_focus = yes
+			}
+
+			### Priorities
+
+			set_temp_variable = { _check_xp = 30 }
+			EAI_XP_has_army_check_xp = yes
+
+        }
+
+        set_country_flag = EAI_TEMPLATE_amphibious_template_upgrade
+
+		if = { limit = { has_country_flag = EAI_template_upgrade_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | TEMPLATES: EAI_TEMPLATE_amphibious_template_upgrade" } 
+    }
+}
+
+EAI_TEMPLATE_mountaineer_template_upgrade = {
+    if = {
+        limit = {
+		    NOT = { has_country_flag = EAI_TEMPLATE_mountaineer_template_upgrade }
+
+			### Focus req.
+
+			check_variable = { EAI_FOCUS/LAND/spec_ops = global.EAI_MNT_SPEC_OPS }
+
+			has_country_flag = EAI_military_focus_config_finished
+
+			### Industry req.
+
+		    num_of_military_factories > 10
+    
+		    ### Tech and design req.
+
+		    has_tech = tech_mountaineers
+
+		    ### Priorities
+
+			set_temp_variable = { _check_xp = 200 } 
+			EAI_XP_has_army_check_xp = yes
+    
+		    if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_MARM_FOCUS } }
+		    	OR = { has_country_flag = EAI_marm_template_upgrade set_temp_variable = { _check_xp = 400 } EAI_XP_has_army_check_xp = yes }
+		    }
+		    else_if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_HARM_FOCUS } }
+		    	OR = { has_country_flag = EAI_harm_template_upgrade set_temp_variable = { _check_xp = 400 } EAI_XP_has_army_check_xp = yes }
+		    }
+		    else_if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_LARM_FOCUS } }
+		    	OR = { has_country_flag = EAI_larm_template_upgrade set_temp_variable = { _check_xp = 400 } EAI_XP_has_army_check_xp = yes }
+		    }
+		    else_if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_AT_FOCUS } }
+		    	OR = { has_country_flag = EAI_anti_tank_template_upgrade set_temp_variable = { _check_xp = 400 } EAI_XP_has_army_check_xp = yes }
+		    }
+        }
+
+        set_country_flag = EAI_TEMPLATE_mountaineer_template_upgrade
+
+		if = { limit = { has_country_flag = EAI_template_upgrade_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | TEMPLATES: upgrading mountaineer" } 
+    }
+}
+
+EAI_TEMPLATE_motorized_template_upgrade = {
+    if = {
+        limit = {
+			NOT = { has_country_flag = EAI_TEMPLATE_mot_template_upgrade }
+
+			### Focus req.
+
+			OR = {
+				check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_MOT_FOCUS }
+				check_variable = { EAI_FOCUS/LAND/attachment = global.EAI_MOT_ATTACHMENT }
+			}
+
+            has_country_flag = EAI_military_focus_config_finished
+
+		    ### Industry req.
+
+		    num_of_military_factories > 25
+    
+		    ### Tech and design req.
+
+		    has_tech = motorised_infantry
+
+	    	OR = {
+	    		AND = {
+	    			check_variable = { EAI_FOCUS/LAND/motorized_design = global.EAI_A_MOT_DESIGN }
+					has_tech = tech_trucks
+	    		}
+
+	    		AND = {
+	    			check_variable = { EAI_FOCUS/LAND/motorized_design = global.EAI_B_MOT_DESIGN }
+	    			has_tech = basic_medium_tank_chassis
+	    		}
+
+	    		AND = {
+	    			check_variable = { EAI_FOCUS/LAND/motorized_design = global.EAI_C_MOT_DESIGN }
+					has_tech = basic_light_tank_chassis
+	    		}
+	    	}
+
+		    ### Priorities
+
+			has_army_experience > 300
+        }
+
+		set_country_flag = EAI_TEMPLATE_mot_template_upgrade
+
+		if = { limit = { has_country_flag = EAI_template_upgrade_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | TEMPLATES: upgrading motorized" } 
+    }
+}
+
+EAI_TEMPLATE_garrison_template_upgrade = {
+    if = {
+        limit = {
+	    	has_country_flag = EAI_military_focus_config_finished
+
+	    	NOT = { has_country_flag = EAI_TEMPLATE_garrison_template_upgrade }
+
+	    	date > 1938.1.1
+    
+	    	has_tech = gw_artillery
+    
+	    	has_tech = tech_engineers
+
+			OR = { is_major = yes has_war = yes }
+
+	    	OR = {
+	    		AND = {
+	    			set_temp_variable = { _check_xp = 50 } 
+					EAI_XP_has_army_check_xp = yes
+    
+	    			if = { limit = { check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_AT_FOCUS } }
+
+	    				has_country_flag = EAI_anti_tank_template_upgrade
+	    			}
+    
+	    			if = { 
+						limit = { 
+							EAI_armor_tech_focus = yes 
+							OR = { 
+								check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_LARM_FOCUS } 
+								check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_MARM_FOCUS } 
+								check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_HARM_FOCUS }
+							}
+						}
+	    				
+						OR = {
+	    					has_country_flag = EAI_larm_template_upgrade
+	    					has_country_flag = EAI_marm_template_upgrade
+	    					has_country_flag = EAI_harm_template_upgrade
+	    				}
+	    			}
+	    		}
+    
+				set_temp_variable = { _check_xp = 100 } 
+				EAI_XP_has_army_check_xp = yes
+
+				AND = { 
+					original_tag = USA 
+					set_temp_variable = { _check_xp = 25 } 
+					EAI_XP_has_army_check_xp = yes
+				}
+	    	}
+			
+			### XP req.
+
+			if = { limit = { NOT = { ai_has_role_template = area_defense } }
+			
+				set_temp_variable = { _check_xp = 25 } 
+				EAI_XP_has_army_check_xp = yes
+			}
+        }
+
+		set_country_flag = EAI_TEMPLATE_garrison_template_upgrade
+
+		if = { limit = { has_country_flag = EAI_template_upgrade_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | TEMPLATES: upgrading garrison" } 
+		
+		if = { limit = { NOT = { ai_has_role_template = area_defense } }
+		
+			set_temp_variable = { _xp_cost = _check_xp }
+			EAI_XP_pay_army_xp_cost = yes
+			
+			division_template = {
+				name = "Garrison Template"
+	
+				priority = 0
+	
+				regiments = {
+					infantry = { x = 0 y = 0 }
+					infantry = { x = 0 y = 1 }
+					infantry = { x = 0 y = 2 }
+	
+					infantry = { x = 1 y = 0 }
+					infantry = { x = 1 y = 1 }
+				}
+	
+				# support = {
+				# 	engineer = { x = 0 y = 0 }
+				# 	artillery = { x = 0 y = 1 }
+				# }
+			}
+		}
+    }
+}
+
+EAI_TEMPLATE_suppression_template_upgrade = {
+    if = {
+        limit = {
+	    	has_country_flag = EAI_military_focus_config_finished
+
+	    	NOT = { has_country_flag = EAI_TEMPLATE_suppression_template_upgrade }
+
+	    	has_war = yes
+			
+			check_variable = { num_occupied_states > 1 }
+        }
+
+		set_country_flag = EAI_TEMPLATE_suppression_template_upgrade
+
+		if = { limit = { has_country_flag = EAI_template_upgrade_logging } log = "[GetYear] [GetMonth] | AI | [Root.GetName] | TEMPLATES: upgrading suppression" } 
+    }
+}

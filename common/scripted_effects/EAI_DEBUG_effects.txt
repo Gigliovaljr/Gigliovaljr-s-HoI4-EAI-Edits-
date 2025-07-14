@@ -1,0 +1,947 @@
+############################################################################################################
+#	Expert AI mod - debug effects
+############################################################################################################
+
+EAI_set_logging_flags = {
+
+	# set_country_flag = EAI_update_logging
+
+	# set_country_flag = EAI_factory_assignment_logging
+	# set_country_flag = EAI_relation_logging
+	# set_country_flag = EAI_PC_AIRBASE_logging
+	# set_country_flag = EAI_PC_AA_logging
+	# set_country_flag = EAI_PC_FORT_logging
+	# set_country_flag = EAI_logging
+	# set_country_flag = EAI_resources_logging
+	# set_country_flag = EAI_pathfind_logging
+	# set_country_flag = EAI_research_logging
+	# set_country_flag = EAI_priority_research_logging
+	# set_country_flag = EAI_construction_logging
+	# set_country_flag = EAI_priority_construction_logging
+	# set_country_flag = EAI_priority_construction_detailed_logging
+	# set_country_flag = EAI_conversion_to_civ_logging
+	# set_country_flag = EAI_building_logging
+	# set_country_flag = EAI_law_logging
+	# set_country_flag = EAI_pp_logging
+	# set_country_flag = EAI_construction_score_logging
+	# set_country_flag = EAI_difficulty_logging
+	# set_country_flag = EAI_military_focus_logging
+	# set_country_flag = EAI_FOCUS_UPDATE_update_logging
+	# set_country_flag = EAI_division_limit_logging
+	# set_country_flag = EAI_leader_recruitment_logging
+	# set_country_flag = EAI_lend_lease_logging
+	# set_country_flag = EAI_naval_invasion_logging
+	# set_country_flag = EAI_template_upgrade_logging
+	# set_country_flag = EAI_template_design_logging
+	# set_country_flag = EAI_variant_logging
+	# set_country_flag = EAI_volunteer_logging
+	# set_country_flag = EAI_diplomacy_event_logging
+	# set_country_flag = EAI_war_justification_logging
+	# set_country_flag = EAI_xp_logging
+	# set_country_flag = EAI_armor_intel_logging
+	# set_country_flag = EAI_attache_logging
+	# set_country_flag = EAI_equipment_logging
+	# set_country_flag = EAI_espionage_logging
+	# set_country_flag = EAI_espionage_score_logging
+	# set_country_flag = EAI_military_strategy_logging
+
+	# set_country_flag = EAI_war_trend_logging
+	# set_country_flag = EAI_invasion_operations_logging
+	# set_country_flag = EAI_sector_operations_logging
+	# set_country_flag = EAI_combined_operations_logging
+	# set_country_flag = EAI_military_strategy_logging
+
+	set_global_flag = EAI_milestone_logging
+}
+
+EAIslf2 = {
+
+	every_country = {
+	# every_country = { limit = { is_major = yes }
+		# set_country_flag = EAI_update_logging
+	
+		# set_country_flag = EAI_factory_assignment_logging
+		# set_country_flag = EAI_relation_logging
+		# set_country_flag = EAI_PC_AIRBASE_logging
+		# set_country_flag = EAI_PC_AA_logging
+		# set_country_flag = EAI_PC_FORT_logging
+		# set_country_flag = EAI_PC_FACILITY_logging
+		# set_country_flag = EAI_logging
+		# set_country_flag = EAI_resources_logging
+		# set_country_flag = EAI_pathfind_logging
+		# set_country_flag = EAI_research_logging
+		# set_country_flag = EAI_priority_research_logging
+		# set_country_flag = EAI_construction_logging
+		# set_country_flag = EAI_priority_construction_logging
+		# set_country_flag = EAI_priority_construction_detailed_logging
+		# set_country_flag = EAI_conversion_to_civ_logging
+		# set_country_flag = EAI_building_logging
+		# set_country_flag = EAI_law_logging
+		# set_country_flag = EAI_pp_logging
+		# set_country_flag = EAI_construction_score_logging
+		# set_country_flag = EAI_difficulty_logging
+		# set_country_flag = EAI_military_focus_logging
+		# set_country_flag = EAI_FOCUS_UPDATE_update_logging
+		# set_country_flag = EAI_division_limit_logging
+		# set_country_flag = EAI_leader_recruitment_logging
+		# set_country_flag = EAI_lend_lease_logging
+		# set_country_flag = EAI_naval_invasion_logging
+		# set_country_flag = EAI_template_upgrade_logging
+		# set_country_flag = EAI_template_design_logging
+		# set_country_flag = EAI_variant_logging
+		# set_country_flag = EAI_volunteer_logging
+		# set_country_flag = EAI_diplomacy_event_logging
+		# set_country_flag = EAI_war_justification_logging
+		# set_country_flag = EAI_xp_logging
+		# set_country_flag = EAI_armor_intel_logging
+		# set_country_flag = EAI_attache_logging
+		# set_country_flag = EAI_equipment_logging
+		# set_country_flag = EAI_espionage_logging
+		# set_country_flag = EAI_espionage_score_logging
+		# set_country_flag = EAI_military_strategy_logging
+
+		set_country_flag = EAI_war_trend_logging
+		set_country_flag = EAI_invasion_operations_logging
+		set_country_flag = EAI_sector_operations_logging
+		set_country_flag = EAI_combined_operations_logging
+		set_country_flag = EAI_military_strategy_logging
+	
+		# set_global_flag = EAI_milestone_logging
+		# set_country_flag = EAI_test_daily_logging
+	}
+}
+
+EAI_startup_logging = {
+
+	# every_country = {
+
+	# 	set_country_flag = EAI_priority_construction_logging
+	# 	set_country_flag = EAI_priority_construction_detailed_logging
+	# }
+}
+
+EAIslf = {
+	EAI_set_logging_flags = yes
+}
+
+###
+
+EAI_log = {
+
+	EAI_set_logging_flags = yes
+}
+
+EAI_log_all = {
+
+	every_country = {
+
+		EAI_set_logging_flags = yes
+	}
+}
+
+EAI_log_majors = {
+
+	every_country = { limit = { OR = { is_major = yes tag = CHI } }
+
+		EAI_set_logging_flags = yes
+	}
+}
+
+EAI_debug_global = {
+
+	set_global_flag = EAI_debug_tracking
+}
+
+EAI_debug = {
+
+	set_country_flag = EAI_debug_tracking
+}
+
+############################################################################################################
+
+EAI_logging = {
+
+	if = { limit = { has_country_flag = EAI_research_logging }
+
+		EAI_LOGGING_track_techs_researched = yes
+	}
+}
+
+EAI_debug_tracking = {
+
+	if = { limit = { OR = { has_global_flag = EAI_debug_tracking has_country_flag = EAI_debug_tracking } }
+
+		EAI_DEBUG_check_for_empty_research_slots = yes
+		EAI_DEBUG_check_for_out_of_manpower = yes
+	}
+}
+
+EAI_debug_tracking_daily = {
+
+}
+
+###
+
+EAI_DEBUG_log_stats = {
+
+	if = { limit = { has_idea = low_economic_mobilisation } set_temp_variable = { tmp_eco_idea = token:low_economic_mobilisation } }
+	if = { limit = { has_idea = partial_economic_mobilisation } set_temp_variable = { tmp_eco_idea = token:partial_economic_mobilisation } }
+	if = { limit = { has_idea = war_economy } set_temp_variable = { tmp_eco_idea = token:war_economy } }
+	if = { limit = { has_idea = tot_economic_mobilisation } set_temp_variable = { tmp_eco_idea = token:tot_economic_mobilisation } }
+
+	if = { limit = { has_idea = volunteer_only } set_temp_variable = { tmp_con_idea = token:volunteer_only } }
+	if = { limit = { has_idea = limited_conscription } set_temp_variable = { tmp_con_idea = token:limited_conscription } }
+	if = { limit = { has_idea = extensive_conscription } set_temp_variable = { tmp_con_idea = token:extensive_conscription } }
+	if = { limit = { has_idea = service_by_requirement } set_temp_variable = { tmp_con_idea = token:service_by_requirement } }
+	if = { limit = { has_idea = all_adults_serve } set_temp_variable = { tmp_con_idea = token:all_adults_serve } }
+	if = { limit = { has_idea = scraping_the_barrel } set_temp_variable = { tmp_con_idea = token:scraping_the_barrel } }
+
+	if = { limit = { has_idea = free_trade } set_temp_variable = { tmp_tra_idea = token:free_trade } }
+	if = { limit = { has_idea = export_focus } set_temp_variable = { tmp_tra_idea = token:export_focus } }
+	if = { limit = { has_idea = limited_exports } set_temp_variable = { tmp_tra_idea = token:limited_exports } }
+
+	log = "Stats for [This.GetName]:"
+	log = " "
+	log = "COUNTRY: manpower=[?manpower_k|0]k, warsupport=[?has_war_support|%], stability=[?has_stability|%], pp=[?political_power], EAI_PP_stored_pp=[?EAI_PP_stored_pp]"
+	log = "INDUSTRY: CIC=[?num_of_civilian_factories], MIC=[?num_of_military_factories], NIC=[?num_of_naval_factories]"
+	log = "MILITARY: army=[?deployed_army_manpower_k]k, air=[?num_deployed_planes], navy=[?EAI_num_surface_ships]"
+	log = "NAVY: capitals=[?EAI_num_capital_ships], screens=[?EAI_num_screen_ships], subs=[?num_ships_with_type@submarine]"
+	log = "ARMOR: light=[?num_armies_with_type@light_armor], medium=[?num_armies_with_type@medium_armor], heavy=[?num_armies_with_type@heavy_armor], modern=[?num_armies_with_type@modern_armor]"
+	if = { limit = { has_country_flag = EAI_women_in_the_workforce_taken } log = "LAWS: eco=[?tmp_eco_idea.GetTokenKey], con=[?tmp_con_idea.GetTokenKey], tra=[?tmp_tra_idea.GetTokenKey], WINTWF=TRUE" }
+	else = { log = "LAWS: eco=[?tmp_eco_idea.GetTokenKey], con=[?tmp_con_idea.GetTokenKey], tra=[?tmp_tra_idea.GetTokenKey], WINTWF=FALSE" }
+	log = " "
+	log = "=============================================================================="
+}
+
+EAI_DEBUG_milestones_log_start_too_early = { log = "*STARTED TOO EARLY*" }
+EAI_DEBUG_milestones_log_start_too_late = { log = "*STARTED TOO LATE*" }
+EAI_DEBUG_milestones_log_end_too_early = { log = "*ENDED TOO EARLY*" }
+EAI_DEBUG_milestones_log_end_too_late = { log = "*ENDED TOO LATE*" }
+
+EAI_DEBUG_milestones = {
+
+	if = { limit = { has_global_flag = EAI_milestone_logging }
+
+		### is_major = yes
+
+		if = { limit = { is_major = yes }
+
+			### EAI_MILESTONE_out_of_manpower						
+
+			if = {
+				limit = {
+					NOT = { has_country_flag = EAI_LAW_manpower_shortage_days }
+					check_variable = { EAI_LAW_manpower_shortage_days > 60 }
+				}
+			
+				set_country_flag = { flag = EAI_LAW_manpower_shortage_days value = 1 days = 60 }
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_out_of_manpower"
+				set_temp_variable = { debug_log_stats = 1 }
+				set_temp_variable = { debug_log_laws = 1 }
+			}
+
+			### EAI_MILESTONE_1938_report_majors						
+
+			if = {
+				limit = {
+					NOT = { has_country_flag = EAI_MILESTONE_1938_report_majors }
+					date > 1938.1.1
+				}
+			
+				set_country_flag = EAI_MILESTONE_1938_report_majors
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_1938_report_majors"
+				set_temp_variable = { debug_log_stats = 1 }
+			}
+
+			### EAI_MILESTONE_1939_report_majors						
+
+			if = {
+				limit = {
+					NOT = { has_country_flag = EAI_MILESTONE_1939_report_majors }
+					date > 1939.1.1
+				}
+			
+				set_country_flag = EAI_MILESTONE_1939_report_majors
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_1939_report_majors"
+				set_temp_variable = { debug_log_stats = 1 }
+			}
+
+			### EAI_MILESTONE_1940_report_majors			
+
+			if = {
+				limit = {
+					NOT = { has_country_flag = EAI_MILESTONE_1940_report_majors }
+					date > 1940.1.1
+				}
+			
+				set_country_flag = EAI_MILESTONE_1940_report_majors
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_1940_report_majors"
+				set_temp_variable = { debug_log_stats = 1 }
+			}
+
+			### EAI_MILESTONE_1941_report_majors			
+
+			if = {
+				limit = {
+					NOT = { has_country_flag = EAI_MILESTONE_1941_report_majors }
+					date > 1941.1.1
+				}
+			
+				set_country_flag = EAI_MILESTONE_1941_report_majors
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_1941_report_majors"
+				set_temp_variable = { debug_log_stats = 1 }
+			}
+
+			### EAI_MILESTONE_1942_report_majors			
+
+			if = {
+				limit = {
+					NOT = { has_country_flag = EAI_MILESTONE_1942_report_majors }
+					date > 1942.1.1
+				}
+			
+				set_country_flag = EAI_MILESTONE_1942_report_majors
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_1942_report_majors"
+				set_temp_variable = { debug_log_stats = 1 }
+			}
+
+			### EAI_MILESTONE_1943_report_majors			
+
+			if = {
+				limit = {
+					NOT = { has_country_flag = EAI_MILESTONE_1943_report_majors }
+					date > 1943.1.1
+				}
+			
+				set_country_flag = EAI_MILESTONE_1943_report_majors
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_1943_report_majors"
+				set_temp_variable = { debug_log_stats = 1 }
+			}
+		}
+
+		### tag = SPR
+
+		if = { limit = { tag = SPR }
+
+			### EAI_MILESTONE_SCW_started			
+
+			if = {
+				limit = {
+					NOT = { has_global_flag = EAI_MILESTONE_SCW_started }
+	
+					has_civil_war = yes
+				}
+			
+				set_global_flag = EAI_MILESTONE_SCW_started
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_SCW_started"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				if = {
+					limit = {
+						date > 1936.10.1
+					}
+				
+					EAI_DEBUG_milestones_log_start_too_late = yes
+				}
+			}
+
+			### EAI_MILESTONE_SCW_ended			
+
+			if = {
+				limit = {
+					has_global_flag = EAI_MILESTONE_SCW_started
+					NOT = { has_global_flag = EAI_MILESTONE_SCW_ended }
+	
+					has_civil_war = no
+				}
+			
+				set_global_flag = EAI_MILESTONE_SCW_ended
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_SCW_ended"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				###
+
+				if = {
+					limit = {
+						date < 1939.1.1
+					}
+				
+					EAI_DEBUG_milestones_log_end_too_early = yes
+				}
+
+				if = {
+					limit = {
+						date > 1940.1.1
+					}
+				
+					EAI_DEBUG_milestones_log_end_too_late = yes
+				}
+			}
+		}
+
+		### tag = GER
+
+		if = { limit = { tag = GER }
+
+			### EAI_MILESTONE_GER_attacked_POL						
+
+			if = {
+				limit = {
+					NOT = { has_global_flag = EAI_MILESTONE_GER_attacked_POL }
+	
+					has_war_with = POL
+				}
+			
+				set_global_flag = EAI_MILESTONE_GER_attacked_POL
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_GER_attacked_POL"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				###
+
+				if = {
+					limit = {
+						date > 1939.10.1
+					}
+				
+					EAI_DEBUG_milestones_log_start_too_late = yes
+				}
+			}
+
+			### EAI_MILESTONE_GER_conquered_POL			
+
+			if = {
+				limit = {
+					has_global_flag = EAI_MILESTONE_GER_attacked_POL
+					NOT = { has_global_flag = EAI_MILESTONE_GER_conquered_POL }
+	
+					NOT = { POL = { EAI_THIS_is_threat_to_PREV = yes } }
+				}
+			
+				set_global_flag = EAI_MILESTONE_GER_conquered_POL
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_GER_conquered_POL"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				###
+
+				if = {
+					limit = {
+						date > 1939.11.1
+					}
+				
+					EAI_DEBUG_milestones_log_end_too_late = yes
+				}
+			}
+
+			### EAI_MILESTONE_GER_attacked_SOV			
+
+			if = {
+				limit = {
+					NOT = { has_global_flag = EAI_MILESTONE_GER_attacked_SOV }
+	
+					has_war_with = SOV
+				}
+			
+				set_global_flag = EAI_MILESTONE_GER_attacked_SOV
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_GER_attacked_SOV"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				###
+
+				if = {
+					limit = {
+						date > 1941.9.1
+					}
+				
+					EAI_DEBUG_milestones_log_start_too_late = yes
+				}
+
+				###
+
+				SOV = { EAI_DEBUG_log_stats = yes }
+			}
+
+			### EAI_MILESTONE_GER_conquered_SOV			
+
+			if = {
+				limit = {
+					has_global_flag = EAI_MILESTONE_GER_attacked_SOV
+					NOT = { has_global_flag = EAI_MILESTONE_GER_conquered_SOV }
+	
+					NOT = { SOV = { EAI_THIS_is_threat_to_PREV = yes } }
+				}
+			
+				set_global_flag = EAI_MILESTONE_GER_conquered_SOV
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_GER_conquered_SOV"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				###
+
+				if = {
+					limit = {
+						date < 1945.1.1
+					}
+				
+					EAI_DEBUG_milestones_log_end_too_early = yes
+				}
+			}
+
+			### EAI_MILESTONE_GER_attacked_FRA			
+
+			if = {
+				limit = {
+					NOT = { has_global_flag = EAI_MILESTONE_GER_attacked_FRA }
+	
+					has_war_with = FRA
+					has_war_with = BEL
+				}
+			
+				set_global_flag = EAI_MILESTONE_GER_attacked_FRA
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_GER_attacked_FRA"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				###
+
+				if = {
+					limit = {
+						date > 1940.5.1
+					}
+				
+					EAI_DEBUG_milestones_log_start_too_late = yes
+				}
+			}
+
+			### EAI_MILESTONE_GER_conquered_FRA			
+
+			if = {
+				limit = {
+					has_global_flag = EAI_MILESTONE_GER_attacked_FRA
+					NOT = { has_global_flag = EAI_MILESTONE_GER_conquered_FRA }
+	
+					NOT = { FRA = { EAI_THIS_is_threat_to_PREV = yes } }
+				}
+			
+				set_global_flag = EAI_MILESTONE_GER_conquered_FRA
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_GER_conquered_FRA"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				###
+
+				if = {
+					limit = {
+						date > 1940.7.1
+					}
+				
+					EAI_DEBUG_milestones_log_end_too_late = yes
+				}
+			}
+		}
+
+		### tag = SOV
+
+		if = { limit = { tag = SOV }
+
+			### EAI_MILESTONE_SOV_failed_to_reach_factory_target_for_focus						
+
+			if = {
+				limit = {
+					NOT = { has_global_flag = EAI_MILESTONE_SOV_failed_to_reach_factory_target_for_focus }
+	
+					has_completed_focus = SOV_the_anti_soviet_trotskyist_center
+					NOT = { has_completed_focus = SOV_finish_the_five_year_plan }
+					focus_progress = { focus = SOV_the_workers_dictatorship progress > 0 }
+				}
+			
+				set_global_flag = EAI_MILESTONE_SOV_failed_to_reach_factory_target_for_focus
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_SOV_failed_to_reach_factory_target_for_focus [?num_of_controlled_factories]<100"
+				set_temp_variable = { debug_log_stats = 1 }
+			}
+
+			### EAI_MILESTONE_SOV_reached_factory_target_for_focus			
+
+			if = {
+				limit = {
+					NOT = { has_global_flag = EAI_MILESTONE_SOV_reached_factory_target_for_focus }
+	
+					has_completed_focus = SOV_the_anti_soviet_trotskyist_center
+					NOT = { has_completed_focus = SOV_the_workers_dictatorship }
+					focus_progress = { focus = SOV_finish_the_five_year_plan progress > 0 }
+				}
+			
+				set_global_flag = EAI_MILESTONE_SOV_reached_factory_target_for_focus
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_SOV_reached_factory_target_for_focus [?num_of_controlled_factories]>100"
+				set_temp_variable = { debug_log_stats = 1 }
+			}
+
+			### EAI_MILESTONE_SOV_attacked_FIN			
+
+			if = {
+				limit = {
+					NOT = { has_global_flag = EAI_MILESTONE_SOV_attacked_FIN }
+	
+					has_war_with = FIN
+				}
+			
+				set_global_flag = EAI_MILESTONE_SOV_attacked_FIN
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_SOV_attacked_FIN"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				###
+
+				if = {
+					limit = {
+						date > 1940.1.1
+					}
+				
+					EAI_DEBUG_milestones_log_start_too_late = yes
+				}
+			}
+
+			### EAI_MILESTONE_SOV_conquered_FIN			
+
+			if = {
+				limit = {
+					has_global_flag = EAI_MILESTONE_SOV_attacked_FIN
+					NOT = { has_global_flag = EAI_MILESTONE_SOV_conquered_FIN }
+	
+					NOT = { has_war_with = FIN }
+				}
+			
+				set_global_flag = EAI_MILESTONE_SOV_conquered_FIN
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_SOV_conquered_FIN"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				###
+
+				if = {
+					limit = {
+						date < 1940.2.1
+					}
+				
+					EAI_DEBUG_milestones_log_end_too_early = yes
+				}
+
+				if = {
+					limit = {
+						date > 1940.6.1
+					}
+				
+					EAI_DEBUG_milestones_log_end_too_late = yes
+				}
+			}
+		}
+
+		### tag = JAP
+
+		if = { limit = { tag = JAP }
+
+			### EAI_MILESTONE_JAP_attacked_CHI						
+
+			if = {
+				limit = {
+					NOT = { has_global_flag = EAI_MILESTONE_JAP_attacked_CHI }
+	
+					has_war_with = CHI
+				}
+			
+				set_global_flag = EAI_MILESTONE_JAP_attacked_CHI
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_JAP_attacked_CHI"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				###
+
+				if = {
+					limit = {
+						date > 1937.8.1
+					}
+				
+					EAI_DEBUG_milestones_log_start_too_late = yes
+				}
+			}
+
+			### EAI_MILESTONE_JAP_war_vs_CHI_state_1939			
+
+			if = {
+				limit = {
+					has_global_flag = EAI_MILESTONE_JAP_attacked_CHI
+					NOT = { has_global_flag = EAI_MILESTONE_JAP_war_vs_CHI_state_1939 }
+	
+					has_war_with = CHI
+					date > 1939.1.1
+				}
+			
+				set_global_flag = EAI_MILESTONE_JAP_war_vs_CHI_state_1939
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_JAP_war_vs_CHI_state_1939=[?CHI.surrender_progress|%]"
+				set_temp_variable = { debug_log_stats = 1 }
+			}
+
+			### EAI_MILESTONE_JAP_war_vs_CHI_state_1940			
+
+			if = {
+				limit = {
+					has_global_flag = EAI_MILESTONE_JAP_attacked_CHI
+					NOT = { has_global_flag = EAI_MILESTONE_JAP_war_vs_CHI_state_1940 }
+	
+					has_war_with = CHI
+					date > 1940.1.1
+				}
+			
+				set_global_flag = EAI_MILESTONE_JAP_war_vs_CHI_state_1940
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_JAP_war_vs_CHI_state_1940=[?CHI.surrender_progress|%]"
+				set_temp_variable = { debug_log_stats = 1 }
+			}
+
+			### EAI_MILESTONE_JAP_war_vs_CHI_state_1941			
+
+			if = {
+				limit = {
+					has_global_flag = EAI_MILESTONE_JAP_attacked_CHI
+					NOT = { has_global_flag = EAI_MILESTONE_JAP_war_vs_CHI_state_1941 }
+	
+					has_war_with = CHI
+					date > 1941.1.1
+				}
+			
+				set_global_flag = EAI_MILESTONE_JAP_war_vs_CHI_state_1941
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_JAP_war_vs_CHI_state_1941=[?CHI.surrender_progress|%]"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				###
+
+				if = {
+					limit = {
+						check_variable = { CHI.surrender_progress < 0.5 }
+					}
+				
+					log = "*FAILED PROGRESS*"
+				}
+			}
+
+			### EAI_MILESTONE_JAP_war_vs_CHI_state_1942			
+
+			if = {
+				limit = {
+					has_global_flag = EAI_MILESTONE_JAP_attacked_CHI
+					NOT = { has_global_flag = EAI_MILESTONE_JAP_war_vs_CHI_state_1942 }
+	
+					has_war_with = CHI
+					date > 1942.1.1
+				}
+			
+				set_global_flag = EAI_MILESTONE_JAP_war_vs_CHI_state_1942
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_JAP_war_vs_CHI_state_1942=[?CHI.surrender_progress|%]"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				###
+
+				if = {
+					limit = {
+						check_variable = { CHI.surrender_progress < 0.5 }
+					}
+				
+					log = "*FAILED PROGRESS*"
+				}
+			}
+
+			### EAI_MILESTONE_JAP_conquered_CHI			
+
+			if = {
+				limit = {
+					NOT = { has_global_flag = EAI_MILESTONE_JAP_conquered_CHI }
+	
+					NOT = { CHI = { EAI_THIS_is_threat_to_PREV = yes } }
+				}
+			
+				set_global_flag = EAI_MILESTONE_JAP_conquered_CHI
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_JAP_conquered_CHI"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				###
+
+				if = {
+					limit = {
+						date < 1940.1.1
+					}
+				
+					EAI_DEBUG_milestones_log_end_too_early = yes
+				}
+			}
+
+			### EAI_MILESTONE_JAP_attacked_USA						
+
+			if = {
+				limit = {
+					NOT = { has_global_flag = EAI_MILESTONE_JAP_attacked_USA }
+	
+					has_war_with = USA
+				}
+			
+				set_global_flag = EAI_MILESTONE_JAP_attacked_USA
+	
+				log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG | EAI_MILESTONE_JAP_attacked_USA"
+				set_temp_variable = { debug_log_stats = 1 }
+
+				###
+
+				if = {
+					limit = {
+						date < 1941.8.1
+					}
+				
+					EAI_DEBUG_milestones_log_start_too_early = yes
+				}
+
+				if = {
+					limit = {
+						date > 1942.1.1
+					}
+				
+					EAI_DEBUG_milestones_log_start_too_late = yes
+				}
+
+				###
+
+				USA = { EAI_DEBUG_log_stats = yes }
+			}
+		}
+
+		###
+
+		if = { limit = { check_variable = { debug_log_stats = 1 } }
+		
+			EAI_DEBUG_log_stats = yes
+		}
+
+		if = { limit = { check_variable = { debug_log_laws = 1 } }
+		
+			EAI_LAW_print_law_needs = yes
+		}
+	}
+}
+
+###
+
+EAI_DEBUG_check_for_empty_research_slots = {
+
+	for_each_loop = { array = global.technology
+
+		if = { limit = { check_variable = { i > 0 } is_researching_technology = var:v }
+			
+			add_to_temp_variable = { debug_techs_being_researched = 1 }
+		}
+	}
+
+	if = { limit = { check_variable = { debug_techs_being_researched < amount_research_slots } }
+
+		add_to_variable = { EAI_DEBUG_empty_research_slots = 1 }
+	}
+	else = { clear_variable = EAI_DEBUG_empty_research_slots }
+
+	if = { limit = { check_variable = { EAI_DEBUG_empty_research_slots > 1 } }
+
+		log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG: AI has unused research slots"
+	}
+}
+
+EAI_DEBUG_check_for_out_of_manpower = {
+
+	if = { 
+		limit = { 
+			has_army_manpower = { size > 100000 }
+			check_variable = { manpower_k < 10 }
+			check_variable = { global.EAI_days_elapsed > 120 }
+		}
+
+		log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG: out of manpower"
+
+		if = { limit = { NOT = { check_variable = { conscription_ratio < 1 } } }
+
+			log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG: not recruiting manpower"
+		}
+
+		if = { limit = { EAI_LAW_upgrade_manpower_law = yes  }
+
+			log = "[GetYear] [GetMonth] | AI | [Root.GetName] | DEBUG: conscription law upgrade permitted EAI_PP_stored_pp [?EAI_PP_stored_pp]"
+		}
+	}
+}
+
+EAI_LOGGING_track_techs_researched = {
+
+	for_each_loop = { array = global.technology
+
+		if = { limit = { check_variable = { i > 0 } has_tech = var:v NOT = { is_in_array = { EAI_DEBUG_track_techs_researched = var:v } } }
+
+			log = "[GetYear] [GetMonth] | AI | [Root.GetName] | RESEARCH: researched [?v.GetTokenKey]"
+			
+			add_to_array = { EAI_DEBUG_track_techs_researched = var:v }
+		}
+	}
+}
+
+EAI_print_military_focuses = {
+
+	log = "=============================================================================="
+	log = "[GetDate] | AI | [This.GetName] | MILITARY FOCUSES:"
+	log = " "
+	log = ">>>>>> Land:"
+	log = ">>> EAI_FOCUS/LAND/land_doctrine = [EAI_GetLandDoctrine]"
+	log = ">>> EAI_FOCUS/LAND/land_doctrine_path = [EAI_GetDoctrinePath]"
+	log = ">>> EAI_FOCUS/LAND/infantry_width = [EAI_GetInfantryWidth]"
+	log = ">>> EAI_FOCUS/LAND/infantry_design = [EAI_GetInfantryDesign]"
+	log = ">>> EAI_FOCUS/LAND/armor_focus = [EAI_GetArmorFocus]"
+	log = ">>> EAI_FOCUS/LAND/armor_design = [EAI_GetArmorDesign]"
+	log = ">>> EAI_FOCUS/LAND/armor_width = [EAI_GetArmorWidth]"
+	log = ">>> EAI_FOCUS/LAND/attachment = [EAI_GetArmorAttachment]"
+	log = ">>> EAI_FOCUS/LAND/antitank_design = [?EAI_FOCUS/LAND/antitank_design]"
+	log = ">>> EAI_FOCUS/LAND/motorized_design = [?EAI_FOCUS/LAND/motorized_design]"
+	log = ">>> EAI_FOCUS/LAND/spec_ops = [EAI_GetSpecOps]"
+	log = " "
+	log = ">>>>>> Air:"
+	log = ">>> EAI_FOCUS/AIR/air_doctrine = [EAI_GetAirDoctrine]"
+	log = ">>> EAI_FOCUS/AIR/ground_bomber = [EAI_GetBomberFocus]"
+	log = ">>> EAI_FOCUS/AIR/fighter = [EAI_GetFighterFocus]"
+	log = ">>> EAI_FOCUS/AIR/heavy_fighter = [EAI_GetHFighterFocus]"
+	log = ">>> EAI_FOCUS/AIR/strategic_bomber = [EAI_GetStratBomberFocus]"
+	log = ">>> EAI_FOCUS/AIR/naval_bomber = [EAI_GetNavalBomberFocus]"
+	log = ">>> EAI_FOCUS/AIR/maritime_patrol = [EAI_GetMaritimePatrolFocus]"
+	log = " "
+	log = ">>>>>> Navy:"
+	log = ">>> EAI_FOCUS/NAVY/naval_doctrine = [EAI_GetNavalDoctrine]"
+	log = ">>> EAI_FOCUS/NAVY/destroyer = [EAI_GetDDFocus]"
+	log = ">>> EAI_FOCUS/NAVY/ASW_destroyer = [EAI_GetASWDDFocus]"
+	log = ">>> EAI_FOCUS/NAVY/light_cruiser = [EAI_GetCLFocus]"
+	log = ">>> EAI_FOCUS/NAVY/ASW_light_cruiser = [EAI_GetASWCLFocus]"
+	log = ">>> EAI_FOCUS/NAVY/heavy_cruiser = [EAI_GetCAFocus]"
+	log = ">>> EAI_FOCUS/NAVY/battlecruiser = [EAI_GetBCFocus]"
+	log = ">>> EAI_FOCUS/NAVY/battleship = [EAI_GetBBFocus]"
+	log = ">>> EAI_FOCUS/NAVY/carrier = [EAI_GetCVFocus]"
+	log = ">>> EAI_FOCUS/NAVY/submarine = [EAI_GetSSFocus]"
+	log = ">>> EAI_FOCUS/NAVY/mine_layer = [?EAI_FOCUS/NAVY/mine_layer]"
+	log = ">>> EAI_FOCUS/NAVY/mine_sweeper = [?EAI_FOCUS/NAVY/mine_sweeper]"
+	log = "=============================================================================="
+}
