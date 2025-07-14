@@ -1,0 +1,72 @@
+#########################################################
+#	Production Strategies
+#########################################################
+
+#########################################################
+#	Diplomacy Strategies
+#########################################################
+
+EAI_SPR_spain_stay_neutral = {
+	enable = {
+		original_tag = SPR
+		has_global_flag = EAI_neutral_spr
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = diplo_action_desire id = GER target = join_faction value = -5000 }
+	ai_strategy = { type = diplo_action_acceptance id = GER target = offer_join_faction value = -5000 }
+
+	ai_strategy = { type = diplo_action_desire id = JAP target = join_faction value = -5000 }
+	ai_strategy = { type = diplo_action_acceptance id = JAP target = offer_join_faction value = -5000 }
+
+	ai_strategy = { type = diplo_action_desire id = SOV target = join_faction value = -5000 }
+	ai_strategy = { type = diplo_action_acceptance id = SOV target = offer_join_faction value = -5000 }
+
+	ai_strategy = { type = diplo_action_desire id = ENG target = join_faction value = -5000 }
+	ai_strategy = { type = diplo_action_acceptance id = ENG target = offer_join_faction value = -5000 }
+
+	ai_strategy = { type = diplo_action_desire id = USA target = join_faction value = -5000 }
+	ai_strategy = { type = diplo_action_acceptance id = USA target = offer_join_faction value = -5000 }
+}
+
+#########################################################
+#	Unit Strategies
+#########################################################
+
+EAI_MILITARY_spanish_cw_LIMITER = {
+	allowed = {
+		OR = {
+			tag = SPA
+			tag = SPB
+			tag = SPC
+			tag = SPD
+			original_tag = SPR
+		}
+	}
+	enable = {
+		has_country_flag = EAI_MILITARY_spanish_cw_LIMITER
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.25
+		priority = 1000
+		execution_type = careful
+		execute_order = no
+		manual_attack = no
+		
+		state_trigger = {
+			is_in_array = { global.EAI_MAP_spanish_cw_theatre = THIS.id }
+			OR = {
+				is_controlled_by = SPA
+				is_controlled_by = SPB
+				is_controlled_by = SPC
+				is_controlled_by = SPD
+				is_controlled_by = SPR
+			}
+		}
+	}
+}

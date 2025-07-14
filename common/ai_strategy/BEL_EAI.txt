@@ -1,0 +1,28 @@
+#########################################################
+#	Production Strategies
+#########################################################
+
+EAI_BEL_stop_building_army = {
+	allowed = { tag = BEL }
+	enable = {
+	    is_historical_focus_on = yes
+		has_war = no
+		is_in_faction = no
+		has_army_manpower = { size > 150000 }
+		AND = {     
+			GER = { is_ai = yes }
+	    }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = build_army id = infantry value = -1000 }
+	ai_strategy = { type = force_build_armies value = -1000 }
+}
+
+#########################################################
+#	Diplomacy Strategies
+#########################################################
+
+#########################################################
+#	Unit Strategies
+#########################################################

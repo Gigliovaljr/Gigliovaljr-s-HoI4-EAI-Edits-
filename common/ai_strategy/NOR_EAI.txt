@@ -1,0 +1,121 @@
+#########################################################
+#	Production Strategies
+#########################################################
+
+#########################################################
+#	Diplomacy Strategies
+#########################################################
+
+#########################################################
+#	Unit Strategies
+#########################################################
+
+EAI_NOR_weserubung_dumb = {
+	enable = {
+		is_historical_focus_on = yes
+		original_tag = NOR
+		has_war_with = GER
+		GER = { is_ai = yes }
+		has_global_flag = EAI_GER_blitz_denmark_365d
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 2
+		states = { 
+			922
+		}
+		subtract_invasions_from_need = no
+		subtract_fronts_from_need = no
+	}
+
+	ai_strategy = {
+		type = front_unit_request
+		value = -200
+
+		country_trigger = { is_in_faction_with = GER }
+	}
+}
+
+EAI_NOR_invaders_smort = {
+	enable = {
+		is_historical_focus_on = yes
+		original_tag = NOR
+		is_in_faction_with = GER
+		has_global_flag = EAI_GER_blitz_denmark_365d
+	}
+	abort_when_not_enabled = yes
+	
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio > 0.2
+		priority = 500
+		execution_type = rush_weak
+		execute_order = yes
+
+		country_trigger = { original_tag = NOR }
+	}
+
+	ai_strategy = {
+		type = front_unit_request
+		value = 200
+
+		country_trigger = { original_tag = NOR }
+	}
+}
+
+EAI_NOR_garrison = {
+	enable = {
+		is_historical_focus_on = yes
+		original_tag = NOR
+		is_in_faction_with = GER
+		NOT = {
+			any_of_scopes = { array = controlled_states
+
+				OR = {
+					region = 11
+					region = 191
+				}
+
+				OR = {
+					NOT = { ROOT = { has_full_control_of_state = PREV } }
+
+					any_neighbor_state = {
+	
+						CONTROLLER = { has_war_with = ROOT }
+					}
+				}
+			}
+		}	
+	}
+	abort_when_not_enabled = yes
+	
+	ai_strategy = {
+		type = front_unit_request
+		value = -400
+		
+		state_trigger = {
+
+			NOT = {
+				region = 11
+				region = 191
+			}
+		}
+	}
+
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 1
+		area = just_norway
+		states = {
+			110
+			142
+			143
+			924
+		}
+		subtract_invasions_from_need = no
+		subtract_fronts_from_need = no
+	}
+}

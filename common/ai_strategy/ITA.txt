@@ -1,0 +1,696 @@
+ITA_trade_with_sweden = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		# if we're not communist and they're not communist
+		NOT = { has_government = communism }
+		NOT = { SWE = { has_government = communism } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = SWE
+		value = 60
+	}
+}
+
+ITA_trade_with_germany = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_government = fascism
+		GER = { has_government = fascism }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = equipment_market_trade_desire
+		id = GER
+		value = 40
+	}
+}
+
+ITA_stresa_front = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_completed_focus = ITA_ratify_the_stresa_front
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = alliance
+		id = ENG
+		value = 400
+	}
+	ai_strategy = {
+		type = alliance
+		id = FRA
+		value = 400
+	}
+}
+
+ITA_stresa_front_ENG_FRA = {
+	allowed = {
+		OR = {
+			original_tag = FRA
+			original_tag = ENG
+		}
+	}
+	enable = {
+		ITA = {
+			has_completed_focus = ITA_ratify_the_stresa_front
+		}
+	}
+	abort = {
+		always = no
+	}
+
+	ai_strategy = {
+		type = alliance
+		id = ITA
+		value = 400
+	}
+}
+
+ITA_albania_war_goal = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_completed_focus = ITA_albanian_occupation
+		country_exists = ALB
+	}
+	abort = {
+		NOT = {
+			country_exists = ALB
+		}
+	}
+
+	ai_strategy = {
+		type = antagonize
+		id = ALB
+		value = 200
+	}
+}
+
+ITA_greece_war_goal = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_completed_focus = ITA_war_with_greece
+		country_exists = GRE
+	}
+	abort = {
+		NOT = {
+			country_exists = GRE
+		}
+	}
+
+	ai_strategy = {
+		type = antagonize
+		id = GRE
+		value = 200
+	}
+}
+
+ITA_anti_uk_war_goals = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_completed_focus = ITA_war_with_the_uk
+		country_exists = ENG
+	}
+	abort = {
+		NOT = {
+			country_exists = ENG
+		}
+	}
+
+	ai_strategy = {
+		type = antagonize
+		id = ENG
+		value = 200
+	}
+}
+
+ITA_yugoslavia_war_goal = { 
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_completed_focus = ITA_balkan_ambition
+		has_completed_focus = ITA_war_with_greece
+		country_exists = YUG
+	}
+	abort = {
+		NOT = {
+			country_exists = YUG
+		}
+	}
+
+	ai_strategy = {
+		type = antagonize
+		id = YUG
+		value = 200
+	}
+}
+
+ITA_germany_ally = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_completed_focus = ITA_pact_of_steel
+		country_exists = GER
+		is_historical_focus_on = no #EAI
+	}
+	abort = {
+		NOT = { country_exists = GER }
+	}
+
+	ai_strategy = {
+		type = befriend
+		id = GER
+		value = 100
+	}
+	ai_strategy = {
+		type = alliance
+		id = GER
+		value = 100
+	}
+}
+
+ITA_romania_ally = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_completed_focus = ITA_potential_allies_in_the_balkans
+		country_exists = ROM
+	}
+	abort = {
+		NOT = { country_exists = ROM }
+	}
+
+	ai_strategy = {
+		type = befriend
+		id = ROM
+		value = 200
+	}
+	ai_strategy = {
+		type = alliance
+		id = ROM
+		value = 200
+	}
+}
+
+ITA_bulgaria_ally = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_completed_focus = ITA_potential_allies_in_the_balkans
+		country_exists = BUL
+	}
+	abort = {
+		NOT = { country_exists = BUL }
+	}
+
+	ai_strategy = {
+		type = befriend
+		id = BUL
+		value = 200
+	}
+	ai_strategy = {
+		type = alliance
+		id = BUL
+		value = 200
+	}
+}
+
+ITA_yugoslavia_ally = { 
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_completed_focus = ITA_potential_allies_in_the_balkans
+		country_exists = YUG
+	}
+	abort = {
+		NOT = { country_exists = YUG }
+	}
+
+	ai_strategy = {
+		type = befriend
+		id = YUG
+		value = 100
+	}
+	ai_strategy = {
+		type = alliance
+		id = YUG
+		value = 100
+	}
+}
+
+ITA_greece_ally = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_completed_focus = ITA_befriend_greece
+		country_exists = GRE
+	}
+	abort = {
+		NOT = { country_exists = GRE }
+	}
+
+	ai_strategy = {
+		type = befriend
+		id = GRE
+		value = 100
+	}
+	ai_strategy = {
+		type = alliance
+		id = GRE
+		value = 100
+	}
+}
+
+ITA_turkey_ally = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_completed_focus = ITA_befriend_turkey
+		country_exists = TUR
+	}
+	abort = {
+		NOT = { country_exists = TUR }
+	}
+
+	ai_strategy = {
+		type = befriend
+		id = TUR
+		value = 100
+	}
+	ai_strategy = {
+		type = alliance
+		id = TUR
+		value = 100
+	}
+}
+
+ITA_portugal_ally = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_completed_focus = ITA_befriend_portugal
+		country_exists = POR
+	}
+	abort = {
+		NOT = { country_exists = POR }
+	}
+
+	ai_strategy = {
+		type = befriend
+		id = POR
+		value = 100
+	}
+	ai_strategy = {
+		type = alliance
+		id = POR
+		value = 100
+	}
+}
+
+ITA_dont_take_claims_on_yug = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		country_exists = YUG
+		is_historical_focus_on = yes
+		date < 1941.4.30
+
+	}
+
+	abort = {
+		OR = {
+			NOT = { country_exists = YUG }
+			date > 1941.5.1 #If Germany won't invade Yugoslavia, then we will!
+		}
+	}
+
+	ai_strategy = {
+		type = declare_war
+		id = YUG
+		value = -200
+	}
+
+	ai_strategy = {
+		type = ignore_claim
+		id = YUG
+		value = 1
+	}
+}
+
+ITA_attack_north = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_war_with = ETH
+		has_active_mission = ITA_conquer_the_north_mission
+		ITA_is_communist_ai = no
+		ITA_is_socialist_ai = no
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+
+		state = 841 # assault Begemder
+
+		ratio = 0.2
+
+		priority = 100
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+	}
+}
+
+ITA_attack_south = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_war_with = ETH
+		has_active_mission = ITA_conquer_the_south_mission
+		ITA_is_communist_ai = no
+		ITA_is_socialist_ai = no
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+
+		state = 837 # assault Sidamo
+
+		ratio = 0.2
+
+		priority = 100
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+	}
+}
+
+ITA_attack_addis = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_war_with = ETH
+		has_active_mission = ETH_conquer_addis_ababa_mission
+		ITA_is_communist_ai = no
+		ITA_is_socialist_ai = no
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+
+		state = 271 # assault Addis
+
+		ratio = 0.2
+
+		priority = 100
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+	}
+}
+
+ITA_attack_harar = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_war_with = ETH
+		has_active_mission = ETH_conquer_harar_mission
+		ITA_is_communist_ai = no
+		ITA_is_socialist_ai = no
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = front_control
+
+		state = 835 # assault Hararghe
+
+		ratio = 0.2
+
+		priority = 100
+		ordertype = front
+		execution_type = rush
+		execute_order = yes
+	}
+}
+
+ITA_prepare_to_invade_afar = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_war_with = ETH
+		AFA = { exists = yes }
+		date < 1937.1.1
+	}
+	abort_when_not_enabled = yes
+	ai_strategy = {
+		type = prepare_for_war
+		id = AFA
+		value = 200
+	}
+}
+
+ITA_communists_downplay_ethiopian_theatre = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		has_war_with = ETH
+		OR = {
+			ITA_is_communist_ai = yes
+			ITA_is_socialist_ai = yes
+		}
+		NOT = { has_completed_focus = ITA_defy_the_duce }
+	}
+	abort = {
+		NOT = { has_war_with = ETH }
+	}
+
+	ai_strategy = {
+		type = area_priority
+		id = horn_of_africa
+		value = -100
+	}
+	ai_strategy = {
+		type = front_control
+
+		tag = ETH
+
+		ratio = 0.6
+
+		priority = 100
+		ordertype = front
+		execution_type = careful
+		manual_attack = no
+	}
+}
+
+ITA_balbo_ignore_germany = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		ITA_is_alt_fascist_balbo_ai = yes
+	}
+	abort = {
+		OR = {
+			NOT = { country_exists = GER }
+			is_in_faction = yes
+			date > 1940.01.01
+		}
+	}
+	ai_strategy = {
+		type = ignore
+		id = GER
+		value = 200
+	}
+}
+
+ITA_prepare_british_invasion = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		NOT = {	has_war_with = ENG }
+		OR = {
+			focus_progress = { focus = ITA_war_with_the_uk progress > 0.1}
+			has_completed_focus = ITA_war_with_the_uk
+		}
+	}
+
+	abort = {
+		any_other_country = {
+			original_tag = ENG
+			has_government = fascism
+		}
+	}
+
+	ai_strategy = {
+		type = prepare_for_war
+		id = ENG
+		value = 200
+	}
+}
+
+ITA_dont_die_in_mountains = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		date < 1942.5.1
+		country_exists = SWI
+		is_historical_focus_on = no
+	}
+	abort = {
+		NOT = { country_exists = FRA }
+		date > 1942.5.1
+	}
+
+	ai_strategy = {
+		type = ignore
+		id = SWI
+		value = 1000
+	}
+}
+
+ITA_ignore_vichy_we_will_annex_them_later = {
+	allowed = {
+		original_tag = ITA
+	}
+	enable = {
+		country_exists = VIC
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = ignore
+		id = VIC
+		value = 100
+	}
+}
+
+# Don't consider joining Italy if they are only at war with GiEs
+ITA_AXIS_dont_join_against_eth = {
+	allowed = {
+		always = yes
+	}
+	enable = {
+		is_in_faction_with = ITA
+		NOT = { original_tag = ITA }
+		ITA = {
+			all_enemy_country = {
+				is_government_in_exile = yes
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+	    type = diplo_action_desire
+	    id = ITA
+	    value = -1000
+	    target = join_allies
+	}
+
+	ai_strategy = {
+		type = diplo_action_acceptance
+		id = ITA
+		value = -1000
+		target = call_allies
+	}
+
+}
+
+# reverse  AI strat to make italy not call allies while fighting only Ethiopia in exile
+ITA_dont_call_allies = {
+	allowed = {
+		always = yes
+	}
+	enable = {
+		is_in_faction_with = ITA
+		ITA = {
+			all_enemy_country = {
+				is_government_in_exile = yes
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	reversed = yes
+
+	ai_strategy = {
+		type = diplo_action_desire
+		id = ITA
+		value = -1000
+		target = call_allies
+	}
+}
+
+# We don't want to join to early, better not risk our forces until the enemy is tired...
+ITA_dont_join_ww2_too_early = {
+	allowed = {
+		always = yes
+	}
+	enable = {
+		date < 1940.6.9 # It is ok after historical date
+		FRA = {
+			surrender_progress < 0.05 # If France is falling, it should be safe
+		}
+		is_in_faction_with = ITA
+		GER = { # Only hold back if we're in the Axis together with Germany, Otherwise, we'll do whatever we feel like.
+			is_in_faction_with = ITA
+			is_faction_leader = yes
+		}
+		ITA = {
+			OR = {
+				ITA_is_historical_ai = yes
+				ITA_is_alt_fascist_balbo_ai = yes
+				ITA_is_alt_fascist_grandi_ai = yes
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+	reversed = yes
+
+	ai_strategy = {
+		type = diplo_action_desire
+		id = ITA
+		value = -1000
+		target = join_allies
+	}
+
+	ai_strategy = {
+		type = diplo_action_acceptance
+		id = ITA
+		value = -1000
+		target = call_allies
+	}
+}

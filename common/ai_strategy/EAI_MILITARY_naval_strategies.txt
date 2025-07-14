@@ -1,0 +1,1266 @@
+############################################################################################################
+#	Expert AI mod - naval strategies
+############################################################################################################
+
+EAI_MILITARY_NAVAL_avoid_convoy_escorts = {
+	enable = { EAI_STRATEGY_need_convoy_escorts = no }
+	abort_when_not_enabled = yes
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_CONVOY_ESCORT" value = 500000 }
+}
+
+### Set naval zone to avoid if the land near these zones is enemy controlled - to make the AI prefer convoy routes elsewhere
+
+EAI_MILITARY_NAVAL_avoid_borneo = {
+	enable = { 
+		has_war = yes
+		AND = {
+			334 = { CONTROLLER = { has_war_with = ROOT } }
+			672 = { CONTROLLER = { has_war_with = ROOT } }
+			335 = { CONTROLLER = { has_war_with = ROOT } }
+			336 = { CONTROLLER = { has_war_with = ROOT } }
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_avoid_region id = 93 value = 50 }
+	ai_strategy = { type = naval_avoid_region id = 72 value = 50 }
+	ai_strategy = { type = naval_avoid_region id = 91 value = 50 }
+	ai_strategy = { type = naval_avoid_region id = 80 value = 50 }
+}
+
+EAI_MILITARY_NAVAL_avoid_philippines = {
+	enable = { 
+		has_war = yes
+		160 = { CONTROLLER = { has_war_with = ROOT } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_avoid_region id = 78 value = 50 }
+	ai_strategy = { type = naval_avoid_region id = 75 value = 50 }
+	ai_strategy = { type = naval_avoid_region id = 80 value = 50 }
+}
+
+EAI_MILITARY_NAVAL_avoid_midway = {
+	enable = { 
+		has_war = yes
+		631 = { CONTROLLER = { has_war_with = ROOT } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_avoid_region id = 95 value = 50 }
+}
+
+EAI_MILITARY_NAVAL_avoid_hawaii = {
+	enable = { 
+		has_war = yes
+		629 = { CONTROLLER = { has_war_with = ROOT } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_avoid_region id = 105 value = 50 }
+}
+
+EAI_MILITARY_NAVAL_avoid_line = {
+	enable = {
+		has_war = yes
+		727 = { CONTROLLER = { has_war_with = ROOT } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_avoid_region id = 172 value = 50 }
+}
+
+EAI_MILITARY_NAVAL_avoid_tahiti = {
+	enable = { 
+		has_war = yes
+		641 = { CONTROLLER = { has_war_with = ROOT } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_avoid_region id = 179 value = 50 }
+}
+
+EAI_MILITARY_NAVAL_avoid_fiji = {
+	enable = { 
+		has_war = yes
+		OR = {
+			726 = { CONTROLLER = { has_war_with = ROOT } }
+			636 = { CONTROLLER = { has_war_with = ROOT } }
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_avoid_region id = 178 value = 50 }
+}
+
+# EAI_MILITARY_NAVAL_avoid_zealand = {
+# 	enable = { 
+# 		has_war = yes
+# 		157 = { CONTROLLER = { has_war_with = ROOT } }
+# 	}
+# 	abort_when_not_enabled = yes
+
+# 	ai_strategy = { type = naval_avoid_region id = 86 value = 50 }
+# }
+
+EAI_MILITARY_NAVAL_avoid_iwo_jima = {
+	enable = { 
+		has_war = yes
+		OR = {
+			645 = { CONTROLLER = { has_war_with = ROOT } }
+			648 = { CONTROLLER = { has_war_with = ROOT } }
+			646 = { CONTROLLER = { has_war_with = ROOT } }
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_avoid_region id = 94 value = 50 }
+}
+
+### naval missions
+
+EAI_MILITARY_NAVAL_peace_time_naval_missions = {
+	enable = { has_war = no }
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_PATROL" value = 50000 }
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_STRIKE_FORCE" value = 50000 }
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_CONVOY_ESCORT" value = 50000 }
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_CONVOY_RAIDING" value = 50000 }
+}
+
+EAI_MILITARY_NAVAL_halt_sub_missions = {
+	enable = { has_country_flag = EAI_halt_sub_missions }
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_CONVOY_RAIDING" value = 50000 }
+}
+
+EAI_MILITARY_NAVAL_conserve_fuel = {
+	enable = { is_major = yes fuel_ratio < 0.25 }
+	abort = { NOT = { fuel_ratio < 0.5 } }
+
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_CONVOY_RAIDING" value = 200000 }
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_MINES_PLANTING" value = 200000 }
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_MINES_SWEEPING" value = 200000 }
+}
+
+EAI_MILITARY_NAVAL_save_navy = {
+	enable = { has_country_flag = EAI_MILITARY_NAVAL_save_navy }
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_PATROL" value = 500000 }
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_STRIKE_FORCE" value = 500000 }
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_CONVOY_ESCORT" value = 500000 }
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_CONVOY_RAIDING" value = 500000 }
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_NAVAL_INVASION_SUPPORT" value = 500000 }
+}
+
+############################################################################ 
+#	scripted invasion AI
+############################################################################
+
+# No combination of strategies should override this value
+EAI_MILITARY_NAVAL_disable_invasions = { # -25000
+	enable = { 
+		OR = { 
+			has_country_flag = EAI_stop_all_invasions 
+			has_country_flag = EAI_MILITARY_NAVAL_save_navy 
+			AND = { # Don't reselect if already in an invasion op strategy
+				has_country_flag = EAI_MILITARY_NAVAL_invasion_force_reselection
+				NOT = { has_country_flag = EAI_MILITARY_INVASION_min_duration }
+			}
+			has_country_flag = EAI_MILITARY_INVASION_synchronize
+		} 
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = invade id = "Q00" value = -25000 }
+	ai_strategy = { type = invade id = "Q01" value = -25000 }
+	ai_strategy = { type = invade id = "Q02" value = -25000 }
+	ai_strategy = { type = invade id = "Q03" value = -25000 }
+	ai_strategy = { type = invade id = "Q04" value = -25000 }
+	ai_strategy = { type = invade id = "Q05" value = -25000 }
+	ai_strategy = { type = invade id = "Q06" value = -25000 }
+	ai_strategy = { type = invade id = "Q07" value = -25000 }
+	ai_strategy = { type = invade id = "Q08" value = -25000 }
+	ai_strategy = { type = invade id = "Q09" value = -25000 }
+	ai_strategy = { type = invade id = "Q0A" value = -25000 }
+	ai_strategy = { type = invade id = "Q0B" value = -25000 }
+	ai_strategy = { type = invade id = "Q0C" value = -25000 }
+	ai_strategy = { type = invade id = "Q0D" value = -25000 }
+	ai_strategy = { type = invade id = "Q0E" value = -25000 }
+	ai_strategy = { type = invade id = "Q0F" value = -25000 }
+	ai_strategy = { type = invade id = "Q0G" value = -25000 }
+	ai_strategy = { type = invade id = "Q0H" value = -25000 }
+	ai_strategy = { type = invade id = "Q0I" value = -25000 }
+	ai_strategy = { type = invade id = "Q0J" value = -25000 }
+	ai_strategy = { type = invade id = "Q0K" value = -25000 }
+	ai_strategy = { type = invade id = "Q0L" value = -25000 }
+	ai_strategy = { type = invade id = "Q0M" value = -25000 }
+	ai_strategy = { type = invade id = "Q0N" value = -25000 }
+	ai_strategy = { type = invade id = "Q0O" value = -25000 }
+	ai_strategy = { type = invade id = "Q0P" value = -25000 }
+	ai_strategy = { type = invade id = "Q0Q" value = -25000 }
+	ai_strategy = { type = invade id = "Q0R" value = -25000 }
+	ai_strategy = { type = invade id = "Q0S" value = -25000 }
+	ai_strategy = { type = invade id = "Q0T" value = -25000 }
+	ai_strategy = { type = invade id = "Q0U" value = -25000 }
+	ai_strategy = { type = invade id = "Q0V" value = -25000 }
+	ai_strategy = { type = invade id = "Q0W" value = -25000 }
+	ai_strategy = { type = invade id = "Q0X" value = -25000 }
+	ai_strategy = { type = invade id = "Q0Y" value = -25000 }
+	ai_strategy = { type = invade id = "Q0Z" value = -25000 }
+	ai_strategy = { type = invade id = "Q10" value = -25000 }
+	ai_strategy = { type = invade id = "Q11" value = -25000 }
+	ai_strategy = { type = invade id = "Q12" value = -25000 }
+	ai_strategy = { type = invade id = "Q13" value = -25000 }
+	ai_strategy = { type = invade id = "Q14" value = -25000 }
+	ai_strategy = { type = invade id = "Q15" value = -25000 }
+	ai_strategy = { type = invade id = "Q16" value = -25000 }
+	ai_strategy = { type = invade id = "Q17" value = -25000 }
+	ai_strategy = { type = invade id = "Q18" value = -25000 }
+	ai_strategy = { type = invade id = "Q19" value = -25000 }
+	ai_strategy = { type = invade id = "Q1A" value = -25000 }
+	ai_strategy = { type = invade id = "Q1B" value = -25000 }
+	ai_strategy = { type = invade id = "Q1C" value = -25000 }
+	ai_strategy = { type = invade id = "Q1D" value = -25000 }
+	ai_strategy = { type = invade id = "Q1E" value = -25000 }
+	ai_strategy = { type = invade id = "Q1F" value = -25000 }
+	ai_strategy = { type = invade id = "Q1G" value = -25000 }
+	ai_strategy = { type = invade id = "Q1H" value = -25000 }
+	ai_strategy = { type = invade id = "Q1I" value = -25000 }
+	ai_strategy = { type = invade id = "Q1J" value = -25000 }
+	ai_strategy = { type = invade id = "Q1K" value = -25000 }
+	ai_strategy = { type = invade id = "Q1L" value = -25000 }
+	ai_strategy = { type = invade id = "Q1M" value = -25000 }
+	ai_strategy = { type = invade id = "Q1N" value = -25000 }
+	ai_strategy = { type = invade id = "Q1O" value = -25000 }
+	ai_strategy = { type = invade id = "Q1P" value = -25000 }
+	ai_strategy = { type = invade id = "Q1Q" value = -25000 }
+	ai_strategy = { type = invade id = "Q1R" value = -25000 }
+	ai_strategy = { type = invade id = "Q1S" value = -25000 }
+	ai_strategy = { type = invade id = "Q1T" value = -25000 }
+	ai_strategy = { type = invade id = "Q1U" value = -25000 }
+	ai_strategy = { type = invade id = "Q1V" value = -25000 }
+	ai_strategy = { type = invade id = "Q1W" value = -25000 }
+	ai_strategy = { type = invade id = "Q1X" value = -25000 }
+	ai_strategy = { type = invade id = "Q1Y" value = -25000 }
+	ai_strategy = { type = invade id = "Q1Z" value = -25000 }
+	ai_strategy = { type = invade id = "Q20" value = -25000 }
+	ai_strategy = { type = invade id = "Q21" value = -25000 }
+	ai_strategy = { type = invade id = "Q22" value = -25000 }
+	ai_strategy = { type = invade id = "Q23" value = -25000 }
+	ai_strategy = { type = invade id = "Q24" value = -25000 }
+	ai_strategy = { type = invade id = "Q25" value = -25000 }
+	ai_strategy = { type = invade id = "Q26" value = -25000 }
+	ai_strategy = { type = invade id = "Q27" value = -25000 }
+	ai_strategy = { type = invade id = "Q28" value = -25000 }
+	ai_strategy = { type = invade id = "Q29" value = -25000 }
+	ai_strategy = { type = invade id = "Q2A" value = -25000 }
+	ai_strategy = { type = invade id = "Q2B" value = -25000 }
+	ai_strategy = { type = invade id = "Q2C" value = -25000 }
+	ai_strategy = { type = invade id = "Q2D" value = -25000 }
+	ai_strategy = { type = invade id = "Q2E" value = -25000 }
+	ai_strategy = { type = invade id = "Q2F" value = -25000 }
+	ai_strategy = { type = invade id = "Q2G" value = -25000 }
+	ai_strategy = { type = invade id = "Q2H" value = -25000 }
+	ai_strategy = { type = invade id = "Q2I" value = -25000 }
+	ai_strategy = { type = invade id = "Q2J" value = -25000 }
+	ai_strategy = { type = invade id = "Q2K" value = -25000 }
+	ai_strategy = { type = invade id = "Q2L" value = -25000 }
+	ai_strategy = { type = invade id = "Q2M" value = -25000 }
+	ai_strategy = { type = invade id = "Q2N" value = -25000 }
+	ai_strategy = { type = invade id = "Q2O" value = -25000 }
+	ai_strategy = { type = invade id = "Q2P" value = -25000 }
+	ai_strategy = { type = invade id = "Q2Q" value = -25000 }
+	ai_strategy = { type = invade id = "Q2R" value = -25000 }
+	ai_strategy = { type = invade id = "Q2S" value = -25000 }
+	ai_strategy = { type = invade id = "Q2T" value = -25000 }
+	ai_strategy = { type = invade id = "Q2U" value = -25000 }
+	ai_strategy = { type = invade id = "Q2V" value = -25000 }
+	ai_strategy = { type = invade id = "Q2W" value = -25000 }
+	ai_strategy = { type = invade id = "Q2X" value = -25000 }
+	ai_strategy = { type = invade id = "Q2Y" value = -25000 }
+	ai_strategy = { type = invade id = "Q2Z" value = -25000 }
+	ai_strategy = { type = invade id = "Q30" value = -25000 }
+	ai_strategy = { type = invade id = "Q31" value = -25000 }
+	ai_strategy = { type = invade id = "Q32" value = -25000 }
+	ai_strategy = { type = invade id = "Q33" value = -25000 }
+	ai_strategy = { type = invade id = "Q34" value = -25000 }
+	ai_strategy = { type = invade id = "Q35" value = -25000 }
+	ai_strategy = { type = invade id = "Q36" value = -25000 }
+	ai_strategy = { type = invade id = "Q37" value = -25000 }
+	ai_strategy = { type = invade id = "Q38" value = -25000 }
+	ai_strategy = { type = invade id = "Q39" value = -25000 }
+	ai_strategy = { type = invade id = "Q3A" value = -25000 }
+	ai_strategy = { type = invade id = "Q3B" value = -25000 }
+	ai_strategy = { type = invade id = "Q3C" value = -25000 }
+	ai_strategy = { type = invade id = "Q3D" value = -25000 }
+	ai_strategy = { type = invade id = "Q3E" value = -25000 }
+	ai_strategy = { type = invade id = "Q3F" value = -25000 }
+	ai_strategy = { type = invade id = "Q3G" value = -25000 }
+	ai_strategy = { type = invade id = "Q3H" value = -25000 }
+	ai_strategy = { type = invade id = "Q3I" value = -25000 }
+	ai_strategy = { type = invade id = "Q3J" value = -25000 }
+	ai_strategy = { type = invade id = "Q3K" value = -25000 }
+	ai_strategy = { type = invade id = "Q3L" value = -25000 }
+	ai_strategy = { type = invade id = "Q3M" value = -25000 }
+	ai_strategy = { type = invade id = "Q3N" value = -25000 }
+	ai_strategy = { type = invade id = "Q3O" value = -25000 }
+	ai_strategy = { type = invade id = "Q3P" value = -25000 }
+	ai_strategy = { type = invade id = "Q3Q" value = -25000 }
+	ai_strategy = { type = invade id = "Q3R" value = -25000 }
+	ai_strategy = { type = invade id = "Q3S" value = -25000 }
+	ai_strategy = { type = invade id = "Q3T" value = -25000 }
+	ai_strategy = { type = invade id = "Q3U" value = -25000 }
+	ai_strategy = { type = invade id = "Q3V" value = -25000 }
+	ai_strategy = { type = invade id = "Q3W" value = -25000 }
+	ai_strategy = { type = invade id = "Q3X" value = -25000 }
+	ai_strategy = { type = invade id = "Q3Y" value = -25000 }
+	ai_strategy = { type = invade id = "Q3Z" value = -25000 }
+	ai_strategy = { type = invade id = "Q40" value = -25000 }
+	ai_strategy = { type = invade id = "Q41" value = -25000 }
+	ai_strategy = { type = invade id = "Q42" value = -25000 }
+	ai_strategy = { type = invade id = "Q43" value = -25000 }
+	ai_strategy = { type = invade id = "Q44" value = -25000 }
+	ai_strategy = { type = invade id = "Q45" value = -25000 }
+	ai_strategy = { type = invade id = "Q46" value = -25000 }
+	ai_strategy = { type = invade id = "Q47" value = -25000 }
+	ai_strategy = { type = invade id = "Q48" value = -25000 }
+	ai_strategy = { type = invade id = "Q49" value = -25000 }
+	ai_strategy = { type = invade id = "Q4A" value = -25000 }
+	ai_strategy = { type = invade id = "Q4B" value = -25000 }
+	ai_strategy = { type = invade id = "Q4C" value = -25000 }
+	ai_strategy = { type = invade id = "Q4D" value = -25000 }
+	ai_strategy = { type = invade id = "Q4E" value = -25000 }
+	ai_strategy = { type = invade id = "Q4F" value = -25000 }
+	ai_strategy = { type = invade id = "Q4G" value = -25000 }
+	ai_strategy = { type = invade id = "Q4H" value = -25000 }
+	ai_strategy = { type = invade id = "Q4I" value = -25000 }
+	ai_strategy = { type = invade id = "Q4J" value = -25000 }
+	ai_strategy = { type = invade id = "Q4K" value = -25000 }
+	ai_strategy = { type = invade id = "Q4L" value = -25000 }
+	ai_strategy = { type = invade id = "Q4M" value = -25000 }
+	ai_strategy = { type = invade id = "Q4N" value = -25000 }
+	ai_strategy = { type = invade id = "Q4O" value = -25000 }
+	ai_strategy = { type = invade id = "Q4P" value = -25000 }
+	ai_strategy = { type = invade id = "Q4Q" value = -25000 }
+	ai_strategy = { type = invade id = "Q4R" value = -25000 }
+	ai_strategy = { type = invade id = "Q4S" value = -25000 }
+	ai_strategy = { type = invade id = "Q4T" value = -25000 }
+	ai_strategy = { type = invade id = "Q4U" value = -25000 }
+	ai_strategy = { type = invade id = "Q4V" value = -25000 }
+	ai_strategy = { type = invade id = "Q4W" value = -25000 }
+	ai_strategy = { type = invade id = "Q4X" value = -25000 }
+	ai_strategy = { type = invade id = "Q4Y" value = -25000 }
+	ai_strategy = { type = invade id = "Q4Z" value = -25000 }
+	ai_strategy = { type = invade id = "Q50" value = -25000 }
+	ai_strategy = { type = invade id = "Q51" value = -25000 }
+	ai_strategy = { type = invade id = "Q52" value = -25000 }
+	ai_strategy = { type = invade id = "Q53" value = -25000 }
+	ai_strategy = { type = invade id = "Q54" value = -25000 }
+	ai_strategy = { type = invade id = "Q55" value = -25000 }
+	ai_strategy = { type = invade id = "Q56" value = -25000 }
+	ai_strategy = { type = invade id = "Q57" value = -25000 }
+	ai_strategy = { type = invade id = "Q58" value = -25000 }
+	ai_strategy = { type = invade id = "Q59" value = -25000 }
+	ai_strategy = { type = invade id = "Q5A" value = -25000 }
+	ai_strategy = { type = invade id = "Q5B" value = -25000 }
+	ai_strategy = { type = invade id = "Q5C" value = -25000 }
+	ai_strategy = { type = invade id = "Q5D" value = -25000 }
+	ai_strategy = { type = invade id = "Q5E" value = -25000 }
+	ai_strategy = { type = invade id = "Q5F" value = -25000 }
+	ai_strategy = { type = invade id = "Q5G" value = -25000 }
+	ai_strategy = { type = invade id = "Q5H" value = -25000 }
+	ai_strategy = { type = invade id = "Q5I" value = -25000 }
+	ai_strategy = { type = invade id = "Q5J" value = -25000 }
+	ai_strategy = { type = invade id = "Q5K" value = -25000 }
+	ai_strategy = { type = invade id = "Q5L" value = -25000 }
+	ai_strategy = { type = invade id = "Q5M" value = -25000 }
+	ai_strategy = { type = invade id = "Q5N" value = -25000 }
+	ai_strategy = { type = invade id = "Q5O" value = -25000 }
+	ai_strategy = { type = invade id = "Q5P" value = -25000 }
+	ai_strategy = { type = invade id = "Q5Q" value = -25000 }
+	ai_strategy = { type = invade id = "Q5R" value = -25000 }
+	ai_strategy = { type = invade id = "Q5S" value = -25000 }
+	ai_strategy = { type = invade id = "Q5T" value = -25000 }
+	ai_strategy = { type = invade id = "Q5U" value = -25000 }
+	ai_strategy = { type = invade id = "Q5V" value = -25000 }
+	ai_strategy = { type = invade id = "Q5W" value = -25000 }
+	ai_strategy = { type = invade id = "Q5X" value = -25000 }
+	ai_strategy = { type = invade id = "Q5Y" value = -25000 }
+	ai_strategy = { type = invade id = "Q5Z" value = -25000 }
+	ai_strategy = { type = invade id = "Q60" value = -25000 }
+	ai_strategy = { type = invade id = "Q61" value = -25000 }
+	ai_strategy = { type = invade id = "Q62" value = -25000 }
+	ai_strategy = { type = invade id = "Q63" value = -25000 }
+	ai_strategy = { type = invade id = "Q64" value = -25000 }
+	ai_strategy = { type = invade id = "Q65" value = -25000 }
+	ai_strategy = { type = invade id = "Q66" value = -25000 }
+	ai_strategy = { type = invade id = "Q67" value = -25000 }
+	ai_strategy = { type = invade id = "Q68" value = -25000 }
+	ai_strategy = { type = invade id = "Q69" value = -25000 }
+	ai_strategy = { type = invade id = "Q6A" value = -25000 }
+	ai_strategy = { type = invade id = "Q6B" value = -25000 }
+	ai_strategy = { type = invade id = "Q6C" value = -25000 }
+	ai_strategy = { type = invade id = "Q6D" value = -25000 }
+	ai_strategy = { type = invade id = "Q6E" value = -25000 }
+	ai_strategy = { type = invade id = "Q6F" value = -25000 }
+	ai_strategy = { type = invade id = "Q6G" value = -25000 }
+	ai_strategy = { type = invade id = "Q6H" value = -25000 }
+	ai_strategy = { type = invade id = "Q6I" value = -25000 }
+	ai_strategy = { type = invade id = "Q6J" value = -25000 }
+	ai_strategy = { type = invade id = "Q6K" value = -25000 }
+	ai_strategy = { type = invade id = "Q6L" value = -25000 }
+	ai_strategy = { type = invade id = "Q6M" value = -25000 }
+	ai_strategy = { type = invade id = "Q6N" value = -25000 }
+	ai_strategy = { type = invade id = "Q6O" value = -25000 }
+	ai_strategy = { type = invade id = "Q6P" value = -25000 }
+	ai_strategy = { type = invade id = "Q6Q" value = -25000 }
+	ai_strategy = { type = invade id = "Q6R" value = -25000 }
+	ai_strategy = { type = invade id = "Q6S" value = -25000 }
+	ai_strategy = { type = invade id = "Q6T" value = -25000 }
+	ai_strategy = { type = invade id = "Q6U" value = -25000 }
+	ai_strategy = { type = invade id = "Q6V" value = -25000 }
+	ai_strategy = { type = invade id = "Q6W" value = -25000 }
+	ai_strategy = { type = invade id = "Q6X" value = -25000 }
+	ai_strategy = { type = invade id = "Q6Y" value = -25000 }
+	ai_strategy = { type = invade id = "Q6Z" value = -25000 }
+	ai_strategy = { type = invade id = "Q70" value = -25000 }
+	ai_strategy = { type = invade id = "Q71" value = -25000 }
+	ai_strategy = { type = invade id = "Q72" value = -25000 }
+	ai_strategy = { type = invade id = "Q73" value = -25000 }
+	ai_strategy = { type = invade id = "Q74" value = -25000 }
+	ai_strategy = { type = invade id = "Q75" value = -25000 }
+	ai_strategy = { type = invade id = "Q76" value = -25000 }
+	ai_strategy = { type = invade id = "Q77" value = -25000 }
+	ai_strategy = { type = invade id = "Q78" value = -25000 }
+	ai_strategy = { type = invade id = "Q79" value = -25000 }
+	ai_strategy = { type = invade id = "Q7A" value = -25000 }
+	ai_strategy = { type = invade id = "Q7B" value = -25000 }
+	ai_strategy = { type = invade id = "Q7C" value = -25000 }
+	ai_strategy = { type = invade id = "Q7D" value = -25000 }
+	ai_strategy = { type = invade id = "Q7E" value = -25000 }
+	ai_strategy = { type = invade id = "Q7F" value = -25000 }
+	ai_strategy = { type = invade id = "Q7G" value = -25000 }
+	ai_strategy = { type = invade id = "Q7H" value = -25000 }
+	ai_strategy = { type = invade id = "Q7I" value = -25000 }
+	ai_strategy = { type = invade id = "Q7J" value = -25000 }
+	ai_strategy = { type = invade id = "Q7K" value = -25000 }
+	ai_strategy = { type = invade id = "Q7L" value = -25000 }
+	ai_strategy = { type = invade id = "Q7M" value = -25000 }
+	ai_strategy = { type = invade id = "Q7N" value = -25000 }
+	ai_strategy = { type = invade id = "Q7O" value = -25000 }
+	ai_strategy = { type = invade id = "Q7P" value = -25000 }
+	ai_strategy = { type = invade id = "Q7Q" value = -25000 }
+	ai_strategy = { type = invade id = "Q7R" value = -25000 }
+	ai_strategy = { type = invade id = "Q7S" value = -25000 }
+	ai_strategy = { type = invade id = "Q7T" value = -25000 }
+	ai_strategy = { type = invade id = "Q7U" value = -25000 }
+	ai_strategy = { type = invade id = "Q7V" value = -25000 }
+	ai_strategy = { type = invade id = "Q7W" value = -25000 }
+	ai_strategy = { type = invade id = "Q7X" value = -25000 }
+	ai_strategy = { type = invade id = "Q7Y" value = -25000 }
+	ai_strategy = { type = invade id = "Q7Z" value = -25000 }
+	ai_strategy = { type = invade id = "Q80" value = -25000 }
+	ai_strategy = { type = invade id = "Q81" value = -25000 }
+	ai_strategy = { type = invade id = "Q82" value = -25000 }
+	ai_strategy = { type = invade id = "Q83" value = -25000 }
+	ai_strategy = { type = invade id = "Q84" value = -25000 }
+	ai_strategy = { type = invade id = "Q85" value = -25000 }
+	ai_strategy = { type = invade id = "Q86" value = -25000 }
+	ai_strategy = { type = invade id = "Q87" value = -25000 }
+	ai_strategy = { type = invade id = "Q88" value = -25000 }
+	ai_strategy = { type = invade id = "Q89" value = -25000 }
+	ai_strategy = { type = invade id = "Q8A" value = -25000 }
+	ai_strategy = { type = invade id = "Q8B" value = -25000 }
+	ai_strategy = { type = invade id = "Q8C" value = -25000 }
+	ai_strategy = { type = invade id = "Q8D" value = -25000 }
+	ai_strategy = { type = invade id = "Q8E" value = -25000 }
+	ai_strategy = { type = invade id = "Q8F" value = -25000 }
+	ai_strategy = { type = invade id = "Q8G" value = -25000 }
+	ai_strategy = { type = invade id = "Q8H" value = -25000 }
+	ai_strategy = { type = invade id = "Q8I" value = -25000 }
+	ai_strategy = { type = invade id = "Q8J" value = -25000 }
+	ai_strategy = { type = invade id = "D01" value = -25000 }
+	ai_strategy = { type = invade id = "D02" value = -25000 }
+	ai_strategy = { type = invade id = "D03" value = -25000 }
+	ai_strategy = { type = invade id = "D04" value = -25000 }
+	ai_strategy = { type = invade id = "D05" value = -25000 }
+	ai_strategy = { type = invade id = "D06" value = -25000 }
+	ai_strategy = { type = invade id = "D07" value = -25000 }
+	ai_strategy = { type = invade id = "D08" value = -25000 }
+	ai_strategy = { type = invade id = "D09" value = -25000 }
+	ai_strategy = { type = invade id = "D10" value = -25000 }
+	ai_strategy = { type = invade id = "D11" value = -25000 }
+	ai_strategy = { type = invade id = "D12" value = -25000 }
+	ai_strategy = { type = invade id = "D13" value = -25000 }
+	ai_strategy = { type = invade id = "D14" value = -25000 }
+	ai_strategy = { type = invade id = "D15" value = -25000 }
+	ai_strategy = { type = invade id = "D16" value = -25000 }
+	ai_strategy = { type = invade id = "D17" value = -25000 }
+	ai_strategy = { type = invade id = "D18" value = -25000 }
+	ai_strategy = { type = invade id = "D19" value = -25000 }
+	ai_strategy = { type = invade id = "D20" value = -25000 }
+	ai_strategy = { type = invade id = "D21" value = -25000 }
+	ai_strategy = { type = invade id = "D22" value = -25000 }
+	ai_strategy = { type = invade id = "D23" value = -25000 }
+	ai_strategy = { type = invade id = "D24" value = -25000 }
+	ai_strategy = { type = invade id = "D25" value = -25000 }
+	ai_strategy = { type = invade id = "D26" value = -25000 }
+	ai_strategy = { type = invade id = "D27" value = -25000 }
+	ai_strategy = { type = invade id = "D28" value = -25000 }
+	ai_strategy = { type = invade id = "D29" value = -25000 }
+	ai_strategy = { type = invade id = "D30" value = -25000 }
+	ai_strategy = { type = invade id = "D31" value = -25000 }
+	ai_strategy = { type = invade id = "D32" value = -25000 }
+	ai_strategy = { type = invade id = "D33" value = -25000 }
+	ai_strategy = { type = invade id = "D34" value = -25000 }
+	ai_strategy = { type = invade id = "D35" value = -25000 }
+	ai_strategy = { type = invade id = "D36" value = -25000 }
+	ai_strategy = { type = invade id = "D37" value = -25000 }
+	ai_strategy = { type = invade id = "D38" value = -25000 }
+	ai_strategy = { type = invade id = "D39" value = -25000 }
+	ai_strategy = { type = invade id = "D40" value = -25000 }
+	ai_strategy = { type = invade id = "D41" value = -25000 }
+	ai_strategy = { type = invade id = "D42" value = -25000 }
+	ai_strategy = { type = invade id = "D43" value = -25000 }
+	ai_strategy = { type = invade id = "D44" value = -25000 }
+	ai_strategy = { type = invade id = "D45" value = -25000 }
+	ai_strategy = { type = invade id = "D46" value = -25000 }
+	ai_strategy = { type = invade id = "D47" value = -25000 }
+	ai_strategy = { type = invade id = "D48" value = -25000 }
+	ai_strategy = { type = invade id = "D49" value = -25000 }
+	ai_strategy = { type = invade id = "D50" value = -25000 }
+	ai_strategy = { type = invade id = "D51" value = -25000 }
+	ai_strategy = { type = invade id = "D52" value = -25000 }
+	ai_strategy = { type = invade id = "D53" value = -25000 }
+	ai_strategy = { type = invade id = "D54" value = -25000 }
+	ai_strategy = { type = invade id = "D55" value = -25000 }
+	ai_strategy = { type = invade id = "D56" value = -25000 }
+	ai_strategy = { type = invade id = "D57" value = -25000 }
+	ai_strategy = { type = invade id = "D58" value = -25000 }
+	ai_strategy = { type = invade id = "D59" value = -25000 }
+	ai_strategy = { type = invade id = "D60" value = -25000 }
+	ai_strategy = { type = invade id = "D61" value = -25000 }
+	ai_strategy = { type = invade id = "D62" value = -25000 }
+	ai_strategy = { type = invade id = "D63" value = -25000 }
+	ai_strategy = { type = invade id = "D64" value = -25000 }
+	ai_strategy = { type = invade id = "D65" value = -25000 }
+	ai_strategy = { type = invade id = "D66" value = -25000 }
+	ai_strategy = { type = invade id = "D67" value = -25000 }
+	ai_strategy = { type = invade id = "D68" value = -25000 }
+	ai_strategy = { type = invade id = "D69" value = -25000 }
+	ai_strategy = { type = invade id = "D70" value = -25000 }
+	ai_strategy = { type = invade id = "D71" value = -25000 }
+	ai_strategy = { type = invade id = "D72" value = -25000 }
+	ai_strategy = { type = invade id = "D73" value = -25000 }
+	ai_strategy = { type = invade id = "D74" value = -25000 }
+	ai_strategy = { type = invade id = "D75" value = -25000 }
+}
+
+### -2000
+
+EAI_MILITARY_NAVAL_block_invasion_target_B00 = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^0 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B00" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B01 = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^1 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B01" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B02 = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^2 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B02" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B03 = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^3 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B03" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B04 = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^4 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B04" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B05 = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^5 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B05" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B06 = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^6 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B06" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B07 = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^7 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B07" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B08 = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^8 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B08" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B09 = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^9 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B09" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0A = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^10 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0A" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0B = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^11 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0B" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0C = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^12 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0C" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0D = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^13 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0D" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0E = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^14 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0E" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0F = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^15 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0F" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0G = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^16 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0G" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0H = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^17 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0H" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0I = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^18 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0I" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0J = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^19 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0J" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0K = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^20 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0K" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0L = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^21 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0L" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0M = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^22 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0M" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0N = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^23 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0N" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0O = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^24 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0O" value = -2000 } }
+EAI_MILITARY_NAVAL_block_invasion_target_B0P = { enable = { NOT = { check_variable = { EAI_INVASION_block_target^25 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = "B0P" value = -2000 } }
+
+###
+
+EAI_MILITARY_NAVAL_naval_invasion = { # +2000
+	enable = { 
+		NOT = { has_country_flag = EAI_MILITARY_NAVAL_save_navy }
+		NOT = { check_variable = { EAI_naval_invasion_target = 0 } } 
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = naval_invasion_supremacy_weight
+		value = 50
+	}
+
+	ai_strategy = { type = invade id = "N00" value = 2000 }
+}
+
+###############################################################
+### Invasion operations
+###############################################################
+
+# This value should override all non special operation invasions
+EAI_MILITARY_INVASION_disable_invasions = { # -10000
+	enable = { 
+		check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = invade id = "Q00" value = -10000 }
+	ai_strategy = { type = invade id = "Q01" value = -10000 }
+	ai_strategy = { type = invade id = "Q02" value = -10000 }
+	ai_strategy = { type = invade id = "Q03" value = -10000 }
+	ai_strategy = { type = invade id = "Q04" value = -10000 }
+	ai_strategy = { type = invade id = "Q05" value = -10000 }
+	ai_strategy = { type = invade id = "Q06" value = -10000 }
+	ai_strategy = { type = invade id = "Q07" value = -10000 }
+	ai_strategy = { type = invade id = "Q08" value = -10000 }
+	ai_strategy = { type = invade id = "Q09" value = -10000 }
+	ai_strategy = { type = invade id = "Q0A" value = -10000 }
+	ai_strategy = { type = invade id = "Q0B" value = -10000 }
+	ai_strategy = { type = invade id = "Q0C" value = -10000 }
+	ai_strategy = { type = invade id = "Q0D" value = -10000 }
+	ai_strategy = { type = invade id = "Q0E" value = -10000 }
+	ai_strategy = { type = invade id = "Q0F" value = -10000 }
+	ai_strategy = { type = invade id = "Q0G" value = -10000 }
+	ai_strategy = { type = invade id = "Q0H" value = -10000 }
+	ai_strategy = { type = invade id = "Q0I" value = -10000 }
+	ai_strategy = { type = invade id = "Q0J" value = -10000 }
+	ai_strategy = { type = invade id = "Q0K" value = -10000 }
+	ai_strategy = { type = invade id = "Q0L" value = -10000 }
+	ai_strategy = { type = invade id = "Q0M" value = -10000 }
+	ai_strategy = { type = invade id = "Q0N" value = -10000 }
+	ai_strategy = { type = invade id = "Q0O" value = -10000 }
+	ai_strategy = { type = invade id = "Q0P" value = -10000 }
+	ai_strategy = { type = invade id = "Q0Q" value = -10000 }
+	ai_strategy = { type = invade id = "Q0R" value = -10000 }
+	ai_strategy = { type = invade id = "Q0S" value = -10000 }
+	ai_strategy = { type = invade id = "Q0T" value = -10000 }
+	ai_strategy = { type = invade id = "Q0U" value = -10000 }
+	ai_strategy = { type = invade id = "Q0V" value = -10000 }
+	ai_strategy = { type = invade id = "Q0W" value = -10000 }
+	ai_strategy = { type = invade id = "Q0X" value = -10000 }
+	ai_strategy = { type = invade id = "Q0Y" value = -10000 }
+	ai_strategy = { type = invade id = "Q0Z" value = -10000 }
+	ai_strategy = { type = invade id = "Q10" value = -10000 }
+	ai_strategy = { type = invade id = "Q11" value = -10000 }
+	ai_strategy = { type = invade id = "Q12" value = -10000 }
+	ai_strategy = { type = invade id = "Q13" value = -10000 }
+	ai_strategy = { type = invade id = "Q14" value = -10000 }
+	ai_strategy = { type = invade id = "Q15" value = -10000 }
+	ai_strategy = { type = invade id = "Q16" value = -10000 }
+	ai_strategy = { type = invade id = "Q17" value = -10000 }
+	ai_strategy = { type = invade id = "Q18" value = -10000 }
+	ai_strategy = { type = invade id = "Q19" value = -10000 }
+	ai_strategy = { type = invade id = "Q1A" value = -10000 }
+	ai_strategy = { type = invade id = "Q1B" value = -10000 }
+	ai_strategy = { type = invade id = "Q1C" value = -10000 }
+	ai_strategy = { type = invade id = "Q1D" value = -10000 }
+	ai_strategy = { type = invade id = "Q1E" value = -10000 }
+	ai_strategy = { type = invade id = "Q1F" value = -10000 }
+	ai_strategy = { type = invade id = "Q1G" value = -10000 }
+	ai_strategy = { type = invade id = "Q1H" value = -10000 }
+	ai_strategy = { type = invade id = "Q1I" value = -10000 }
+	ai_strategy = { type = invade id = "Q1J" value = -10000 }
+	ai_strategy = { type = invade id = "Q1K" value = -10000 }
+	ai_strategy = { type = invade id = "Q1L" value = -10000 }
+	ai_strategy = { type = invade id = "Q1M" value = -10000 }
+	ai_strategy = { type = invade id = "Q1N" value = -10000 }
+	ai_strategy = { type = invade id = "Q1O" value = -10000 }
+	ai_strategy = { type = invade id = "Q1P" value = -10000 }
+	ai_strategy = { type = invade id = "Q1Q" value = -10000 }
+	ai_strategy = { type = invade id = "Q1R" value = -10000 }
+	ai_strategy = { type = invade id = "Q1S" value = -10000 }
+	ai_strategy = { type = invade id = "Q1T" value = -10000 }
+	ai_strategy = { type = invade id = "Q1U" value = -10000 }
+	ai_strategy = { type = invade id = "Q1V" value = -10000 }
+	ai_strategy = { type = invade id = "Q1W" value = -10000 }
+	ai_strategy = { type = invade id = "Q1X" value = -10000 }
+	ai_strategy = { type = invade id = "Q1Y" value = -10000 }
+	ai_strategy = { type = invade id = "Q1Z" value = -10000 }
+	ai_strategy = { type = invade id = "Q20" value = -10000 }
+	ai_strategy = { type = invade id = "Q21" value = -10000 }
+	ai_strategy = { type = invade id = "Q22" value = -10000 }
+	ai_strategy = { type = invade id = "Q23" value = -10000 }
+	ai_strategy = { type = invade id = "Q24" value = -10000 }
+	ai_strategy = { type = invade id = "Q25" value = -10000 }
+	ai_strategy = { type = invade id = "Q26" value = -10000 }
+	ai_strategy = { type = invade id = "Q27" value = -10000 }
+	ai_strategy = { type = invade id = "Q28" value = -10000 }
+	ai_strategy = { type = invade id = "Q29" value = -10000 }
+	ai_strategy = { type = invade id = "Q2A" value = -10000 }
+	ai_strategy = { type = invade id = "Q2B" value = -10000 }
+	ai_strategy = { type = invade id = "Q2C" value = -10000 }
+	ai_strategy = { type = invade id = "Q2D" value = -10000 }
+	ai_strategy = { type = invade id = "Q2E" value = -10000 }
+	ai_strategy = { type = invade id = "Q2F" value = -10000 }
+	ai_strategy = { type = invade id = "Q2G" value = -10000 }
+	ai_strategy = { type = invade id = "Q2H" value = -10000 }
+	ai_strategy = { type = invade id = "Q2I" value = -10000 }
+	ai_strategy = { type = invade id = "Q2J" value = -10000 }
+	ai_strategy = { type = invade id = "Q2K" value = -10000 }
+	ai_strategy = { type = invade id = "Q2L" value = -10000 }
+	ai_strategy = { type = invade id = "Q2M" value = -10000 }
+	ai_strategy = { type = invade id = "Q2N" value = -10000 }
+	ai_strategy = { type = invade id = "Q2O" value = -10000 }
+	ai_strategy = { type = invade id = "Q2P" value = -10000 }
+	ai_strategy = { type = invade id = "Q2Q" value = -10000 }
+	ai_strategy = { type = invade id = "Q2R" value = -10000 }
+	ai_strategy = { type = invade id = "Q2S" value = -10000 }
+	ai_strategy = { type = invade id = "Q2T" value = -10000 }
+	ai_strategy = { type = invade id = "Q2U" value = -10000 }
+	ai_strategy = { type = invade id = "Q2V" value = -10000 }
+	ai_strategy = { type = invade id = "Q2W" value = -10000 }
+	ai_strategy = { type = invade id = "Q2X" value = -10000 }
+	ai_strategy = { type = invade id = "Q2Y" value = -10000 }
+	ai_strategy = { type = invade id = "Q2Z" value = -10000 }
+	ai_strategy = { type = invade id = "Q30" value = -10000 }
+	ai_strategy = { type = invade id = "Q31" value = -10000 }
+	ai_strategy = { type = invade id = "Q32" value = -10000 }
+	ai_strategy = { type = invade id = "Q33" value = -10000 }
+	ai_strategy = { type = invade id = "Q34" value = -10000 }
+	ai_strategy = { type = invade id = "Q35" value = -10000 }
+	ai_strategy = { type = invade id = "Q36" value = -10000 }
+	ai_strategy = { type = invade id = "Q37" value = -10000 }
+	ai_strategy = { type = invade id = "Q38" value = -10000 }
+	ai_strategy = { type = invade id = "Q39" value = -10000 }
+	ai_strategy = { type = invade id = "Q3A" value = -10000 }
+	ai_strategy = { type = invade id = "Q3B" value = -10000 }
+	ai_strategy = { type = invade id = "Q3C" value = -10000 }
+	ai_strategy = { type = invade id = "Q3D" value = -10000 }
+	ai_strategy = { type = invade id = "Q3E" value = -10000 }
+	ai_strategy = { type = invade id = "Q3F" value = -10000 }
+	ai_strategy = { type = invade id = "Q3G" value = -10000 }
+	ai_strategy = { type = invade id = "Q3H" value = -10000 }
+	ai_strategy = { type = invade id = "Q3I" value = -10000 }
+	ai_strategy = { type = invade id = "Q3J" value = -10000 }
+	ai_strategy = { type = invade id = "Q3K" value = -10000 }
+	ai_strategy = { type = invade id = "Q3L" value = -10000 }
+	ai_strategy = { type = invade id = "Q3M" value = -10000 }
+	ai_strategy = { type = invade id = "Q3N" value = -10000 }
+	ai_strategy = { type = invade id = "Q3O" value = -10000 }
+	ai_strategy = { type = invade id = "Q3P" value = -10000 }
+	ai_strategy = { type = invade id = "Q3Q" value = -10000 }
+	ai_strategy = { type = invade id = "Q3R" value = -10000 }
+	ai_strategy = { type = invade id = "Q3S" value = -10000 }
+	ai_strategy = { type = invade id = "Q3T" value = -10000 }
+	ai_strategy = { type = invade id = "Q3U" value = -10000 }
+	ai_strategy = { type = invade id = "Q3V" value = -10000 }
+	ai_strategy = { type = invade id = "Q3W" value = -10000 }
+	ai_strategy = { type = invade id = "Q3X" value = -10000 }
+	ai_strategy = { type = invade id = "Q3Y" value = -10000 }
+	ai_strategy = { type = invade id = "Q3Z" value = -10000 }
+	ai_strategy = { type = invade id = "Q40" value = -10000 }
+	ai_strategy = { type = invade id = "Q41" value = -10000 }
+	ai_strategy = { type = invade id = "Q42" value = -10000 }
+	ai_strategy = { type = invade id = "Q43" value = -10000 }
+	ai_strategy = { type = invade id = "Q44" value = -10000 }
+	ai_strategy = { type = invade id = "Q45" value = -10000 }
+	ai_strategy = { type = invade id = "Q46" value = -10000 }
+	ai_strategy = { type = invade id = "Q47" value = -10000 }
+	ai_strategy = { type = invade id = "Q48" value = -10000 }
+	ai_strategy = { type = invade id = "Q49" value = -10000 }
+	ai_strategy = { type = invade id = "Q4A" value = -10000 }
+	ai_strategy = { type = invade id = "Q4B" value = -10000 }
+	ai_strategy = { type = invade id = "Q4C" value = -10000 }
+	ai_strategy = { type = invade id = "Q4D" value = -10000 }
+	ai_strategy = { type = invade id = "Q4E" value = -10000 }
+	ai_strategy = { type = invade id = "Q4F" value = -10000 }
+	ai_strategy = { type = invade id = "Q4G" value = -10000 }
+	ai_strategy = { type = invade id = "Q4H" value = -10000 }
+	ai_strategy = { type = invade id = "Q4I" value = -10000 }
+	ai_strategy = { type = invade id = "Q4J" value = -10000 }
+	ai_strategy = { type = invade id = "Q4K" value = -10000 }
+	ai_strategy = { type = invade id = "Q4L" value = -10000 }
+	ai_strategy = { type = invade id = "Q4M" value = -10000 }
+	ai_strategy = { type = invade id = "Q4N" value = -10000 }
+	ai_strategy = { type = invade id = "Q4O" value = -10000 }
+	ai_strategy = { type = invade id = "Q4P" value = -10000 }
+	ai_strategy = { type = invade id = "Q4Q" value = -10000 }
+	ai_strategy = { type = invade id = "Q4R" value = -10000 }
+	ai_strategy = { type = invade id = "Q4S" value = -10000 }
+	ai_strategy = { type = invade id = "Q4T" value = -10000 }
+	ai_strategy = { type = invade id = "Q4U" value = -10000 }
+	ai_strategy = { type = invade id = "Q4V" value = -10000 }
+	ai_strategy = { type = invade id = "Q4W" value = -10000 }
+	ai_strategy = { type = invade id = "Q4X" value = -10000 }
+	ai_strategy = { type = invade id = "Q4Y" value = -10000 }
+	ai_strategy = { type = invade id = "Q4Z" value = -10000 }
+	ai_strategy = { type = invade id = "Q50" value = -10000 }
+	ai_strategy = { type = invade id = "Q51" value = -10000 }
+	ai_strategy = { type = invade id = "Q52" value = -10000 }
+	ai_strategy = { type = invade id = "Q53" value = -10000 }
+	ai_strategy = { type = invade id = "Q54" value = -10000 }
+	ai_strategy = { type = invade id = "Q55" value = -10000 }
+	ai_strategy = { type = invade id = "Q56" value = -10000 }
+	ai_strategy = { type = invade id = "Q57" value = -10000 }
+	ai_strategy = { type = invade id = "Q58" value = -10000 }
+	ai_strategy = { type = invade id = "Q59" value = -10000 }
+	ai_strategy = { type = invade id = "Q5A" value = -10000 }
+	ai_strategy = { type = invade id = "Q5B" value = -10000 }
+	ai_strategy = { type = invade id = "Q5C" value = -10000 }
+	ai_strategy = { type = invade id = "Q5D" value = -10000 }
+	ai_strategy = { type = invade id = "Q5E" value = -10000 }
+	ai_strategy = { type = invade id = "Q5F" value = -10000 }
+	ai_strategy = { type = invade id = "Q5G" value = -10000 }
+	ai_strategy = { type = invade id = "Q5H" value = -10000 }
+	ai_strategy = { type = invade id = "Q5I" value = -10000 }
+	ai_strategy = { type = invade id = "Q5J" value = -10000 }
+	ai_strategy = { type = invade id = "Q5K" value = -10000 }
+	ai_strategy = { type = invade id = "Q5L" value = -10000 }
+	ai_strategy = { type = invade id = "Q5M" value = -10000 }
+	ai_strategy = { type = invade id = "Q5N" value = -10000 }
+	ai_strategy = { type = invade id = "Q5O" value = -10000 }
+	ai_strategy = { type = invade id = "Q5P" value = -10000 }
+	ai_strategy = { type = invade id = "Q5Q" value = -10000 }
+	ai_strategy = { type = invade id = "Q5R" value = -10000 }
+	ai_strategy = { type = invade id = "Q5S" value = -10000 }
+	ai_strategy = { type = invade id = "Q5T" value = -10000 }
+	ai_strategy = { type = invade id = "Q5U" value = -10000 }
+	ai_strategy = { type = invade id = "Q5V" value = -10000 }
+	ai_strategy = { type = invade id = "Q5W" value = -10000 }
+	ai_strategy = { type = invade id = "Q5X" value = -10000 }
+	ai_strategy = { type = invade id = "Q5Y" value = -10000 }
+	ai_strategy = { type = invade id = "Q5Z" value = -10000 }
+	ai_strategy = { type = invade id = "Q60" value = -10000 }
+	ai_strategy = { type = invade id = "Q61" value = -10000 }
+	ai_strategy = { type = invade id = "Q62" value = -10000 }
+	ai_strategy = { type = invade id = "Q63" value = -10000 }
+	ai_strategy = { type = invade id = "Q64" value = -10000 }
+	ai_strategy = { type = invade id = "Q65" value = -10000 }
+	ai_strategy = { type = invade id = "Q66" value = -10000 }
+	ai_strategy = { type = invade id = "Q67" value = -10000 }
+	ai_strategy = { type = invade id = "Q68" value = -10000 }
+	ai_strategy = { type = invade id = "Q69" value = -10000 }
+	ai_strategy = { type = invade id = "Q6A" value = -10000 }
+	ai_strategy = { type = invade id = "Q6B" value = -10000 }
+	ai_strategy = { type = invade id = "Q6C" value = -10000 }
+	ai_strategy = { type = invade id = "Q6D" value = -10000 }
+	ai_strategy = { type = invade id = "Q6E" value = -10000 }
+	ai_strategy = { type = invade id = "Q6F" value = -10000 }
+	ai_strategy = { type = invade id = "Q6G" value = -10000 }
+	ai_strategy = { type = invade id = "Q6H" value = -10000 }
+	ai_strategy = { type = invade id = "Q6I" value = -10000 }
+	ai_strategy = { type = invade id = "Q6J" value = -10000 }
+	ai_strategy = { type = invade id = "Q6K" value = -10000 }
+	ai_strategy = { type = invade id = "Q6L" value = -10000 }
+	ai_strategy = { type = invade id = "Q6M" value = -10000 }
+	ai_strategy = { type = invade id = "Q6N" value = -10000 }
+	ai_strategy = { type = invade id = "Q6O" value = -10000 }
+	ai_strategy = { type = invade id = "Q6P" value = -10000 }
+	ai_strategy = { type = invade id = "Q6Q" value = -10000 }
+	ai_strategy = { type = invade id = "Q6R" value = -10000 }
+	ai_strategy = { type = invade id = "Q6S" value = -10000 }
+	ai_strategy = { type = invade id = "Q6T" value = -10000 }
+	ai_strategy = { type = invade id = "Q6U" value = -10000 }
+	ai_strategy = { type = invade id = "Q6V" value = -10000 }
+	ai_strategy = { type = invade id = "Q6W" value = -10000 }
+	ai_strategy = { type = invade id = "Q6X" value = -10000 }
+	ai_strategy = { type = invade id = "Q6Y" value = -10000 }
+	ai_strategy = { type = invade id = "Q6Z" value = -10000 }
+	ai_strategy = { type = invade id = "Q70" value = -10000 }
+	ai_strategy = { type = invade id = "Q71" value = -10000 }
+	ai_strategy = { type = invade id = "Q72" value = -10000 }
+	ai_strategy = { type = invade id = "Q73" value = -10000 }
+	ai_strategy = { type = invade id = "Q74" value = -10000 }
+	ai_strategy = { type = invade id = "Q75" value = -10000 }
+	ai_strategy = { type = invade id = "Q76" value = -10000 }
+	ai_strategy = { type = invade id = "Q77" value = -10000 }
+	ai_strategy = { type = invade id = "Q78" value = -10000 }
+	ai_strategy = { type = invade id = "Q79" value = -10000 }
+	ai_strategy = { type = invade id = "Q7A" value = -10000 }
+	ai_strategy = { type = invade id = "Q7B" value = -10000 }
+	ai_strategy = { type = invade id = "Q7C" value = -10000 }
+	ai_strategy = { type = invade id = "Q7D" value = -10000 }
+	ai_strategy = { type = invade id = "Q7E" value = -10000 }
+	ai_strategy = { type = invade id = "Q7F" value = -10000 }
+	ai_strategy = { type = invade id = "Q7G" value = -10000 }
+	ai_strategy = { type = invade id = "Q7H" value = -10000 }
+	ai_strategy = { type = invade id = "Q7I" value = -10000 }
+	ai_strategy = { type = invade id = "Q7J" value = -10000 }
+	ai_strategy = { type = invade id = "Q7K" value = -10000 }
+	ai_strategy = { type = invade id = "Q7L" value = -10000 }
+	ai_strategy = { type = invade id = "Q7M" value = -10000 }
+	ai_strategy = { type = invade id = "Q7N" value = -10000 }
+	ai_strategy = { type = invade id = "Q7O" value = -10000 }
+	ai_strategy = { type = invade id = "Q7P" value = -10000 }
+	ai_strategy = { type = invade id = "Q7Q" value = -10000 }
+	ai_strategy = { type = invade id = "Q7R" value = -10000 }
+	ai_strategy = { type = invade id = "Q7S" value = -10000 }
+	ai_strategy = { type = invade id = "Q7T" value = -10000 }
+	ai_strategy = { type = invade id = "Q7U" value = -10000 }
+	ai_strategy = { type = invade id = "Q7V" value = -10000 }
+	ai_strategy = { type = invade id = "Q7W" value = -10000 }
+	ai_strategy = { type = invade id = "Q7X" value = -10000 }
+	ai_strategy = { type = invade id = "Q7Y" value = -10000 }
+	ai_strategy = { type = invade id = "Q7Z" value = -10000 }
+	ai_strategy = { type = invade id = "Q80" value = -10000 }
+	ai_strategy = { type = invade id = "Q81" value = -10000 }
+	ai_strategy = { type = invade id = "Q82" value = -10000 }
+	ai_strategy = { type = invade id = "Q83" value = -10000 }
+	ai_strategy = { type = invade id = "Q84" value = -10000 }
+	ai_strategy = { type = invade id = "Q85" value = -10000 }
+	ai_strategy = { type = invade id = "Q86" value = -10000 }
+	ai_strategy = { type = invade id = "Q87" value = -10000 }
+	ai_strategy = { type = invade id = "Q88" value = -10000 }
+	ai_strategy = { type = invade id = "Q89" value = -10000 }
+	ai_strategy = { type = invade id = "Q8A" value = -10000 }
+	ai_strategy = { type = invade id = "Q8B" value = -10000 }
+	ai_strategy = { type = invade id = "Q8C" value = -10000 }
+	ai_strategy = { type = invade id = "Q8D" value = -10000 }
+	ai_strategy = { type = invade id = "Q8E" value = -10000 }
+	ai_strategy = { type = invade id = "Q8F" value = -10000 }
+	ai_strategy = { type = invade id = "Q8G" value = -10000 }
+	ai_strategy = { type = invade id = "Q8H" value = -10000 }
+	ai_strategy = { type = invade id = "Q8I" value = -10000 }
+	ai_strategy = { type = invade id = "Q8J" value = -10000 }
+	ai_strategy = { type = invade id = "D01" value = -10000 }
+	ai_strategy = { type = invade id = "D02" value = -10000 }
+	ai_strategy = { type = invade id = "D03" value = -10000 }
+	ai_strategy = { type = invade id = "D04" value = -10000 }
+	ai_strategy = { type = invade id = "D05" value = -10000 }
+	ai_strategy = { type = invade id = "D06" value = -10000 }
+	ai_strategy = { type = invade id = "D07" value = -10000 }
+	ai_strategy = { type = invade id = "D08" value = -10000 }
+	ai_strategy = { type = invade id = "D09" value = -10000 }
+	ai_strategy = { type = invade id = "D10" value = -10000 }
+	ai_strategy = { type = invade id = "D11" value = -10000 }
+	ai_strategy = { type = invade id = "D12" value = -10000 }
+	ai_strategy = { type = invade id = "D13" value = -10000 }
+	ai_strategy = { type = invade id = "D14" value = -10000 }
+	ai_strategy = { type = invade id = "D15" value = -10000 }
+	ai_strategy = { type = invade id = "D16" value = -10000 }
+	ai_strategy = { type = invade id = "D17" value = -10000 }
+	ai_strategy = { type = invade id = "D18" value = -10000 }
+	ai_strategy = { type = invade id = "D19" value = -10000 }
+	ai_strategy = { type = invade id = "D20" value = -10000 }
+	ai_strategy = { type = invade id = "D21" value = -10000 }
+	ai_strategy = { type = invade id = "D22" value = -10000 }
+	ai_strategy = { type = invade id = "D23" value = -10000 }
+	ai_strategy = { type = invade id = "D24" value = -10000 }
+	ai_strategy = { type = invade id = "D25" value = -10000 }
+	ai_strategy = { type = invade id = "D26" value = -10000 }
+	ai_strategy = { type = invade id = "D27" value = -10000 }
+	ai_strategy = { type = invade id = "D28" value = -10000 }
+	ai_strategy = { type = invade id = "D29" value = -10000 }
+	ai_strategy = { type = invade id = "D30" value = -10000 }
+	ai_strategy = { type = invade id = "D31" value = -10000 }
+	ai_strategy = { type = invade id = "D32" value = -10000 }
+	ai_strategy = { type = invade id = "D33" value = -10000 }
+	ai_strategy = { type = invade id = "D34" value = -10000 }
+	ai_strategy = { type = invade id = "D35" value = -10000 }
+	ai_strategy = { type = invade id = "D36" value = -10000 }
+	ai_strategy = { type = invade id = "D37" value = -10000 }
+	ai_strategy = { type = invade id = "D38" value = -10000 }
+	ai_strategy = { type = invade id = "D39" value = -10000 }
+	ai_strategy = { type = invade id = "D40" value = -10000 }
+	ai_strategy = { type = invade id = "D41" value = -10000 }
+	ai_strategy = { type = invade id = "D42" value = -10000 }
+	ai_strategy = { type = invade id = "D43" value = -10000 }
+	ai_strategy = { type = invade id = "D44" value = -10000 }
+	ai_strategy = { type = invade id = "D45" value = -10000 }
+	ai_strategy = { type = invade id = "D46" value = -10000 }
+	ai_strategy = { type = invade id = "D47" value = -10000 }
+	ai_strategy = { type = invade id = "D48" value = -10000 }
+	ai_strategy = { type = invade id = "D49" value = -10000 }
+	ai_strategy = { type = invade id = "D50" value = -10000 }
+	ai_strategy = { type = invade id = "D51" value = -10000 }
+	ai_strategy = { type = invade id = "D52" value = -10000 }
+	ai_strategy = { type = invade id = "D53" value = -10000 }
+	ai_strategy = { type = invade id = "D54" value = -10000 }
+	ai_strategy = { type = invade id = "D55" value = -10000 }
+	ai_strategy = { type = invade id = "D56" value = -10000 }
+	ai_strategy = { type = invade id = "D57" value = -10000 }
+	ai_strategy = { type = invade id = "D58" value = -10000 }
+	ai_strategy = { type = invade id = "D59" value = -10000 }
+	ai_strategy = { type = invade id = "D60" value = -10000 }
+	ai_strategy = { type = invade id = "D61" value = -10000 }
+	ai_strategy = { type = invade id = "D62" value = -10000 }
+	ai_strategy = { type = invade id = "D63" value = -10000 }
+	ai_strategy = { type = invade id = "D64" value = -10000 }
+	ai_strategy = { type = invade id = "D65" value = -10000 }
+	ai_strategy = { type = invade id = "D66" value = -10000 }
+	ai_strategy = { type = invade id = "D67" value = -10000 }
+	ai_strategy = { type = invade id = "D68" value = -10000 }
+	ai_strategy = { type = invade id = "D69" value = -10000 }
+	ai_strategy = { type = invade id = "D70" value = -10000 }
+	ai_strategy = { type = invade id = "D71" value = -10000 }
+	ai_strategy = { type = invade id = "D72" value = -10000 }
+	ai_strategy = { type = invade id = "D73" value = -10000 }
+	ai_strategy = { type = invade id = "D74" value = -10000 }
+	ai_strategy = { type = invade id = "D75" value = -10000 }
+}
+
+EAI_MILITARY_INVASION_strategy = {
+	enable = {
+		check_variable = { EAI_MILITARY_INVASION_states^num > 0 }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_CONVOY_ESCORT" value = -500000 }
+
+	ai_strategy = {
+		type = naval_invasion_supremacy_weight
+		value = 50
+	}
+
+	ai_strategy = {
+		type = naval_invasion_focus
+		value = 20
+	}
+
+	ai_strategy = {
+        type = invasion_unit_request
+        value = 150 # Less than this and the AI refuses to invade some places?
+
+        state_trigger = {
+			is_in_array = { FROM.FROM.EAI_MILITARY_INVASION_states = THIS.id }
+		}
+    }
+
+	ai_strategy = {
+        type = invasion_unit_request
+        value = -1000
+
+        state_trigger = {
+			NOT = { is_in_array = { FROM.FROM.EAI_MILITARY_INVASION_states = THIS.id } }
+		}
+    }
+
+	ai_strategy = {
+		type = front_unit_request
+		value = 50
+
+		state_trigger = {
+			is_in_array = { FROM.FROM.EAI_MILITARY_INVASION_states = THIS.id }
+		}
+	}
+
+	ai_strategy = {
+		type = force_concentration_front_factor
+		ratio = 0.25
+		value = 50
+		
+		state_trigger = {
+			is_in_array = { FROM.FROM.EAI_MILITARY_INVASION_states = THIS.id }
+		}
+	}
+
+	ai_strategy = {
+		type = force_concentration_target_weight
+		value = 50
+		
+		state_trigger = {
+			is_in_array = { FROM.FROM.EAI_MILITARY_INVASION_objectives = THIS.id }
+		}
+	}
+
+	ai_strategy = {
+		type = force_concentration_front_factor
+		ratio = 0.25
+		value = -50
+		
+		state_trigger = {
+			NOT = { is_in_array = { FROM.FROM.EAI_MILITARY_INVASION_states = THIS.id } }
+		}
+	}
+
+	ai_strategy = {
+		type = force_concentration_target_weight
+		value = -50
+		
+		state_trigger = {
+			NOT = { is_in_array = { FROM.FROM.EAI_MILITARY_INVASION_objectives = THIS.id } }
+		}
+	}
+}
+
+EAI_MILITARY_INVASION_fleet_ops = {
+	enable = {
+		check_variable = { EAI_MILITARY_INVASION_states^num > 0 }
+		has_country_flag = EAI_MILITARY_INVASION_hold_fleet_ops
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = naval_invasion_supremacy_weight
+		value = -1000
+	}
+
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_CONVOY_ESCORT" value = 500000 }
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_NAVAL_INVASION_SUPPORT" value = 500000 }
+}
+
+EAI_MILITARY_INVASION_planning_phase = {
+	enable = {
+		check_variable = { EAI_MILITARY_INVASION_states^num > 0 }
+		has_country_flag = EAI_MILITARY_INVASION_planning_phase
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_control
+		ordertype = invasion
+		ratio = 0
+		priority = 2000
+		execution_type = balanced
+		execute_order = no
+
+		country_trigger = {
+			is_in_array = { FROM.EAI_MILITARY_INVASION_target_countries = THIS.id }
+		}
+	}
+}
+
+EAI_MILITARY_INVASION_execution_phase = {
+	enable = {
+		check_variable = { EAI_MILITARY_INVASION_states^num > 0 }
+		has_country_flag = EAI_MILITARY_INVASION_execution_phase
+		NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_control
+		ordertype = invasion
+		ratio = 0
+		priority = 2000
+		execution_type = balanced
+		execute_order = yes
+
+		country_trigger = {
+			is_in_array = { FROM.FROM.EAI_MILITARY_INVASION_target_countries = THIS.id }
+		}
+	}
+}
+
+EAI_MILITARY_INVASION_rapid_phase = {
+	enable = {
+		check_variable = { EAI_MILITARY_INVASION_states^num > 0 }
+		NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase }
+		has_country_flag = EAI_MILITARY_INVASION_rapid_phase
+	}
+	abort_when_not_enabled = yes
+
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0
+		priority = 3000
+		execution_type = rush_weak
+		execute_order = yes
+
+		state_trigger = {
+			is_in_array = { FROM.FROM.EAI_MILITARY_INVASION_states = THIS.id }
+		}
+	}
+}
+
+EAI_MILITARY_INVASION_operational_pause = {
+	enable = {
+		check_variable = { EAI_MILITARY_INVASION_states^num > 0 }
+		NOT = { has_country_flag = EAI_MILITARY_INVASION_rapid_phase }
+		var:EAI_MILITARY_INVASION_leader = { has_country_flag = EAI_MILITARY_operational_pause_timer }
+	}
+	abort_when_not_enabled = yes
+
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.75
+		priority = 3000
+		execution_type = careful
+		execute_order = no
+
+		state_trigger = {
+			is_in_array = { FROM.FROM.EAI_MILITARY_INVASION_states = THIS.id }
+		}
+	}
+}
+
+EAI_MILITARY_INVASION_operational_resume = {
+	enable = {
+		check_variable = { EAI_MILITARY_INVASION_states^num > 0 }
+		NOT = { has_country_flag = EAI_MILITARY_INVASION_rapid_phase }
+		var:EAI_MILITARY_INVASION_leader = {
+			has_country_flag = EAI_operational_initial_resume_timer
+			NOT = { has_country_flag = EAI_MILITARY_operational_pause_timer }
+		}
+	}
+	abort_when_not_enabled = yes
+
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.75
+		priority = 3000
+		execution_type = rush
+		execute_order = yes
+
+		state_trigger = {
+			is_in_array = { FROM.FROM.EAI_MILITARY_INVASION_states = THIS.id }
+		}
+	}
+}
+
+### +15000
+
+EAI_MILITARY_INVASION_target_country_S00 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { check_variable = { EAI_MILITARY_INVASION_target_countries^0 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = S00 value = 15000 } }
+EAI_MILITARY_INVASION_target_country_S01 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { check_variable = { EAI_MILITARY_INVASION_target_countries^1 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = S01 value = 15000 } }
+EAI_MILITARY_INVASION_target_country_S02 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { check_variable = { EAI_MILITARY_INVASION_target_countries^2 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = S02 value = 15000 } }
+EAI_MILITARY_INVASION_target_country_S03 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { check_variable = { EAI_MILITARY_INVASION_target_countries^3 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = S03 value = 15000 } }
+EAI_MILITARY_INVASION_target_country_S04 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { check_variable = { EAI_MILITARY_INVASION_target_countries^4 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = S04 value = 15000 } }
+EAI_MILITARY_INVASION_target_country_S05 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { check_variable = { EAI_MILITARY_INVASION_target_countries^5 = 0 } } } abort_when_not_enabled = yes ai_strategy = { type = invade id = S05 value = 15000 } }
+
+###
+
+EAI_MILITARY_INVASION_air_region_23 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_air_regions = 23 } } abort_when_not_enabled = yes ai_strategy = { type = strategic_air_importance id = 23 value = 25000 } }
+EAI_MILITARY_INVASION_air_region_208 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_air_regions = 208 } } abort_when_not_enabled = yes ai_strategy = { type = strategic_air_importance id = 208 value = 25000 } }
+EAI_MILITARY_INVASION_air_region_19 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_air_regions = 19 } } abort_when_not_enabled = yes ai_strategy = { type = strategic_air_importance id = 19 value = 25000 } }
+EAI_MILITARY_INVASION_air_region_5 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_air_regions = 5 } } abort_when_not_enabled = yes ai_strategy = { type = strategic_air_importance id = 5 value = 25000 } }
+EAI_MILITARY_INVASION_air_region_20 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_air_regions = 20 } } abort_when_not_enabled = yes ai_strategy = { type = strategic_air_importance id = 20 value = 25000 } }
+EAI_MILITARY_INVASION_air_region_182 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_air_regions = 182 } } abort_when_not_enabled = yes ai_strategy = { type = strategic_air_importance id = 182 value = 25000 } }
+EAI_MILITARY_INVASION_air_region_126 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_air_regions = 126 } } abort_when_not_enabled = yes ai_strategy = { type = strategic_air_importance id = 126 value = 25000 } }
+EAI_MILITARY_INVASION_air_region_169 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_air_regions = 169 } } abort_when_not_enabled = yes ai_strategy = { type = strategic_air_importance id = 169 value = 25000 } }
+EAI_MILITARY_INVASION_air_region_29 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_air_regions = 29 } } abort_when_not_enabled = yes ai_strategy = { type = strategic_air_importance id = 29 value = 25000 } }
+EAI_MILITARY_INVASION_air_region_18 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_air_regions = 18 } } abort_when_not_enabled = yes ai_strategy = { type = strategic_air_importance id = 18 value = 25000 } }
+EAI_MILITARY_INVASION_air_region_42 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_air_regions = 42 } } abort_when_not_enabled = yes ai_strategy = { type = strategic_air_importance id = 42 value = 25000 } }
+EAI_MILITARY_INVASION_air_region_48 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_air_regions = 48 } } abort_when_not_enabled = yes ai_strategy = { type = strategic_air_importance id = 48 value = 25000 } }
+EAI_MILITARY_INVASION_air_region_47 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_air_regions = 47 } } abort_when_not_enabled = yes ai_strategy = { type = strategic_air_importance id = 47 value = 25000 } }
+EAI_MILITARY_INVASION_air_region_68 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_air_regions = 68 } } abort_when_not_enabled = yes ai_strategy = { type = strategic_air_importance id = 68 value = 25000 } }
+
+###
+
+EAI_MILITARY_INVASION_sea_region_169 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 169 } } abort_when_not_enabled = yes ai_strategy = { type = strike_force_home_base id = 169 value = 10000 } }
+EAI_MILITARY_INVASION_sea_region_29 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 29 } } abort_when_not_enabled = yes ai_strategy = { type = strike_force_home_base id = 29 value = 10000 } }
+EAI_MILITARY_INVASION_sea_region_18 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 18 } } abort_when_not_enabled = yes ai_strategy = { type = strike_force_home_base id = 18 value = 10000 } }
+EAI_MILITARY_INVASION_sea_region_42 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 42 } } abort_when_not_enabled = yes ai_strategy = { type = strike_force_home_base id = 42 value = 10000 } }
+EAI_MILITARY_INVASION_sea_region_48 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 48 } } abort_when_not_enabled = yes ai_strategy = { type = strike_force_home_base id = 48 value = 10000 } }
+EAI_MILITARY_INVASION_sea_region_47 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 47 } } abort_when_not_enabled = yes ai_strategy = { type = strike_force_home_base id = 47 value = 10000 } }
+EAI_MILITARY_INVASION_sea_region_68 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 68 } } abort_when_not_enabled = yes ai_strategy = { type = strike_force_home_base id = 68 value = 10000 } }
+EAI_MILITARY_INVASION_sea_region_51 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } NOT = { has_country_flag = EAI_MILITARY_INVASION_planning_phase } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 51 } } abort_when_not_enabled = yes ai_strategy = { type = strike_force_home_base id = 51 value = 10000 } }
+
+###
+
+EAI_MILITARY_INVASION_naval_avoid_169 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 169 } } abort_when_not_enabled = yes ai_strategy = { type = naval_avoid_region id = 169 value = -10000 } }
+EAI_MILITARY_INVASION_naval_avoid_29 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 29 } } abort_when_not_enabled = yes ai_strategy = { type = naval_avoid_region id = 29 value = -10000 } }
+EAI_MILITARY_INVASION_naval_avoid_18 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 18 } } abort_when_not_enabled = yes ai_strategy = { type = naval_avoid_region id = 18 value = -10000 } }
+EAI_MILITARY_INVASION_naval_avoid_42 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 42 } } abort_when_not_enabled = yes ai_strategy = { type = naval_avoid_region id = 42 value = -10000 } }
+EAI_MILITARY_INVASION_naval_avoid_48 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 48 } } abort_when_not_enabled = yes ai_strategy = { type = naval_avoid_region id = 48 value = -10000 } }
+EAI_MILITARY_INVASION_naval_avoid_47 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 47 } } abort_when_not_enabled = yes ai_strategy = { type = naval_avoid_region id = 47 value = -10000 } }
+EAI_MILITARY_INVASION_naval_avoid_68 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 68 } } abort_when_not_enabled = yes ai_strategy = { type = naval_avoid_region id = 68 value = -10000 } }
+EAI_MILITARY_INVASION_naval_avoid_51 = { enable = { check_variable = { EAI_MILITARY_INVASION_objectives^num > 0 } is_in_array = { EAI_MILITARY_INVASION_sea_regions = 51 } } abort_when_not_enabled = yes ai_strategy = { type = naval_avoid_region id = 51 value = -10000 } }

@@ -1,0 +1,1885 @@
+#########################################################
+#	Production Strategies
+#########################################################
+
+EAI_GER_air_production = {
+	allowed = { tag = GER }
+	enable = { always = yes }
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = air_factory_balance value = 90 }
+}
+
+EAI_GER_air_production_early = {
+	allowed = { tag = GER }
+	enable = { 
+		OR = {
+			date < 1940.6.1 
+			FRA = { EAI_THIS_is_threat_to_PREV = yes }
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = air_factory_balance value = 30 }
+	ai_strategy = { type = unit_ratio id = cas value = -35 }
+	ai_strategy = { type = unit_ratio id = naval_bomber value = -20 }
+}
+
+EAI_GER_air_production_increase = {
+	allowed = { tag = GER }
+	enable = { 
+		num_of_military_factories > 150
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = air_factory_balance value = 45 }
+}
+
+EAI_GER_air_reduce_naval_bomber_production= {
+	allowed = { tag = GER }
+	enable = { 
+		date > 1940.6.1 
+	}
+	abort_when_not_enabled = yes
+
+	# ai_strategy = { type = unit_ratio id = cas value = -20 }
+	ai_strategy = { type = unit_ratio id = naval_bomber value = -20 }
+}
+
+EAI_GER_build_army = {
+	allowed = { tag = GER }
+	enable = { 
+		date < 1940.1.1
+		has_war = no
+		has_army_manpower = { size < 800000 }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = build_army id = infantry value = 500 }
+	ai_strategy = { type = force_build_armies value = 300 }
+	ai_strategy = { type = equipment_production_min_factories_archetype id = infantry_equipment value = 10 }
+	ai_strategy = { type = equipment_production_min_factories_archetype id = support_equipment value = 3 }
+	ai_strategy = { type = equipment_production_min_factories_archetype id = motorized_equipment value = 3 }
+}
+
+EAI_GER_support_equipment = {
+	allowed = { tag = GER }
+	enable = { 
+		date < 1941.1.1
+		has_army_manpower = { size < 1200000 }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = equipment_production_min_factories_archetype id = support_equipment value = 3 }
+	ai_strategy = { type = equipment_production_min_factories_archetype id = anti_air_equipment value = 2 }
+	ai_strategy = { type = equipment_production_min_factories_archetype id = anti_tank_equipment value = 2 }
+}
+
+EAI_GER_artillery = {
+	allowed = { tag = GER }
+	enable = { 
+		date < 1940.1.1
+		has_war = no
+		has_army_manpower = { size < 1200000 }
+		check_variable = { EAI_FOCUS/LAND/infantry_design > global.EAI_A_INF_DESIGN }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = equipment_production_min_factories_archetype id = artillery_equipment value = 5 }
+}
+
+EAI_GER_limit_tanks_to_focus_on_planes = {
+	allowed = { tag = GER }
+	enable = {
+		check_variable = { num_equipment_in_armies@medium_tank_chassis > 16000 }
+	}
+	abort = {
+		check_variable = { num_equipment_in_armies@medium_tank_chassis < 13000 }
+	}
+
+	ai_strategy = { type = equipment_production_factor id = armor value = -60 }
+}
+
+EAI_GER_more_subs = {
+	allowed = { tag = GER }
+	enable = {
+		check_variable = { EAI_FOCUS/NAVY/naval_doctrine = global.EAI_TI_DOCTRINE }
+		check_variable = { EAI_FOCUS/NAVY/submarine = global.EAI_ON }
+
+		num_of_naval_factories > 8
+		check_variable = { num_ships_with_type@destroyer < 75 }
+	}
+	abort = {
+		NOT = {
+			AND = {
+				num_of_naval_factories > 8
+				check_variable = { num_ships_with_type@destroyer < 100 }
+			}
+		}
+	}
+
+	ai_strategy = { type = role_ratio id = naval_submarine value = 500 }
+}
+
+#########################################################
+#	Diplomacy Strategies
+#########################################################
+
+EAI_GER_no_docking_rights_for_GER_outside_europe = {
+	enable = { 
+		NOT = {
+			capital_scope = { is_on_continent = europe }
+			has_war_together_with = GER
+			is_in_faction_with = GER
+			any_neighbor_country = { is_in_faction_with = GER }
+		}
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = diplo_action_desire id = GER target = docking_rights value = -200 }
+	ai_strategy = { type = diplo_action_acceptance id = GER target = docking_rights value = -200 }
+}
+
+EAI_GER_asia_minors_dont_ally_GER = {
+	enable = {
+		is_historical_focus_on = yes
+		capital_scope = { is_on_continent = asia }
+		NOT = { any_neighbor_country = { original_tag = GER } }
+	}
+
+	abort_when_not_enabled = yes
+	
+	ai_strategy = {
+		type = alliance
+		id = "GER"
+		value = -500
+	}
+}
+
+EAI_GER_asia_minors_dont_ally_GER_2 = {
+	enable = {
+		is_historical_focus_on = yes
+		capital_scope = { is_on_continent = asia }
+		NOT = { any_neighbor_country = { original_tag = GER } }
+	}
+
+	abort_when_not_enabled = yes
+
+	reversed = yes
+	
+	ai_strategy = {
+		type = alliance
+		id = "GER"
+		value = -500
+	}
+}
+
+EAI_GER_ignore_spr = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+		has_government = fascism
+		has_war_with = SOV
+	}
+	abort = {
+		NOT = { has_war_with = SOV }
+	}
+	ai_strategy = {
+		type = ignore
+		id = "SPR"
+		value = 500
+	}
+	ai_strategy = {
+		type = ignore
+		id = "D01"
+		value = 500
+	}
+}
+
+EAI_GER_ignore_bnl = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+		has_government = fascism
+		NOT = { 
+			BEL = { has_country_flag = EAI_declare_war_from_GER } 
+			LUX = { has_country_flag = EAI_declare_war_from_GER } 
+			HOL = { has_country_flag = EAI_declare_war_from_GER } 
+		}
+		NOT = { 
+			GER = { has_capitulated = yes }
+			GER = { exists = no }
+			GER = { is_subject = yes }
+		}
+		NOT = { has_country_flag = GER_invade_BNL }
+		NOT = { has_completed_focus = GER_around_maginot }
+	}
+	abort = {
+		OR = { 
+			BEL = { has_country_flag = EAI_declare_war_from_GER } 
+			LUX = { has_country_flag = EAI_declare_war_from_GER } 
+			HOL = { has_country_flag = EAI_declare_war_from_GER } 
+		}
+		has_completed_focus = GER_around_maginot
+	}
+	ai_strategy = {
+		type = ignore_claim
+		id = "BEL"
+		value = 500
+	}
+	ai_strategy = {
+		type = ignore_claim
+		id = "HOL"
+		value = 500
+	}
+	ai_strategy = {
+		type = ignore_claim
+		id = "LUX"
+		value = 500
+	}
+}
+
+EAI_GER_ignore_SWE = {
+	enable = {
+		is_historical_focus_on = yes
+
+		OR = { tag = GER tag = SWE }
+
+		GER = { 
+			SOV = { EAI_THIS_is_threat_to_PREV = yes }
+		}
+		DEN = { has_capitulated = yes has_war_with = GER }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = ignore id = "SWE" value = 2000 }
+	ai_strategy = { type = antagonize id = "SWE" value = -2000 }
+
+	ai_strategy = { type = ignore id = "GER" value = 2000 }
+	ai_strategy = { type = antagonize id = "GER" value = -2000 }
+}
+
+EAI_GER_portuguese_trade_relation = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+
+		date > 1940.1.1
+		
+		has_political_power > 100
+		
+		check_variable = { EAI_FOCUS/LAND/armor_focus = global.EAI_MARM_FOCUS }
+		
+		NOT = { has_war_with = POR }
+		
+		POR = { tungsten > 200 }
+		
+		POR = { has_opinion = { target = ROOT value < 90 } }
+	}
+	abort = {
+		OR = {
+			NOT = { has_political_power > 80 }
+			NOT = { POR = { has_opinion = { target = ROOT value < 90 } } }
+		}
+	}
+	ai_strategy = {
+		type = befriend
+		id = "POR"
+		value = 500
+	}
+}
+
+### Stop european minors from joining Japan
+
+EAI_GER_minor_allies = {
+	enable = {
+		has_government = fascism
+		is_in_faction = no
+		GER = {
+			has_government = fascism
+		}
+		capital_scope = {
+			is_on_continent = europe
+		}
+	}
+	abort = {
+		GER = {
+			NOT = {
+				has_government = fascism
+			}
+		}
+	}
+
+	ai_strategy = { type = diplo_action_desire id = JAP target = join_faction value = -1000 }
+	ai_strategy = { type = diplo_action_acceptance id = JAP target = offer_join_faction value = -1000 }
+}
+
+EAI_GER_minor_allies_2 = {
+	allowed = { tag = JAP }
+	enable = {
+		has_government = fascism
+	}
+	abort = {
+		NOT = {
+			has_government = fascism
+		}
+	}
+
+	ai_strategy = { type = diplo_action_desire id = ROM target = offer_join_faction value = -1000 }
+	ai_strategy = { type = diplo_action_acceptance id = ROM target = join_faction value = -1000 }
+
+	ai_strategy = { type = diplo_action_desire id = BUL target = offer_join_faction value = -1000 }
+	ai_strategy = { type = diplo_action_acceptance id = BUL target = join_faction value = -1000 }
+
+	ai_strategy = { type = diplo_action_desire id = HUN target = offer_join_faction value = -1000 }
+	ai_strategy = { type = diplo_action_acceptance id = HUN target = join_faction value = -1000 }
+}
+
+# Impossible to break it later with SOV division numbers
+EAI_GER_break_NAP_with_SOV = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = diplo_action_desire id = SOV target = non_aggression_pact value = -1000 }
+	ai_strategy = { type = diplo_action_acceptance id = SOV target = non_aggression_pact value = -1000 }
+}
+
+#########################################################
+#	Unit Strategies
+#########################################################
+
+EAI_GER_dont_defend_borders_ITA = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+		
+		has_war_with = FRA
+		
+		FRA = { has_capitulated = no }
+		
+		is_in_faction_with = ITA
+		
+		ITA = { has_war_with = FRA }
+
+		date < 1941.1.1
+	}
+	
+	abort_when_not_enabled = yes
+	
+	ai_strategy = { type = dont_defend_ally_borders id = "ITA" value = 500 }
+}
+
+EAI_GER_garrison_home = {
+	allowed = { tag = GER }
+	enable = {
+		has_capitulated = no
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = strategic_air_importance id = 7 value = 25000 }
+	ai_strategy = { type = strategic_air_importance id = 6 value = 25000 }
+	ai_strategy = { type = strategic_air_importance id = 8 value = 25000 }
+
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.05
+		order_id = 9
+		states = { 
+			64
+		}
+		subtract_invasions_from_need = no
+		subtract_fronts_from_need = no
+	}
+}
+
+EAI_GER_garrison_atlantic_wall = {
+	enable = {
+		OR = {
+			tag = GER
+			AND = {
+				is_in_faction_with = GER
+				NOT = { tag = ITA }
+				NOT = { tag = FIN }
+				NOT = { tag = JAP }
+				NOT = { tag = SPR }
+			}
+		}
+		any_enemy_country = { is_major = yes naval_strength_ratio = { tag = GER ratio > 1.0 } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.15
+		states = { 
+			99
+			58
+			59
+			56
+			36
+			7
+			35
+			6
+			29
+			758
+			15
+			14
+			30
+			23
+			19
+			31
+			22
+			21
+			997
+		}
+		subtract_invasions_from_need = no
+		subtract_fronts_from_need = no
+	}
+}
+
+EAI_GER_withdraw_troops_from_SOV_if_home_invaded = {
+	allowed = { tag = GER }
+	enable = {
+		surrender_progress > 0.15
+		has_country_flag = EAI_MILITARY_trend_losing_war
+	}
+	abort = {
+		NOT = {
+			AND = {
+				surrender_progress > 0.05
+				has_country_flag = EAI_MILITARY_trend_losing_war
+			}
+		}
+	}
+
+	ai_strategy = {
+		type = front_unit_request
+		value = -50
+
+		tag = SOV
+	}
+}
+
+EAI_GER_axis_vichy_border_garrison = {
+	enable = {
+		is_in_faction_with = GER
+		country_exists = VIC
+		GER = { VIC = { EAI_THIS_is_aligned_with_PREV = yes } }
+		NOT = { VIC = { is_in_faction_with = GER } }
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_unit_request
+		value = -200
+
+		country_trigger = { tag = VIC }
+	}
+}
+
+EAI_GER_avoid_southern_africa = { # AI GER gains any states in Africa = disaster
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+		enemies_naval_strength_ratio > 1.0
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_unit_request
+		value = -1000
+
+		area = EAI_southern_africa
+	}
+}
+
+EAI_axis_avoid_middle_east = {
+	enable = {
+		is_historical_focus_on = yes
+		is_in_faction_with = GER
+		CAPITAL_SCOPE = { is_on_continent = europe }
+		OR = {
+			alliance_naval_strength_ratio < 2.0
+			has_war = no
+		}
+		NOT = { GER = { has_country_flag = EAI_path_exists_from_berlin_to_tehran } }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = dont_defend_ally_borders id = "IRQ" value = 500 }
+	ai_strategy = { type = dont_defend_ally_borders id = "PER" value = 500 }
+}
+
+### Where axis minors send units
+
+EAI_axis_defend_GER_borders = {
+	enable = {
+		is_historical_focus_on = yes
+		is_in_faction_with = GER
+		is_major = no
+		CAPITAL_SCOPE = { is_on_continent = europe }
+		NOT = {
+			any_neighbor_country = {
+				has_war_with = ROOT
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = force_defend_ally_borders id = "GER" value = 5000 }
+}
+
+EAI_axis_dont_defend_GER_borders = {
+	enable = {
+		is_historical_focus_on = yes
+		is_in_faction_with = GER
+		is_major = no
+		CAPITAL_SCOPE = { is_on_continent = europe }
+		any_neighbor_country = {
+			has_war_with = ROOT
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = dont_defend_ally_borders id = "GER" value = 5000 }
+	ai_strategy = { type = dont_defend_ally_borders id = "ITA" value = 5000 }
+}
+
+EAI_axis_dont_defend_VIC_borders = {
+	enable = {
+		is_historical_focus_on = yes
+		is_in_faction_with = GER
+		is_major = no
+		CAPITAL_SCOPE = { is_on_continent = europe }
+		NOT = { tag = VIC }
+		NOT = {
+			any_controlled_state = {
+				is_on_continent = africa
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = dont_defend_ally_borders id = VIC value = 5000 }
+	ai_strategy = {
+		type = front_unit_request
+		value = -2000
+
+		state_trigger = { is_on_continent = africa }
+	}
+}
+
+###########################
+# 	Invasion of Poland
+###########################
+
+EAI_GER_poland_PREPARE_POL = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+		has_global_flag = { flag = EAI_GER_blitz_poland_365d days < 90 }
+		POL = { EAI_PREV_imminent_war_against_THIS = yes }
+		date > 1939.6.1
+		date < 1940.6.1
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = declare_war id = "POL" value = 500 }
+	ai_strategy = { type = antagonize id = "POL" value = 5000 }
+	ai_strategy = { type = ignore_claim id = "POL" value = -500 }
+}
+
+EAI_GER_poland_DEPLOY_POL = {
+	allowed = { tag = GER }
+	enable = {
+		OR = {
+			has_global_flag = { flag = EAI_GER_blitz_poland_365d days < 90 }
+			AND = { focus_progress = { focus = GER_danzig_or_war progress > 0 } NOT = { has_completed_focus = GER_danzig_or_war } }
+		}
+		POL = { EAI_PREV_deploy_against_THIS = yes }
+	}
+	abort_when_not_enabled = yes
+
+	### Deploy
+
+	ai_strategy = { type = strategic_air_importance id = 38 value = 50000 }
+	ai_strategy = { type = front_armor_score id = POL value = 50000 }
+
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 25
+	}
+
+	ai_strategy = {
+		type = force_concentration_front_factor
+		ratio = 0.5
+		value = 50
+		
+		state = 97
+		state = 98
+		state = 10
+		state = 5
+	}
+
+	### Avoid
+
+	ai_strategy = { type = garrison value = -50 }
+
+	ai_strategy = {
+		type = force_concentration_front_factor
+		ratio = 0.25
+		value = -50
+		
+		tag = FRA
+	}
+
+	ai_strategy = {
+	    type = front_unit_request
+	    value = -200
+		
+	    tag = LIT
+	}
+
+	ai_strategy = {
+	    type = invasion_unit_request
+	    value = -200
+		
+	    area = europe
+	}
+}
+
+EAI_GER_poland_OFFENSIVE_objectives = {
+	allowed = { tag = GER }
+	enable = {
+		OR = {
+			has_global_flag = { flag = EAI_GER_blitz_poland_365d days < 30 }
+			AND = { focus_progress = { focus = GER_danzig_or_war progress > 0 } NOT = { has_completed_focus = GER_danzig_or_war } }
+		}
+		POL = { EAI_PREV_deploy_against_THIS = yes }
+	}
+	abort_when_not_enabled = yes
+
+	### Deploy
+
+	ai_strategy = {
+		type = force_concentration_target_weight
+		value = 50
+		
+		state = 10
+	}
+
+	### Avoid
+
+	ai_strategy = {
+		type = force_concentration_target_weight
+		value = -100
+		
+		state_trigger = {
+			NOT = { state = 10 }
+		}
+	}
+}
+
+EAI_GER_poland_OFFENSIVE_push_POL = {
+	allowed = { tag = GER }
+	enable = {
+		OR = {
+			has_global_flag = { flag = EAI_GER_blitz_poland_365d days < 90 }
+			AND = { focus_progress = { focus = GER_danzig_or_war progress > 0 } NOT = { has_completed_focus = GER_danzig_or_war } }
+		}
+		POL = { EAI_PREV_deploy_against_THIS = yes }
+		EAI_MILITARY_army_readiness_MEDIUM = yes
+	}
+	
+	abort = {
+		NOT = {
+			AND = {
+				OR = {
+					has_global_flag = { flag = EAI_GER_blitz_poland_365d days < 90 }
+					AND = { focus_progress = { focus = GER_danzig_or_war progress > 0 } NOT = { has_completed_focus = GER_danzig_or_war } }
+				}
+				POL = { EAI_PREV_deploy_against_THIS = yes }
+				EAI_MILITARY_army_readiness_MEDIUM_abort = yes
+			}
+		}
+	}
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.5
+		priority = 500
+		execution_type = rush
+		
+		tag = POL
+	}
+}
+
+EAI_GER_poland_OFFENSIVE_blitz_POL = {
+	allowed = { tag = GER }
+	enable = {
+		OR = {
+			has_global_flag = { flag = EAI_GER_blitz_poland_365d days < 15 }
+			AND = { focus_progress = { focus = GER_danzig_or_war progress > 0 } NOT = { has_completed_focus = GER_danzig_or_war } }
+		}
+		POL = { EAI_PREV_deploy_against_THIS = yes }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.5
+		priority = 600
+		execution_type = rush
+		execute_order = yes
+		
+		tag = POL
+	}
+}
+
+###########################
+# 	Invasion of Denmark/Norway
+###########################
+
+EAI_GER_weserubung_PREPARE_DEN = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+		has_global_flag = { flag = EAI_GER_blitz_denmark_365d days < 90 }
+		DEN = { EAI_PREV_imminent_war_against_THIS = yes }
+		date > 1939.6.1
+		date < 1940.6.1
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = declare_war id = "DEN" value = 500 }
+	ai_strategy = { type = antagonize id = "DEN" value = 5000 }
+	ai_strategy = { type = ignore_claim id = "DEN" value = -500 }
+}
+
+EAI_GER_weserubung_PREPARE_NOR = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+		has_global_flag = { flag = EAI_GER_blitz_denmark_365d days < 90 }
+		NOR = { EAI_PREV_imminent_war_against_THIS = yes }
+		date > 1939.6.1
+		date < 1940.6.1
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = declare_war id = "NOR" value = 500 }
+	ai_strategy = { type = antagonize id = "NOR" value = 5000 }
+	ai_strategy = { type = ignore_claim id = "NOR" value = -500 }
+}
+
+EAI_GER_weserubung_DEPLOY_DEN = {
+	allowed = { tag = GER }
+	enable = {
+		OR = {
+			has_global_flag = { flag = EAI_GER_blitz_denmark_365d days < 90 }
+			AND = { focus_progress = { focus = GER_operation_weserubung progress > 0 } NOT = { has_completed_focus = GER_operation_weserubung } }
+		}
+		DEN = { EAI_PREV_deploy_against_THIS = yes }
+	}
+	abort_when_not_enabled = yes
+
+	### Deploy
+
+	# ai_strategy = { type = strategic_air_importance id = 275 value = 50000 }
+	# ai_strategy = { type = front_armor_score id = DEN value = 50000 }
+
+	# ai_strategy = {
+	# 	type = force_concentration_factor
+	# 	value = 20
+	# }
+	# ai_strategy = {
+	# 	type = force_concentration_front_factor
+	# 	ratio = 0.5
+	# 	value = 50
+		
+	# 	strategic_region = 275
+	# }
+	# ai_strategy = {
+	# 	type = force_concentration_target_weight
+	# 	value = 50
+		
+	# 	state = 37
+	# }
+
+	### Avoid
+
+	ai_strategy = {
+		type = force_concentration_front_factor
+		ratio = 0.25
+		value = -50
+		
+		tag = FRA
+	}
+}
+
+EAI_GER_weserubung_DEPLOY_NOR = {
+	allowed = { tag = GER }
+	enable = {
+		OR = {
+			AND = {
+				has_global_flag = EAI_GER_blitz_poland_365d
+				NOR = { EAI_THIS_is_threat_to_PREV = yes }
+				NOT = { POL = { EAI_THIS_is_threat_to_PREV = yes } }
+			}
+			has_global_flag = { flag = EAI_GER_blitz_denmark_365d days < 90 }
+			AND = { focus_progress = { focus = GER_operation_weserubung progress > 0 } NOT = { has_completed_focus = GER_operation_weserubung } }
+		}
+		NOR = { EAI_PREV_deploy_against_THIS = yes }
+	}
+	abort_when_not_enabled = yes
+
+	### Deploy
+
+	ai_strategy = { type = invade id = NOR value = 3000 }
+
+	ai_strategy = {
+		type = invasion_unit_request
+		value = 100
+
+		tag = NOR
+	}
+
+	ai_strategy = {
+		type = invasion_unit_request
+		value = -100
+
+		country_trigger = {
+			NOT = { tag = NOR }
+		}
+	}
+
+	ai_strategy = {
+		type = area_priority
+		id = just_norway
+		value = 50
+	}
+
+	ai_strategy = {
+		type = prepare_for_war
+		id = NOR
+		value = 100
+	}
+}
+
+###########################
+# 	Invasion of low countries
+###########################
+
+EAI_GER_around_maginot_PREPARE_HOL = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+		has_global_flag = { flag = EAI_GER_blitz_low_countries_365d days < 90 }
+		HOL = { EAI_PREV_imminent_war_against_THIS = yes }
+		date > 1940.4.1
+		date < 1941.1.1
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = prepare_for_war id = "HOL" value = 500 }
+	ai_strategy = { type = declare_war id = "HOL" value = 500 }
+	ai_strategy = { type = antagonize id = "HOL" value = 5000 }
+	ai_strategy = { type = ignore_claim id = "HOL" value = -500 }
+}
+
+EAI_GER_around_maginot_PREPARE_LUX = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+		has_global_flag = { flag = EAI_GER_blitz_low_countries_365d days < 90 }
+		LUX = { EAI_PREV_imminent_war_against_THIS = yes }
+		date > 1940.4.1
+		date < 1941.1.1
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = prepare_for_war id = "LUX" value = 500 }
+	ai_strategy = { type = declare_war id = "LUX" value = 500 }
+	ai_strategy = { type = antagonize id = "LUX" value = 5000 }
+	ai_strategy = { type = ignore_claim id = "LUX" value = -500 }
+}
+
+EAI_GER_around_maginot_PREPARE_BEL = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+		has_global_flag = { flag = EAI_GER_blitz_low_countries_365d days < 90 }
+		BEL = { EAI_PREV_imminent_war_against_THIS = yes }
+		date > 1940.4.1
+		date < 1941.1.1
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = prepare_for_war id = "BEL" value = 500 }
+	ai_strategy = { type = declare_war id = "BEL" value = 500 }
+	ai_strategy = { type = antagonize id = "BEL" value = 5000 }
+	ai_strategy = { type = ignore_claim id = "BEL" value = -500 }
+}
+
+EAI_GER_around_maginot_DEPLOY_BNL = {
+	allowed = { tag = GER }
+	enable = {
+		OR = {
+			has_global_flag = { flag = EAI_GER_blitz_low_countries_365d days < 365 }
+			AND = { focus_progress = { focus = GER_around_maginot progress > 0 } NOT = { has_completed_focus = GER_around_maginot } }
+		}
+		OR = {
+			if = { limit = { has_war_with = HOL } HOL = { has_capitulated = no } }
+			if = { limit = { has_war_with = BEL } BEL = { has_capitulated = no } }
+		}
+	}
+	abort_when_not_enabled = yes
+
+	### Deploy
+
+	ai_strategy = { type = strategic_air_importance id = 5 value = 50000 }
+	ai_strategy = { type = front_armor_score id = HOL value = 50000 }
+	ai_strategy = { type = front_armor_score id = BEL value = 50000 }
+
+	ai_strategy = {
+		type = front_unit_request
+		value = 500
+
+		tag = BEL
+		tag = HOL
+		tag = LUX
+	}
+
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 50
+	}
+
+	ai_strategy = {
+		type = force_concentration_front_factor
+		ratio = 0.5
+		value = 50
+		
+		tag = HOL
+		tag = BEL
+	}
+
+	ai_strategy = {	
+		type = force_concentration_target_weight
+		value = 50
+		
+		state = 6
+		state = 977
+		state = 34
+		state = 980
+		state = 29
+	}
+
+	### Avoid
+
+	ai_strategy = { type = garrison value = -200 }
+
+	ai_strategy = {
+		type = front_unit_request
+		value = -50
+		
+		state = 28
+	}
+
+	ai_strategy = {
+		type = front_unit_request
+		value = -200
+		
+		tag = SOV
+	}
+
+	ai_strategy = {
+	    type = invasion_unit_request
+	    value = -200
+		
+	    area = europe
+	}
+
+	ai_strategy = {
+		type = force_concentration_front_factor
+		ratio = 0.8
+		value = -100
+
+		state = 28
+	}
+
+	ai_strategy = {
+		type = force_concentration_target_weight
+		value = -100
+		
+		state = 28
+		state = 17
+		state = 18
+		state = 27
+	}
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.8
+		priority = 400
+		execution_type = careful
+		execute_order = no
+		manual_attack = no
+
+		state = 28
+	}
+}
+
+###########################
+# 	Invasion of France
+###########################
+
+EAI_GER_france_PREPARE_FRA = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+
+		date < 1941.1.1
+		
+		focus_progress = { focus = GER_danzig_or_war progress > 0 }
+		
+		any_neighbor_country = { tag = FRA }
+		
+		FRA = { is_in_faction_with = ENG }
+		
+		NOT = { has_war_with = FRA }
+	}
+	
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = prepare_for_war
+		id = "FRA"
+		value = 100
+	}
+}
+
+EAI_GER_france_DEPLOY_FRA = {
+	allowed = { tag = GER }
+	enable = {
+		has_war_with = FRA
+		FRA = { has_capitulated = no }
+		has_global_flag = { flag = EAI_GER_blitz_france_365d days < 365 }
+		if = { limit = { has_war_with = HOL } HOL = { has_capitulated = yes } }
+		if = { limit = { has_war_with = BEL } BEL = { has_capitulated = yes } }
+	}
+	abort_when_not_enabled = yes
+
+	### Deploy
+
+	ai_strategy = { type = strategic_air_importance id = 5 value = 50000 }
+	ai_strategy = { type = strategic_air_importance id = 19 value = 50000 }
+	ai_strategy = { type = strategic_air_importance id = 208 value = 50000 }
+	ai_strategy = { type = front_armor_score id = FRA value = 50000 }
+
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 50
+	}
+
+	ai_strategy = {
+		type = force_concentration_front_factor
+		ratio = 0.5
+		value = 50
+		
+		strategic_region = 5
+		strategic_region = 19
+		strategic_region = 208
+	}
+
+	ai_strategy = {
+		type = force_concentration_target_weight
+		value = 50
+
+		state = 16
+		state = 785
+		state = 29
+		state = 15
+		state = 6
+		state = 34
+	}
+
+	### Avoid
+
+	ai_strategy = { type = garrison value = -50 }
+
+	ai_strategy = {
+		type = front_unit_request
+		value = -200
+		
+		tag = SOV
+	}
+
+	ai_strategy = {
+	    type = invasion_unit_request
+	    value = -200
+		
+	    area = europe
+	}
+
+	ai_strategy = {
+		type = force_concentration_front_factor
+		ratio = 0.8
+		value = -100
+
+		state = 28
+	}
+
+	ai_strategy = {
+		type = force_concentration_target_weight
+		value = -100
+		
+		state = 28
+		state = 17
+		state = 18
+		state = 27
+	}
+
+	ai_strategy = {
+		type = force_concentration_target_weight
+		value = -50
+		
+		state_trigger = {
+			NOT = {
+				state = 16
+				state = 785
+				state = 29
+				state = 15
+				state = 6
+				state = 34
+			}
+		}
+	}
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.8
+		priority = 400
+		execution_type = careful
+		execute_order = no
+		manual_attack = no
+
+		state = 28
+	}
+}
+
+EAI_GER_france_MISC_phoney_war = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+		FRA = { NOT = { EAI_PREV_defeated_THIS = yes } }
+		has_global_flag = EAI_GER_blitz_poland_365d
+		NOT = {
+			has_global_flag = EAI_GER_blitz_france_365d
+			FRA = { surrender_progress > 0.1 }
+		}
+	}
+	abort_when_not_enabled = yes
+
+	### Avoid
+
+	ai_strategy = { type = strategic_air_importance id = 19 value = -50000 }
+	ai_strategy = { type = strategic_air_importance id = 208 value = -50000 }
+	ai_strategy = { type = strategic_air_importance id = 5 value = -50000 }
+	ai_strategy = { type = strategic_air_importance id = 20 value = -50000 }
+	ai_strategy = { type = strategic_air_importance id = 18 value = -50000 }
+
+	ai_strategy = {
+		type = force_concentration_front_factor
+		ratio = 0.8
+		value = -100
+
+		state = 28
+	}
+
+	ai_strategy = {
+		type = force_concentration_target_weight
+		value = -100
+		
+		state = 28
+		state = 17
+		state = 18
+		state = 27
+	}
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.8
+		priority = 400
+		execution_type = careful
+		execute_order = no
+		manual_attack = no
+
+		state = 28
+	}
+}
+
+###########################
+# 	Invasion of Balkans
+###########################
+
+EAI_GER_balkans_PREPARE_YUG = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+		has_global_flag = { flag = EAI_GER_blitz_yugoslavia_365d days < 90 }
+		YUG = { EAI_PREV_imminent_war_against_THIS = yes }
+		date > 1940.6.1
+		date < 1942.6.1
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = declare_war id = "YUG" value = 500 }
+	ai_strategy = { type = antagonize id = "YUG" value = 5000 }
+	ai_strategy = { type = ignore_claim id = "YUG" value = -500 }
+}
+
+EAI_GER_balkans_DEPLOY_YUG = {
+	allowed = { tag = GER }
+	enable = {
+		OR = {
+			has_global_flag = { flag = EAI_GER_blitz_yugoslavia_365d days < 180 }
+			AND = { focus_progress = { focus = GER_demand_slovenia progress > 0 } NOT = { has_completed_focus = GER_demand_slovenia } }
+		}
+		YUG = { EAI_PREV_deploy_against_THIS = yes }
+	}
+	abort_when_not_enabled = yes
+
+	### Deploy
+
+	ai_strategy = { type = strategic_air_importance id = 24 value = 50000 }
+	ai_strategy = { type = front_armor_score id = YUG value = 50000 }
+
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 20
+	}
+	ai_strategy = {
+		type = force_concentration_front_factor
+		ratio = 0.5
+		value = 50
+		
+		strategic_region = 24
+	}
+	ai_strategy = {
+		type = force_concentration_target_weight
+		value = 50
+		
+		state = 107
+	}
+
+	### Avoid
+}
+
+### Greece
+
+EAI_GER_balkans_DEPLOY_GRE = {
+	allowed = { tag = GER }
+	enable = {
+		has_global_flag = { flag = EAI_GER_blitz_yugoslavia_365d days < 180 }
+		NOT = { YUG = { EAI_PREV_deploy_against_THIS = yes } }
+		GRE = { EAI_PREV_deploy_against_THIS = yes }
+	}
+	abort_when_not_enabled = yes
+
+	### Deploy
+
+	ai_strategy = { type = strategic_air_importance id = 25 value = 50000 }
+	ai_strategy = { type = front_armor_score id = GRE value = 50000 }
+
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 20
+	}
+	ai_strategy = {
+		type = force_concentration_front_factor
+		ratio = 0.5
+		value = 50
+		
+		strategic_region = 25
+	}
+	ai_strategy = {
+		type = force_concentration_target_weight
+		value = 50
+		
+		state = 47
+	}
+
+	### Avoid
+}
+
+###########################
+# 	Battle of Britain
+###########################
+
+EAI_GER_battle_of_britain_DEFENSIVE_save_airforce = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+		has_war_with = ENG
+		NOT = { ENG = { surrender_progress > 0 } }
+		OR = {
+			date > 1941.1.1
+			SOV = { is_ai = no }
+		}
+		NOT = { check_variable = { ENG.num_deployed_planes < 500 } }
+		check_variable = { num_deployed_planes < 3000 }
+		OR = {
+			SOV = { EAI_THIS_is_threat_to_PREV = yes }
+			any_neighbor_country = {
+				is_major = yes
+				has_war_with = ROOT
+			}
+		}
+		NOT = {
+			any_of_scopes = { array = global.EAI_MAP_britain_theatre
+				CONTROLLER = { has_war_with = ENG }
+			}
+		}
+	}
+	abort = {
+		NOT = {
+			AND = {
+				is_historical_focus_on = yes
+				has_war_with = ENG
+				NOT = { ENG = { surrender_progress > 0 } }
+				OR = {
+					date > 1941.1.1
+					SOV = { is_ai = no }
+				}
+				NOT = { check_variable = { ENG.num_deployed_planes < 500 } }
+				check_variable = { num_deployed_planes < 3500 }
+				OR = {
+					SOV = { EAI_THIS_is_threat_to_PREV = yes }
+					any_neighbor_country = {
+						is_major = yes
+						has_war_with = ROOT
+					}
+				}
+				NOT = {
+					any_of_scopes = { array = global.EAI_MAP_britain_theatre
+						CONTROLLER = { has_war_with = ENG }
+					}
+				}
+			}
+		}
+	}
+
+	ai_strategy = { type = strategic_air_importance id = 1 value = -50000 }
+	ai_strategy = { type = strategic_air_importance id = 2 value = -50000 }
+	ai_strategy = { type = strategic_air_importance id = 18 value = -50000 }
+}
+
+EAI_GER_battle_of_britain_NAVAL_raid_atlantic = {
+	allowed = { original_tag = GER }
+	enable = {
+		OR = {
+			has_war_with = ENG
+			has_war_with = USA
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_convoy_raid_region id = 49 value = 50000 }
+	ai_strategy = { type = naval_convoy_raid_region id = 44 value = 50000 }
+	ai_strategy = { type = naval_convoy_raid_region id = 51 value = 50000 }
+	ai_strategy = { type = naval_convoy_raid_region id = 58 value = 50000 }
+	ai_strategy = { type = naval_convoy_raid_region id = 50 value = 50000 }
+	ai_strategy = { type = naval_convoy_raid_region id = 56 value = 50000 }
+	ai_strategy = { type = naval_convoy_raid_region id = 57 value = 50000 }
+	ai_strategy = { type = naval_convoy_raid_region id = 61 value = 50000 }
+
+	ai_strategy = { type = naval_convoy_raid_region id = 18 value = -5000 }
+	ai_strategy = { type = naval_convoy_raid_region id = 42 value = -5000 }
+	ai_strategy = { type = naval_convoy_raid_region id = 43 value = -5000 }
+}
+
+EAI_GER_battle_of_britain_NAVAL_avoid = {
+	enable = {
+		has_war_with = ENG
+		NOT = { ENG = { has_capitulated = yes } }
+		alliance_naval_strength_ratio < 1.0
+		NOT = { ENG = { has_country_flag = EAI_naval_invasion_from_@ROOT } }
+	}
+	
+	abort_when_not_enabled = yes
+	
+	ai_strategy = { type = naval_avoid_region id = 18 value = 50 }
+	ai_strategy = { type = naval_avoid_region id = 16 value = 50 }
+	ai_strategy = { type = naval_avoid_region id = 43 value = 50 }
+	ai_strategy = { type = naval_avoid_region id = 42 value = 50 }
+}
+
+###########################
+# 	Operation Barbarossa
+###########################
+
+EAI_GER_barbarossa_PREPARE_SOV = {
+	allowed = { tag = GER }
+	enable = {
+		is_historical_focus_on = yes
+		has_global_flag = { flag = EAI_GER_blitz_russia_365d days < 90 }
+		SOV = { EAI_PREV_imminent_war_against_THIS = yes }
+		date > 1941.1.1
+		date < 1942.1.1
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = prepare_for_war id = SOV value = 5000 }
+	ai_strategy = { type = consider_weak id = SOV value = 5000 }
+	ai_strategy = { type = declare_war id = SOV value = 5000 }
+	ai_strategy = { type = ignore_claim id = SOV value = -5000 }
+}
+
+EAI_GER_barbarossa_DEPLOY = {
+	allowed = { tag = GER }
+	enable = {
+		OR = {
+			NOT = { SOV = { EAI_PREV_defeated_THIS = yes } }
+			has_global_flag = { flag = EAI_GER_blitz_russia_365d days < 90 }
+			AND = { focus_progress = { focus = GER_war_with_the_ussr progress > 0 } NOT = { has_completed_focus = GER_war_with_the_ussr } }
+		}
+		SOV = { EAI_PREV_deploy_against_THIS = yes }
+	}
+	abort_when_not_enabled = yes
+
+	### Deploy
+
+	ai_strategy = { type = front_armor_score id = SOV value = 50000 }
+
+	ai_strategy = {
+		type = force_concentration_factor
+		value = 20
+	}
+
+	### Avoid
+}
+
+### Defensive
+
+EAI_GER_barbarossa_DEFENSIVE_major_shortage = {
+	enable = {
+		has_war_with = SOV
+		is_in_faction_with = GER
+		EAI_MILITARY_army_shortage_CRITICAL = yes
+	}
+	abort = {
+		NOT = { 
+			AND = {
+				has_war_with = SOV
+				is_in_faction_with = GER
+				EAI_MILITARY_army_shortage_CRITICAL_abort = yes
+			}
+		}
+	} 	
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.75
+		priority = 900
+		execution_type = careful
+		execute_order = no
+
+		tag = SOV
+	}
+}
+
+EAI_GER_barbarossa_DEFENSIVE_minor_shortage = {
+	enable = {
+		has_war_with = SOV
+		is_in_faction_with = GER
+		EAI_MILITARY_army_shortage_MAJOR = yes
+	}
+	abort = {
+		NOT = { 
+			AND = {
+				has_war_with = SOV
+				is_in_faction_with = GER
+				EAI_MILITARY_army_shortage_MAJOR_abort = yes
+			}
+		}
+	} 	
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.75
+		priority = 600
+		execution_type = careful
+
+		tag = SOV
+	}
+}
+
+EAI_GER_barbarossa_DEFENSIVE_operational_pause = {
+	enable = {
+		has_war_with = SOV
+		is_in_faction_with = GER
+		has_country_flag = EAI_MILITARY_operational_pause_timer
+	}
+	abort_when_not_enabled = yes	
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.75
+		priority = 700
+		execution_type = careful
+		execute_order = no
+
+		tag = SOV
+	}
+}
+
+### Offensive
+
+EAI_GER_barbarossa_OFFENSIVE_operational_resume = {
+	enable = {
+		has_war_with = SOV
+		is_in_faction_with = GER
+		has_country_flag = EAI_operational_initial_resume_timer
+		NOT = { has_country_flag = EAI_MILITARY_operational_pause_timer }
+		EAI_MILITARY_army_readiness_HIGH = yes
+		NOT = { EAI_MILITARY_north_mud_season = yes }
+	}
+	abort = {
+		NOT = {
+			AND = {
+				has_war_with = SOV
+				is_in_faction_with = GER
+				has_country_flag = EAI_operational_initial_resume_timer
+				NOT = { has_country_flag = EAI_MILITARY_operational_pause_timer }
+				EAI_MILITARY_army_readiness_HIGH_abort = yes
+				NOT = { EAI_MILITARY_north_mud_season = yes }
+			}
+		}
+	}
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.75
+		priority = 800
+		execution_type = rush_weak
+		execute_order = yes
+
+		tag = SOV
+	}
+}
+
+EAI_GER_barbarossa_OFFENSIVE_initial_blitz = {
+	enable = { 
+		is_in_faction_with = GER
+		OR = {
+			has_global_flag = { flag = EAI_GER_blitz_russia_365d days < 30 }
+			AND = { focus_progress = { focus = GER_war_with_the_ussr progress > 0 } NOT = { has_completed_focus = GER_war_with_the_ussr } }
+		}
+		SOV = { EAI_PREV_deploy_against_THIS = yes }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.75
+		priority = 1000
+		execution_type = rush
+		execute_order = yes
+		
+		tag = SOV
+	}
+}
+
+EAI_GER_barbarossa_OFFENSIVE_sector = {
+	allowed = { tag = GER }
+	enable = {
+		has_variable = EAI_MILITARY_SECTOR_id
+	}
+	abort = {
+		NOT = {
+			AND = {
+				has_variable = EAI_MILITARY_SECTOR_id
+			}
+		}
+	}
+
+	ai_strategy = {
+		type = force_concentration_front_factor
+		ratio = 0.5
+		value = 50
+		
+		state_trigger = {
+			is_in_array = { FROM.FROM.EAI_MILITARY_SECTOR_target_states = THIS.id }
+		}
+	}
+	ai_strategy = {
+		type = force_concentration_target_weight
+		value = 50
+		
+		state_trigger = {
+			is_in_array = { FROM.FROM.EAI_MILITARY_SECTOR_target_objectives = THIS.id }
+		}
+	}
+	ai_strategy = {
+		type = force_concentration_target_weight
+		value = -99
+		
+		state_trigger = {
+			NOT = { is_in_array = { FROM.FROM.EAI_MILITARY_SECTOR_target_states = THIS.id } }
+		}
+	}
+}
+
+EAI_GER_barbarossa_OFFENSIVE_sector_NORTH_DEBUG = {
+	allowed = { tag = GER }
+	enable = {
+		has_variable = EAI_MILITARY_SECTOR_id
+		check_variable = { EAI_MILITARY_SECTOR_id = 0 }
+	}
+	abort_when_not_enabled = yes
+}
+
+EAI_GER_barbarossa_OFFENSIVE_sector_CENTER_DEBUG = {
+	allowed = { tag = GER }
+	enable = {
+		has_variable = EAI_MILITARY_SECTOR_id
+		check_variable = { EAI_MILITARY_SECTOR_id = 1 }
+	}
+	abort_when_not_enabled = yes
+}
+
+EAI_GER_barbarossa_OFFENSIVE_sector_SOUTH_DEBUG = {
+	allowed = { tag = GER }
+	enable = {
+		has_variable = EAI_MILITARY_SECTOR_id
+		check_variable = { EAI_MILITARY_SECTOR_id = 2 }
+	}
+	abort_when_not_enabled = yes
+}
+
+### Seasonal behavior
+
+EAI_GER_barbarossa_SEASONAL_mud = {
+	enable = {
+		has_war_with = SOV
+		is_in_faction_with = GER
+		EAI_MILITARY_north_mud_season = yes
+		EAI_MILITARY_army_shortage_MINOR = yes
+	}
+	abort = {
+		NOT = {
+			AND = {
+				has_war_with = SOV
+				is_in_faction_with = GER
+				EAI_MILITARY_north_mud_season = yes
+				EAI_MILITARY_army_shortage_MINOR_abort = yes
+			}
+		}
+	}
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.75
+		priority = 500
+		execution_type = careful
+
+		area = EAI_russia_plains
+	}
+}
+
+EAI_GER_barbarossa_SEASONAL_winter = {
+	enable = {
+		has_war_with = SOV
+		is_in_faction_with = GER
+		EAI_MILITARY_north_winter_season = yes
+	}
+	abort_when_not_enabled = yes	
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.75
+		priority = 500
+		execution_type = balanced
+
+		area = EAI_russia_plains
+	}
+}
+
+EAI_GER_barbarossa_SEASONAL_summer = {
+	enable = {
+		has_war_with = SOV
+		is_in_faction_with = GER
+		EAI_MILITARY_north_summer_season = yes
+		EAI_MILITARY_army_readiness_HIGH = yes
+	}
+	abort = {
+		NOT = {
+			AND = {
+				has_war_with = SOV
+				is_in_faction_with = GER
+				EAI_MILITARY_north_summer_season = yes
+				EAI_MILITARY_army_readiness_HIGH_abort = yes
+			}
+		}
+	}
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.75
+		priority = 500
+		execution_type = rush_weak
+
+		area = EAI_russia_plains
+	}
+}
+
+### Misc
+
+EAI_GER_barbarossa_HISTORICAL_careful_limiter = {
+	enable = {
+		has_war_with = SOV
+		SOV = { is_ai = yes }
+		is_in_faction_with = GER
+		GER = { check_variable = { EAI_MILITARY_barbarossa_LIMITER = 1 } }
+		check_variable = { global.EAI_eastern_front = 2 }
+	}
+	abort_when_not_enabled = yes	
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.5
+		priority = 1200
+		execution_type = careful
+		manual_attack = no
+		
+		tag = SOV
+	}
+}
+
+EAI_GER_barbarossa_HISTORICAL_hold_limiter = {
+	enable = {
+		has_war_with = SOV
+		SOV = { is_ai = yes }
+		is_in_faction_with = GER
+		GER = { check_variable = { EAI_MILITARY_barbarossa_LIMITER = 2 } }
+		check_variable = { global.EAI_eastern_front = 2 }
+	}
+	abort_when_not_enabled = yes	
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.5
+		priority = 1200
+		execution_type = careful
+		manual_attack = no
+		execute_order = no
+		
+		tag = SOV
+	}
+	ai_strategy = {
+		type = force_concentration_front_factor
+		ratio = 0.5
+		value = -100
+		
+		state_trigger = {
+			CONTROLLER = { is_in_faction_with = SOV }
+			is_in_array = { global.EAI_MAP_barbarossa_theatre = THIS.id }
+		}
+	}
+	ai_strategy = {
+		type = force_concentration_target_weight
+		value = -100
+		
+		state_trigger = {
+			CONTROLLER = { is_in_faction_with = SOV }
+			is_in_array = { global.EAI_MAP_barbarossa_theatre = THIS.id }
+		}
+	}
+}
+
+#########################################################
+#	Naval
+#########################################################
+
+EAI_axis_avoid_mediterranean = {
+	enable = { 
+		has_war_with = ENG
+		alliance_naval_strength_ratio < 2 
+		GER = { EAI_PREV_on_same_side_with_THIS = yes }
+		OR = {
+			NOT = { # gibraltar
+				118 = { CONTROLLER = { is_in_faction_with = ROOT } }
+				290 = { CONTROLLER = { is_in_faction_with = ROOT } }
+			}
+			NOT = { # suez
+				446 = { CONTROLLER = { is_in_faction_with = ROOT } }
+				453 = { CONTROLLER = { is_in_faction_with = ROOT } }
+			}
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_avoid_region id = 68 value = 50 }
+	ai_strategy = { type = naval_avoid_region id = 169 value = 50 }
+	ai_strategy = { type = naval_avoid_region id = 69 value = 50 }
+	ai_strategy = { type = naval_avoid_region id = 100 value = 50 }
+}
+
+EAI_axis_avoid_mediterranean_2 = {
+	enable = { 
+		has_war_with = ENG
+		alliance_naval_strength_ratio < 2 		
+		GER = { EAI_PREV_on_same_side_with_THIS = yes }
+		OR = {
+			452 = { CONTROLLER = { is_in_faction_with = ROOT } }
+			447 = { CONTROLLER = { is_in_faction_with = ROOT } }
+			446 = { CONTROLLER = { is_in_faction_with = ROOT } }
+			453 = { CONTROLLER = { is_in_faction_with = ROOT } }
+		}
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_avoid_region id = 69 value = 500 }
+}
+
+EAI_GER_naval_missions_early_war = {
+	allowed = { tag = GER }
+	enable = { 
+		FRA = {
+			has_war_with = GER
+			NOT = { has_capitulated = yes }
+			is_in_faction_with = ENG
+		}
+
+		alliance_naval_strength_ratio < 2
+
+		date < 1941.1.1
+	}
+	
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_PATROL" value = 200000 }
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_STRIKE_FORCE" value = 200000 }
+	ai_strategy = { type = naval_mission_threshold id = "MISSION_CONVOY_ESCORT" value = 200000 }
+}

@@ -1,0 +1,304 @@
+#########################################################
+#	Production Strategies
+#########################################################
+
+EAI_SIA_build_army = {
+	allowed = { tag = SIA }
+	enable = {
+		date > 1939.8.1
+		date < 1943.1.1
+		has_army_manpower = { size < 620000 }
+	}
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = build_army id = infantry value = 100 }
+	ai_strategy = { type = force_build_armies value = 100 }
+}
+
+#########################################################
+#	Diplomacy Strategies
+#########################################################
+
+EAI_SIA_support_JAP_war_effort = {
+	allowed = { tag = SIA }
+	enable = {
+	    is_in_faction_with = JAP
+		stockpile_ratio = {
+            archetype = artillery_equipment
+            ratio > 0.5
+		}
+    }
+	
+	ai_strategy = {
+        type = send_lend_lease_desire
+        id = JAP
+        value = 5000
+    }
+	
+	ai_strategy = { 
+	    type = support 
+		id = JAP 
+		value = 5000 
+	} 
+	
+	ai_strategy = { 
+	    type = diplo_action_desire 
+	    id = JAP 
+	    target = lend_lease 
+	    value = 3000 
+	}
+}			
+
+#########################################################
+#	Unit Strategies
+#########################################################
+
+EAI_SIA_training_in_the_countryside = {#Training troops where there is supply
+    allowed = { tag = SIA }
+	enable = {
+	    has_war = no
+		date > 1939.8.1
+		NOT = {
+		    OR = {
+				date > 1941.3.1
+			}	
+		}	
+	}
+
+    abort_when_not_enabled = yes
+	
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.75
+		states = { 
+			289
+			724
+			869
+		}
+		subtract_invasions_from_need = no
+		subtract_fronts_from_need = no
+	}
+	
+	ai_strategy = {
+		type = front_unit_request
+		value = 500
+		
+		state = 336
+	}
+	
+	ai_strategy = { #No supply for training in Indochina
+		type = front_unit_request
+		value = -100
+		
+		tag = FRA
+	}
+	ai_strategy = { #No supply for training in Indochina
+		type = front_unit_request
+		value = -100
+		
+		tag = VIC
+	}
+}
+
+EAI_SIA_prepare_for_war = {
+    allowed = { tag = SIA }
+	enable = {
+	    is_in_faction_with = JAP
+		date > 1941.10.1
+	}
+
+    abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_unit_request
+		value = 150
+		
+		tag = BRM
+	}
+
+	ai_strategy = {
+		type = front_unit_request
+		value = 100
+		
+		strategic_region = 188
+	}
+	
+	ai_strategy = {
+		type = front_unit_request
+		value = 150
+		
+		tag = ENG
+	}
+	
+	ai_strategy = {
+		type = front_unit_request
+		value = 150
+		
+		tag = RAJ
+	}
+
+	ai_strategy = {
+		type = prepare_for_war
+		id = "BRM"
+		value = 150
+	}
+	
+	ai_strategy = {
+		type = prepare_for_war
+		id = "MAL"
+		value = 100
+	}
+	
+	ai_strategy = {
+		type = prepare_for_war
+		id = "ENG"
+		value = 150
+	}
+	ai_strategy = {
+		type = prepare_for_war
+		id = "RAJ"
+		value = 150
+	}
+	
+	ai_strategy = {
+        type = ignore_army_incompetence
+        value = 100
+    }
+}
+
+EAI_SIA_guard_rear = {
+    allowed = { tag = SIA }
+	enable = {
+	    is_in_faction_with = JAP
+		date > 1941.10.1
+	}
+
+    abort_when_not_enabled = yes
+	
+	ai_strategy = {
+		type = put_unit_buffers
+		ratio = 0.08
+		states = { 
+			289
+			724
+			869
+		}
+		subtract_invasions_from_need = no
+		subtract_fronts_from_need = no
+	}
+}
+
+EAI_SIA_avoid_JAP_border = {
+	allowed = { tag = SIA }
+	enable = { 
+		is_in_faction_with = JAP
+		JAP = { num_divisions > 15 }
+	}
+
+	abort_when_not_enabled = yes
+
+	ai_strategy = { type = dont_defend_ally_borders id = "JAP" value = 5000 }
+}
+
+#EAI_SIA_avoid__china = {#Once Pacific War starts
+#    allowed = { tag = SIA }
+#	enable = { 
+#		is_in_faction_with = JAP
+#		OR = {
+#		    has_war_with = ENG
+#			has_war_together_with = ENG
+#		}
+#	}
+#	
+#	ai_strategy = {
+#		type = front_unit_request
+#		value = -1000
+#		
+#		country_trigger = {
+#		    is_in_faction_with = CHI
+#		}	
+#	}
+#}	
+
+EAI_SIA_southeast_asia_blitz = {
+    allowed = { tag = SIA }
+	enable = {
+	    is_in_faction_with = JAP
+		has_global_flag = { flag = EAI_JAP_blitz_pacific_1000d value = 1 days < 120 }
+		OR = {
+		    has_war_with = ENG
+			has_war_together_with = ENG
+		}
+	}
+
+    abort_when_not_enabled = yes
+	
+	
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.3
+		priority = 1600
+		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+
+		country_trigger = { 
+			OR = { 
+				tag = BRM				
+				tag = RAJ
+				tag = ENG
+			} 
+		}
+	}
+	
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio = 0.2
+		priority = 1600
+		execution_type = rush
+		execute_order = yes
+		manual_attack = yes
+
+		state_trigger = { 
+			OR = { 
+				state = 336 
+			} 
+		}
+	}
+	
+	ai_strategy = {
+        type = ignore_army_incompetence
+        value = 100
+    }
+}
+
+EAI_allies_southeast_asia_blitz_surprise = {
+    enable = {
+		has_war_with = JAP
+		has_war_with = SIA
+		ENG = { EAI_PREV_on_same_side_with_THIS = yes }
+		has_global_flag = { flag = EAI_JAP_blitz_pacific_1000d value = 1 days < 120 }
+		NOT = { tag = BRM }
+		BRM = { has_capitulated = no }
+		AND = {
+		    JAP = { is_ai = yes }
+		    SIA = { is_ai = yes }
+	    }
+	}
+	abort_when_not_enabled = yes
+    
+	ai_strategy = {
+	    type = dont_defend_ally_borders
+		id = BRM
+		value = 5000
+	}
+	
+	ai_strategy = {
+		type = front_unit_request
+		value = -500
+		
+		area = burma
+	}
+}	
