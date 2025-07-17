@@ -829,6 +829,44 @@ EAI_ENG_invasion_of_iraq_PREPARE = {
 	}
 }
 
+EAI_ENG_irag_1941_PREPARE = {
+	enable = {
+	    is_in_faction_with = ENG
+		is_historical_focus_on = yes
+		date > 1941.1.1
+		NOT = { has_war_with = IRQ }
+		focus_progress = {
+            focus = uk_iraq_focus
+            progress < 0.01
+        }
+		GER = {
+			OR = {
+				has_war_with = ENG
+
+				AND = {
+					focus_progress = { focus = GER_danzig_or_war progress > 0 }
+					NOT = { has_completed_focus = GER_danzig_or_war }
+				}
+			}
+		}
+	}
+	
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_unit_request
+		value = 50
+		
+		tag = IRQ
+	}
+
+	ai_strategy = {
+		type = prepare_for_war
+		id = "IRQ"
+		value = 100
+	}
+}
+
 EAI_ENG_invasion_of_iraq_WARDEC = {
 	allowed = { tag = ENG }
 	enable = {
@@ -872,6 +910,48 @@ EAI_ENG_invasion_of_iraq_DEPLOY = {
 		value = 50
 		
 		strategic_region = 28
+	}
+
+	ai_strategy = {
+		type = front_control
+		ordertype = front
+		ratio > 0.25
+		priority = 800
+		execution_type = rush
+		
+		strategic_region = 28
+	}
+}
+
+EAI_ENG_irag_1941_PREPARE = {
+	enable = {
+	    is_in_faction_with = ENG
+		is_historical_focus_on = yes
+		date > 1941.1.1
+		has_war_with = IRQ
+		focus_progress = {
+            focus = uk_iraq_focus
+            progress < 0.01
+        }
+		GER = {
+			OR = {
+				has_war_with = ENG
+
+				AND = {
+					focus_progress = { focus = GER_danzig_or_war progress > 0 }
+					NOT = { has_completed_focus = GER_danzig_or_war }
+				}
+			}
+		}
+	}
+	
+	abort_when_not_enabled = yes
+
+	ai_strategy = {
+		type = front_unit_request
+		value = 50
+		
+		tag = IRQ
 	}
 
 	ai_strategy = {
@@ -1149,14 +1229,14 @@ EAI_ENG_ethiopia_PREPARE = {
 
 	ai_strategy = {
 		type = front_unit_request
-		value = 75
+		value = 100
 		
 		area = east_africa
 	}
 
 	ai_strategy = {
 		type = front_unit_request
-		value = 50
+		value = 100
 		
 		strategic_region = 273
 		strategic_region = 274
@@ -1189,14 +1269,14 @@ EAI_ENG_ethiopia_DEPLOY = {
 	
 	ai_strategy = {
 		type = front_unit_request
-		value = 75
+		value = 100
 		
 		area = east_africa
 	}
 
 	ai_strategy = {
 		type = front_unit_request
-		value = 50
+		value = 100
 		
 		strategic_region = 273
 		strategic_region = 274
@@ -1204,7 +1284,7 @@ EAI_ENG_ethiopia_DEPLOY = {
 
 	ai_strategy = {
 		type = put_unit_buffers
-		ratio = 0.05
+		ratio = 0.08
 		states = { 
 			905
 			269
