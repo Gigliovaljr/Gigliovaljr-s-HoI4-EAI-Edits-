@@ -1541,6 +1541,55 @@ EAI_PC_railway_STRATEGIES = { # >>> arr:railway_start_provinces_:railway_end_pro
 			}
 		}
 
+	### Western France - ENG FRA USA
+
+		if = {
+			limit = {
+				OR = {
+					tag = ENG
+					tag = FRA
+					tag = USA
+				}
+			}
+
+			### Railway level
+
+				set_temp_variable = { route_level = 5 }
+
+				set_temp_variable = { route_priority = _project_priority }
+				set_temp_variable = { high_route_priority = route_priority }
+				multiply_temp_variable = { high_route_priority = 1.1 }
+	        
+			### Develop Western France railways
+
+					if = { set_temp_variable = { route_start = 9495 }
+						add_to_temp_array = { array = railway_start_provinces_ index = 0 value = route_start }
+						add_to_temp_array = { array = railway_end_provinces_ index = 0 value = 6449 }
+						add_to_temp_array = { array = railway_target_levels_ index = 0 value = route_level }
+						add_to_temp_array = { array = railway_priorities_ index = 0 value = high_route_priority }
+
+						add_to_temp_array = { array = railway_start_provinces_ index = 0 value = route_start }
+						add_to_temp_array = { array = railway_end_provinces_ index = 0 value = 9510 }
+						add_to_temp_array = { array = railway_target_levels_ index = 0 value = route_level }
+						add_to_temp_array = { array = railway_priorities_ index = 0 value = high_route_priority }
+						
+						add_to_temp_array = { array = railway_start_provinces_ index = 0 value = route_start }
+						add_to_temp_array = { array = railway_end_provinces_ index = 0 value = 11465 }
+						add_to_temp_array = { array = railway_target_levels_ index = 0 value = route_level }
+						add_to_temp_array = { array = railway_priorities_ index = 0 value = high_route_priority }
+					}
+					
+					if = { set_temp_variable = { route_start = 6657 }						
+						add_to_temp_array = { array = railway_start_provinces_ index = 0 value = route_start }
+						add_to_temp_array = { array = railway_end_provinces_ index = 0 value = 11465 }
+						add_to_temp_array = { array = railway_target_levels_ index = 0 value = route_level }
+						add_to_temp_array = { array = railway_priorities_ index = 0 value = high_route_priority }
+					}
+		
+				###
+		
+				set_temp_variable = { EAI_PC_railway_STRATEGIES = 1 }
+			}
 	###
 }
 

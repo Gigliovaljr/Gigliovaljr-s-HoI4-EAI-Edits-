@@ -286,6 +286,15 @@ EAI_PC_startup_strategy_USA = {
 		set_temp_variable = { _project_queue_num = 5 }
 		EAI_PC_start_project = yes
 	}
+	
+	### Mississippi
+	370 = { 
+		set_temp_variable = { _project_building_type = global.EAI_PC_NIC }
+		set_temp_variable = { _project_type_id = strategy_type_id }
+		set_temp_variable = { _project_priority = strategy_type_prio }
+		set_temp_variable = { _project_queue_num = 5 }
+		EAI_PC_start_project = yes
+	}
 }
 
 
