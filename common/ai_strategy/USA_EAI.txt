@@ -253,7 +253,7 @@ EAI_USA_more_subs = {
 	enable = {
 		date > 1942.3.1
 		has_navy_size = {
-                size > 185
+                size > 150
                 type = screen_ship
                 archetype = ship_hull_light
             } 
